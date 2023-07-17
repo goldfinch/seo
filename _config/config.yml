@@ -5,3 +5,7 @@ Name: goldfinch-seokit
 SilverStripe\SiteConfig\SiteConfig:
   extensions:
     - Goldfinch\Seokit\Extensions\SiteConfigExtension
+
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - Goldfinch\Seokit\Extensions\SEOExtension
