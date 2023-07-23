@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Models;
+namespace Goldfinch\Seokit\Models;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Permission;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Admin;
+namespace Goldfinch\Seokit\Admin;
 
 use Goldfinch\Models\SEOData;
 use SilverStripe\Admin\ModelAdmin;
