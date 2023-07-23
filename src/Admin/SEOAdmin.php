@@ -2,7 +2,7 @@
 
 namespace Goldfinch\Seokit\Admin;
 
-use Goldfinch\Models\SEOData;
+use Goldfinch\Seokit\Models\SEOData;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
