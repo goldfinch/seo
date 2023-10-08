@@ -2,6 +2,42 @@
 Name: goldfinch-seo-meta
 ---
 
-# Goldfinch\Seo\Traits\MetaUniverse:
-#   states:
-#     'meta_base': true
+Goldfinch\Seo\Traits\MetaUniverse:
+  headrules:
+    'base': true
+    'category': false
+    'dns-prefetch-control': false
+    'compatible': true
+    'language': true
+    'news_keywords': false
+    'dates': false
+    'identifier-URL': true
+    'geo': false
+    'rating': false
+    'mobile-web-app-capable': false
+    'refresh': false
+    'apple': false
+    'format-detection': false
+    'msapplication': false
+    'author': false
+    'copyright': false
+    'referrer': false
+    'application-name': false
+    'content-type-charset': true
+    'title': true
+    'verifications': false
+    'csrf': true
+    'description': true
+    'theme': false
+    'viewport': true
+    'x-cms': true
+    'search': false
+    'image_src': false
+    'humans': false
+    'apple-touch': false
+    'home': true
+    'shortlink': true
+    'preconnect': false
+    'canonical': true
+    'amphtml': false
+    'icon': false
