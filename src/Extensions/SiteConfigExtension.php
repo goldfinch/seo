@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Seokit\Extensions;
+namespace Goldfinch\Seo\Extensions;
 
 use SilverStripe\Assets\Image;
 use SilverStripe\Forms\FieldList;

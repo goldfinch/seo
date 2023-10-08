@@ -1,5 +1,5 @@
 {
-    "name": "goldfinch/seokit",
+    "name": "goldfinch/seo",
     "description": "",
     "type": "silverstripe-vendormodule",
     "keywords": [
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Goldfinch\\Seokit\\": "src/"
+            "Goldfinch\\Seo\\": "src/"
         }
     },
     "minimum-stability": "dev",

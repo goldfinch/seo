@@ -1,8 +1,8 @@
 <?php
 
-namespace Goldfinch\Seokit\Admin;
+namespace Goldfinch\Seo\Admin;
 
-use Goldfinch\Seokit\Models\SEOData;
+use Goldfinch\Seo\Models\SEOData;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldImportButton;

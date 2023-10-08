@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Seokit\MetaManager;
+namespace Goldfinch\Seo\MetaManager;
 
 use Spatie\SchemaOrg\Schema;
 use SilverStripe\Control\Director;
