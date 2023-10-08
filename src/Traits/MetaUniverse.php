@@ -92,15 +92,6 @@ trait MetaUniverse
         return $output;
     }
 
-    public function linkSearch()
-    {
-        $output = '
-        <link rel="search" type="application/opensearchdescription+xml" href="/__static__/semrush-opensearch.xml" title="Semrush.com">
-        ';
-
-        return $output;
-    }
-
     /**
      * To enable/disable DNS prefetching
      */
@@ -175,16 +166,7 @@ trait MetaUniverse
     public function metaIdentifierURL()
     {
         $output = '
-        <meta name="identifier-URL" content="web url">
-        ';
-
-        return $output;
-    }
-
-    public function linkImageSrc()
-    {
-        $output = '
-        <link rel="image_src" href="https://demo.com/logo.png" type="image/jpeg">
+        <meta name="identifier-URL" content="' . Director::absoluteBaseURL() . '">
         ';
 
         return $output;
@@ -204,15 +186,6 @@ trait MetaUniverse
         <meta name="geo.position" content="00.000000;00.000000″>
         <meta name="geo.region" content="IN-DL">
         <meta name="geo.placename" content="Delhi">
-        ';
-
-        return $output;
-    }
-
-    public function linkHumans()
-    {
-        $output = '
-        <link rel="author" href="http://demo.com/humans.txt" type="text/plain">
         ';
 
         return $output;
@@ -287,17 +260,6 @@ trait MetaUniverse
 
         return $output;
     }
-
-    public function linkAppleMobile()
-    {
-        $output = '
-        <link rel="apple-touch-startup-image" href="/startup.png">
-        ';
-
-        return $output;
-    }
-
-    //
 
     public function metaWindowsPhone()
     {
@@ -377,24 +339,6 @@ trait MetaUniverse
         return $output;
     }
 
-    public function linkHome()
-    {
-        $output = '
-        <link rel="home" href="'. Director::absoluteBaseURL() .'">
-        ';
-
-        return $output;
-    }
-
-    public function linkShortlink()
-    {
-        $output = '
-        <link rel="shortlink" href="'. Director::absoluteBaseURL() .'">
-        ';
-
-        return $output;
-    }
-
     public function metaCharset()
     {
         $output = '
@@ -413,31 +357,6 @@ trait MetaUniverse
     {
         $output = '
         <title></title>
-        ';
-
-        return $output;
-    }
-
-    public function linkPreconnect()
-    {
-        $defaults = [
-            'https://www.google.com',
-            'https://www.googletagmanager.com',
-            'https://www.google-analytics.com',
-            'https://www.gstatic.com',
-            'https://fonts.gstatic.com',
-            'https://maps.gstatic.com',
-            'https://maps.googleapis.com',
-            // 'https://googleadservices.com',
-            // 'https://www.facebook.com',
-            // 'https://connect.facebook.net',
-            // 'https://ad.doubleclick.net',
-        ];
-
-        // <link rel="preconnect" href="//i.demo.com" crossorigin="anonymous" / crossorigin>
-        $output = '
-        <link rel="preconnect" src="https://cdn.example.com">
-        <link rel="dns-prefetch" src="https://cdn.example.com">
         ';
 
         return $output;
@@ -477,24 +396,6 @@ trait MetaUniverse
         return $output;
     }
 
-    public function linkCanonical()
-    {
-        $output = '
-        <link rel="canonical" href="' . Director::absoluteBaseURL() . '">
-        ';
-
-        return $output;
-    }
-
-    public function linkAmphtml()
-    {
-        $output = '
-        <link rel="amphtml" href="#">
-        ';
-
-        return $output;
-    }
-
     public function metaTheme()
     {
         // color-scheme : Status & Address Bar
@@ -520,6 +421,7 @@ trait MetaUniverse
     * Prevent shrink: 'shrink-to-fit=no'
      *
      */
+
     public function metaViewport()
     {
         $content = [
@@ -531,6 +433,103 @@ trait MetaUniverse
 
         $output = '
         <meta name="viewport" content="' . implode(', ', $content) . '">
+        ';
+
+        return $output;
+    }
+
+    public function linkSearch()
+    {
+        $output = '
+        <link rel="search" type="application/opensearchdescription+xml" href="/__static__/semrush-opensearch.xml" title="Semrush.com">
+        ';
+
+        return $output;
+    }
+
+    public function linkImageSrc()
+    {
+        $output = '
+        <link rel="image_src" href="https://demo.com/logo.png" type="image/jpeg">
+        ';
+
+        return $output;
+    }
+
+    public function linkHumans()
+    {
+        $output = '
+        <link rel="author" href="/humans.txt" type="text/plain">
+        ';
+
+        return $output;
+    }
+
+    public function linkAppleMobile()
+    {
+        $output = '
+        <link rel="apple-touch-startup-image" href="/startup.png">
+        ';
+
+        return $output;
+    }
+
+    public function linkHome()
+    {
+        $output = '
+        <link rel="home" href="'. Director::absoluteBaseURL() .'">
+        ';
+
+        return $output;
+    }
+
+    public function linkShortlink()
+    {
+        $output = '
+        <link rel="shortlink" href="'. Director::absoluteBaseURL() .'">
+        ';
+
+        return $output;
+    }
+
+    public function linkPreconnect()
+    {
+        $defaults = [
+            'https://www.google.com',
+            'https://www.googletagmanager.com',
+            'https://www.google-analytics.com',
+            'https://www.gstatic.com',
+            'https://fonts.gstatic.com',
+            'https://maps.gstatic.com',
+            'https://maps.googleapis.com',
+            // 'https://googleadservices.com',
+            // 'https://www.facebook.com',
+            // 'https://connect.facebook.net',
+            // 'https://ad.doubleclick.net',
+        ];
+
+        // <link rel="preconnect" href="//i.demo.com" crossorigin="anonymous" / crossorigin>
+        $output = '
+        <link rel="preconnect" src="https://cdn.example.com">
+        <link rel="dns-prefetch" src="https://cdn.example.com">
+        ';
+
+        return $output;
+    }
+
+    public function linkCanonical()
+    {
+        $output = '
+        <link rel="canonical" href="' . Director::absoluteBaseURL() . '">
+        ';
+
+        return $output;
+    }
+
+    public function linkAmphtml()
+    {
+        $output = '
+        <link rel="amphtml" href="#">
         ';
 
         return $output;
