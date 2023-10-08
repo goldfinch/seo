@@ -13,9 +13,11 @@
         "php": ">=8.0",
         "silverstripe/framework": "^5.0",
         "silverstripe/admin": "^2.0",
+        "goldfinch/sitemap": "dev-master",
         "astrotomic/php-open-graph": "^0.5.2",
         "spatie/schema-org": "^3.14",
-        "unclecheese/display-logic": "^3.0"
+        "unclecheese/display-logic": "^3.0",
+        "tractorcow/silverstripe-robots": "^4"
     },
     "autoload": {
         "psr-4": {
