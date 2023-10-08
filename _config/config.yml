@@ -9,3 +9,8 @@ SilverStripe\SiteConfig\SiteConfig:
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     - Goldfinch\Seo\Extensions\SEOExtension
+
+SilverStripe\Control\Director:
+  rules:
+    'humans.txt': 'Goldfinch\Seo\Humans'
+    'manifest.webmanifest': 'Goldfinch\Seo\Webmanifest'
