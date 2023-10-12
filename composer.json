@@ -15,7 +15,7 @@
         "silverstripe/admin": "^2.0",
         "goldfinch/sitemap": "dev-master",
         "goldfinch/helpers": "dev-master",
-        "astrotomic/php-open-graph": "^0.5.2",
+        "astrotomic/php-open-graph": "^1.0",
         "spatie/schema-org": "^3.14",
         "unclecheese/display-logic": "^3.0",
         "tractorcow/silverstripe-robots": "^4"
