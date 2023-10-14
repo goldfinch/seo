@@ -270,11 +270,28 @@ trait MetaUniverse
         // IN-DL
         // Delhi
 
-        $output = '
-        <meta name="geo.position" content="">
-        <meta name="geo.region" content="">
-        <meta name="geo.placename" content="">
-        ';
+        $output = '';
+
+        if (ss_env('APP_SEO_GEO_POSITION'))
+        {
+            $output .= '
+            <meta name="geo.position" content="' . ss_env('APP_SEO_GEO_POSITION') . '">
+            ';
+        }
+
+        if (ss_env('APP_SEO_GEO_REGION'))
+        {
+            $output .= '
+            <meta name="geo.region" content="' . ss_env('APP_SEO_GEO_REGION') . '">
+            ';
+        }
+
+        if (ss_env('APP_SEO_GEO_PLACENAME'))
+        {
+            $output .= '
+            <meta name="geo.placename" content="' . ss_env('APP_SEO_GEO_PLACENAME') . '">
+            ';
+        }
 
         return $output;
     }
@@ -292,9 +309,15 @@ trait MetaUniverse
         // <meta http-equiv="pics-label" content="labellist"> - The Platform for Internet Content Selection (PICS) is a standard for labelling online content: basically online content rating.
         // <meta name="rating" content="RTA-5042-1996-1400-1577-RTA">
         // general, mature, restricted, adult, 14 years, safe for kids
-        $output = '
-        <meta name="rating" content="general">
-        ';
+
+        $output = '';
+
+        if (ss_env('APP_SEO_RATING'))
+        {
+            $output .= '
+            <meta name="rating" content="' . ss_env('APP_SEO_RATING') . '">
+            ';
+        }
 
         return $output;
     }
@@ -413,10 +436,14 @@ trait MetaUniverse
         {
             return;
         }
+        $output = '';
 
-        $output = '
-        <meta name="author" content="">
-        ';
+        if (ss_env('APP_SEO_AUTHOR'))
+        {
+            $output = '
+            <meta name="author" content="' . ss_env('APP_SEO_AUTHOR') . '">
+            ';
+        }
 
         return $output;
     }
@@ -428,9 +455,14 @@ trait MetaUniverse
             return;
         }
 
-        $output = '
-        <meta name="copyright" content="">
-        ';
+        $output = '';
+
+        if (ss_env('APP_SEO_COPYRIGHT'))
+        {
+            $output = '
+            <meta name="copyright" content="' . ss_env('APP_SEO_COPYRIGHT') . '">
+            ';
+        }
 
         return $output;
     }
@@ -449,7 +481,7 @@ trait MetaUniverse
         // <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
         // <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
         $output = '
-        <meta name="robots" content="noarchive, index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+        <meta name="robots" content="' . ss_env('APP_SEO_ROBOTS_BASE') . '">
         ';
 
         return $output;
@@ -477,8 +509,10 @@ trait MetaUniverse
             return;
         }
 
+        $cfg = SiteConfig::current_site_config();
+
         $output = '
-        <meta name="application-name" content="">
+        <meta name="application-name" content="' . $cfg->Title . '">
         ';
 
         return $output;
@@ -535,11 +569,28 @@ trait MetaUniverse
             return;
         }
 
-        $output = '
-        <meta name="google-site-verification" content="">
-        <meta name="msvalidate.01" content="">
-        <meta name="p:domain_verify" content="">
-        ';
+        $output = '';
+
+        if (ss_env('APP_SEO_BING_CONSOLE'))
+        {
+            $output .= '
+            <meta name="google-site-verification" content="' . ss_env('APP_SEO_GOOGLE_CONSOLE') . '">
+            ';
+        }
+
+        if (ss_env('APP_SEO_BING_CONSOLE'))
+        {
+            $output .= '
+            <meta name="msvalidate.01" content="' . ss_env('APP_SEO_BING_CONSOLE') . '">
+            ';
+        }
+
+        if (ss_env('APP_SEO_PINTEREST'))
+        {
+            $output .= '
+            <meta name="p:domain_verify" content="' . ss_env('APP_SEO_PINTEREST') . '">
+            ';
+        }
 
         return $output;
     }
@@ -589,8 +640,8 @@ trait MetaUniverse
         // <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F6F7F8">
         // <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111317">
         $output = '
-        <meta name="color-scheme" content="only light">
-        <meta name="theme-color" content="#ffffff">
+        <meta name="color-scheme" content="' . ss_env('APP_COLOR_SCHEME') . '">
+        <meta name="theme-color" content="' . ss_env('APP_THEME_COLOR') . '">
         ';
 
         return $output;
@@ -811,7 +862,14 @@ trait MetaUniverse
 
     /**
      * - mask-icon : Safari 9 Pinned tabs. Pinned Sites allow your users to keep their favorite websites open, running, and easily accessible. You can set the icon that the user sees when they pin your site by providing a vector image.
+     *
+     *
+     * - 512x512 (png)
+     * - 192x192 (png)
+     * - 512x512 (svg)
+     * - 32x32 (ico)
      * - apple-touch-icon : 180×180
+     * -
      */
     public function linkIcons()
     {
@@ -822,7 +880,7 @@ trait MetaUniverse
 
         // <link rel="shortcut icon" href="https://cdn.evbstatic.com/s3-bs/favicons/favicon.ico">
         $output = '
-        <link rel="mask-icon" href="/icon.svg" color="#ffffff">
+        <link rel="mask-icon" href="/icon.svg" color="' . ss_env('APP_THEME_COLOR') . '">
         <link rel="icon" href="/favicon.ico" sizes="32x32">
         <link rel="icon" href="/icon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">

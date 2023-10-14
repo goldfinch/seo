@@ -9,9 +9,11 @@ class Webmanifest extends RequestHandler
 {
     public function index()
     {
+        $cfg = SiteConfig::current_site_config();
+
         $text = '
         {
-          "short_name": "Weather",
+          "short_name": "' . $cfg->Title . '",
           "name": "Weather: Do I need an umbrella?",
           "icons": [
             {

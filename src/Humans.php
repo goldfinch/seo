@@ -9,22 +9,49 @@ class Humans extends RequestHandler
 {
     public function index()
     {
-        $text = '
+        $cfg = SiteConfig::current_site_config();
+
+        $text = '';
+
+        $text .= '
         /* TEAM */
-        Your title: Your name.
-        Site: email, link to a contact form, etc.
-        Twitter: your Twitter username.
-        Location: City, Country.
+
+        ';
+
+        if (ss_env('APP_HUMANS_CREATOR'))
+        {
+            $text .= '
+            Creator: ' . ss_env('APP_HUMANS_CREATOR') . '
+            ';
+        }
+
+        if (ss_env('APP_HUMANS_CREATOR'))
+        {
+            $text .= '
+            Site: ' . ss_env('APP_HUMANS_SITE') . '
+            ';
+        }
+
+        if (ss_env('APP_HUMANS_CREATOR'))
+        {
+            $text .= '
+            Location: ' . ss_env('APP_HUMANS_LOCATION') . '
+            ';
+        }
+
+        $text .= '
 
         /* THANKS */
-        Name: name or url
 
         /* SITE */
-        Last update: YYYY/MM/DD
-        Standards: HTML5, CSS3,..
-        Components: Modernizr, jQuery, etc.
-        Software: Software used for the development
         ';
+
+        if (ss_env('APP_HUMANS_CREATOR'))
+        {
+            $text .= '
+            Standards: ' . ss_env('APP_HUMANS_STANDARDS') . '
+            ';
+        }
 
         $text = str_replace('        ', '', $text);
         $text = preg_replace(['/[ \t]*($|\R)/u', '/^\n*|(\n)\n*$|(\n{3})\n+/'], ["\n", '\1\2'], $text);
