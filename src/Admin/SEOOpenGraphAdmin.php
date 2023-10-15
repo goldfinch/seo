@@ -2,26 +2,41 @@
 
 namespace Goldfinch\Seo\Admin;
 
-use Goldfinch\Seo\Models\SEOData;
+use Goldfinch\Seo\Models\OpenGraph;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\GridField\GridFieldConfig;
+use SilverStripe\Forms\GridField\GridFieldPrintButton;
+use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
 
-class SEOAdmin extends ModelAdmin
+class SEOOpenGraphAdmin extends ModelAdmin
 {
-    private static $url_segment = 'seo';
+    private static $url_segment = 'seo-open-graph';
 
-    private static $menu_title = 'SEO';
+    private static $menu_title = 'Open graph';
 
     private static $managed_models = [
-        SEOData::class => [
-            'title' => 'Data records',
+        OpenGraph::class => [
+            'title' => 'Open Graph records',
         ],
     ];
 
-    private static $menu_priority = 0;
+    // private static $managed_models = [
+    //    ExampleProduct::class,
+    //
+    //    ExampleCategory::class => [
+    //        'title' => 'All categories',
+    //    ],
+    //
+    //    'product-category' => [
+    //        'dataClass' => ExampleCategory::class,
+    //        'title' => 'Product categories',
+    //    ],
+    // ];
 
-    private static $menu_icon_class = 'bi-wrench-adjustable-circle';
+    private static $menu_priority = -0.5;
+
+    private static $menu_icon_class = 'font-icon-database';
 
     public $showImportForm = true;
 
@@ -51,7 +66,9 @@ class SEOAdmin extends ModelAdmin
     {
         $config = parent::getGridFieldConfig();
 
-        $config->removeComponentsByType(GridFieldImportButton::class);
+        // $config->removeComponentsByType(GridFieldExportButton::class);
+        // $config->removeComponentsByType(GridFieldPrintButton::class);
+        // $config->removeComponentsByType(GridFieldImportButton::class);
 
         return $config;
     }

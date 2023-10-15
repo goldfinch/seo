@@ -1,0 +1,12 @@
+---
+Name: goldfinch-seo-admin
+---
+
+SilverStripe\Admin\LeftAndMain:
+  menu_groups:
+    SEO:
+      priority: 47.3
+      icon_class: "bi-wrench-adjustable-circle"
+      children:
+        - Goldfinch-Seo-Admin-SEOSchemaAdmin
+        - Goldfinch-Seo-Admin-SEOOpenGraphAdmin
