@@ -146,6 +146,16 @@ class MetaUniverse extends Extension
 
     /**
      * To enable/disable DNS prefetching
+     *
+     * By default, Chromium does not prefetch host names in hyperlinks that appear in HTTPS pages. This   * restriction helps prevent an eavesdropper from inferring the host names of hyperlinks that appear * in HTTPS pages based on DNS prefetch traffic. The one exception is that Chromium may periodically * re-resolve the domain of the HTTPS page itself. — Source: chromium.org
+     *
+     * As stated in this MDN entry, you can enable/disable this functionality in Chrome and Firefox
+     * by adding a X-DNS-Prefetch-Control header. It can also be set up through a meta tag:
+     * <meta http-equiv="x-dns-prefetch-control" content="on">.
+     *
+     * This option should only be enabled if we know for sure it will not interfere with the user
+     * event tracking system. Otherwise users might be registered for visiting links they have
+     * not clicked on.
      */
     public function metaDnsPrefetchControl()
     {
@@ -473,17 +483,28 @@ class MetaUniverse extends Extension
      */
     public function metaRobots()
     {
+
         if (!ss_config($this->universeClass, 'headrules', 'robots'))
         {
             return;
         }
 
-        // <meta name="robots" content="index, follow">
-        // <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-        // <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-        $output = '
-        <meta name="robots" content="' . ss_env('APP_SEO_ROBOTS_BASE') . '">
-        ';
+        if ($this->owner->ClassName == ErrorPage::class)
+        {
+            $output = '
+            <meta name="robots" content="noindex, follow">
+            ';
+        }
+        else
+        {
+            // <meta name="robots" content="index, follow">
+            // <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+            // <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+            $output = '
+            <meta name="robots" content="' . ss_env('APP_SEO_ROBOTS_BASE') . '">
+            ';
+        }
 
         return $output;
     }
@@ -801,12 +822,109 @@ class MetaUniverse extends Extension
         return $output;
     }
 
+    /**
+     * preconnect links can be declared followed by a dns-prefetch link so that if the first one
+     * is not supported, time can be saved for the DNS resolution of the origin
+     *
+     * first preconnect, second dns-prefetch
+     *
+     * If our resource is going to be fetched through a CORS connection using anonymous mode,
+     * we need to add the attribute crossorigin to the link tag:
+     * <link rel="preconnect" href="https://cdn.vrbo.com" crossorigin>
+     *
+     * no more than 4-6 domains is recommended in `preconnect` and we can still use `dns-prefetch`
+     * for other connections.
+     *
+     * dns-prefetch is only effective for DNS lookups on cross-origin domains, so avoid using it to
+     * point to your site or domain. This is because the IP behind your site’s domain will have
+     * already been resolved by the time the browser sees the hint.
+     *
+     *
+     */
+    // <!-- Google CDN -->
+    // <link rel="dns-prefetch" href="//ajax.googleapis.com">
+    // <link href="//ajax.googleapis.com" rel="preconnect" crossorigin>
+
+    // <!-- Google API -->
+    // <link rel="dns-prefetch" href="//apis.google.com">
+    // <link href="apis.google.com" rel="preconnect" crossorigin>
+
+    // <!-- Google Fonts -->
+    // <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    // <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+    // <!-- Google Analytics -->
+    // <link rel="dns-prefetch" href="//www.google-analytics.com">
+    // <link href="//www.google-analytics.com" rel="preconnect" crossorigin>
+
+    // <!-- Google Tag Manager -->
+    // <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    // <link href="//www.googletagmanager.com" rel="preconnect" crossorigin>
+
+    // <!-- Google Publisher Tag -->
+    // <link rel="dns-prefetch" href="//www.googletagservices.com">
+
+    // <!-- Google AdSense -->
+    // <link rel="dns-prefetch" href="//adservice.google.com">
+    // <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
+    // <link rel="dns-prefetch" href="//tpc.googlesyndication.com">
+
+
+    // <!-- Microsoft CDN -->
+    // <link rel="dns-prefetch" href="//ajax.microsoft.com">
+    // <link rel="dns-prefetch" href="//ajax.aspnetcdn.com">
+
+    // <!-- Amazon S3 -->
+    // <link rel="dns-prefetch" href="//s3.amazonaws.com">
+
+    // <!-- Cloudflare CDN -->
+    // <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
+    // <!-- jQuery CDN -->
+    // <link rel="dns-prefetch" href="//code.jquery.com">
+
+    // <!-- Bootstrap CDN -->
+    // <link rel="dns-prefetch" href="//stackpath.bootstrapcdn.com">
+
+    // <!-- Font Awesome CDN -->
+    // <link rel="dns-prefetch" href="//use.fontawesome.com">
+
+    // <!-- Facebook -->
+    // <link rel="dns-prefetch" href="//connect.facebook.net">
+
+    // <!-- Twitter -->
+    // <link rel="dns-prefetch" href="//platform.twitter.com">
+
+    // <!-- Linkedin -->
+    // <link rel="dns-prefetch" href="//platform.linkedin.com">
+
+    // <!-- Vimeo -->
+    // <link rel="dns-prefetch" href="//player.vimeo.com">
+
+    // <!-- GitHub -->
+    // <link rel="dns-prefetch" href="//github.githubassets.com">
+
+    // <!-- Disqus -->
+    // <link rel="dns-prefetch" href="//referrer.disqus.com">
+    // <link rel="dns-prefetch" href="//c.disquscdn.com">
+
+    // <!-- Gravatar -->
+    // <link rel="dns-prefetch" href="//0.gravatar.com">
+    // <link rel="dns-prefetch" href="//2.gravatar.com">
+    // <link rel="dns-prefetch" href="//1.gravatar.com">
+
+    // <!-- DoubleClick -->
+    // <link rel="dns-prefetch" href="//ad.doubleclick.net">
+    // <link rel="dns-prefetch" href="//googleads.g.doubleclick.net">
+    // <link rel="dns-prefetch" href="//stats.g.doubleclick.net">
+    // <link rel="dns-prefetch" href="//cm.g.doubleclick.net">
     public function linkPreconnect()
     {
         if (!ss_config($this->universeClass, 'headrules', 'preconnect'))
         {
             return;
         }
+
 
         $defaults = [
             'https://www.google.com',
@@ -825,9 +943,13 @@ class MetaUniverse extends Extension
         // https://cdn.example.com
 
         // <link rel="preconnect" href="//i.demo.com" crossorigin="anonymous" / crossorigin>
+
+
         $output = '
-        <link rel="preconnect" src="">
-        <link rel="dns-prefetch" src="">
+        <link rel="dns-prefetch" href="//www.googletagmanager.com">
+        <link href="//www.googletagmanager.com" rel="preconnect" crossorigin>
+        <link rel="dns-prefetch" href="//www.google-analytics.com">
+        <link href="//www.google-analytics.com" rel="preconnect" crossorigin>
         ';
 
         return $output;
