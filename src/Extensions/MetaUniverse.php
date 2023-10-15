@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfinch\Seo\Traits;
+namespace Goldfinch\Seo\Extensions;
 
 use BadMethodCallException;
 use Spatie\SchemaOrg\Schema;
@@ -11,8 +11,9 @@ use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\Core\Extension;
 
-trait MetaUniverse
+class MetaUniverse extends Extension
 {
     public $universeClass = 'Goldfinch\Seo\Traits\MetaUniverse';
 
@@ -21,55 +22,55 @@ trait MetaUniverse
         $output = DBHTMLText::create();
 
         $html =
-            $this->metaBase() .
+            $this->owner->metaBase() .
 
-            $this->metaTitle() .
+            $this->owner->metaTitle() .
 
-            $this->metaContentTypeCharset() .
-            $this->metaCompatible() .
-            $this->metaDnsPrefetchControl() .
-            $this->metaRefresh() .
-            $this->metaDates() .
+            $this->owner->metaContentTypeCharset() .
+            $this->owner->metaCompatible() .
+            $this->owner->metaDnsPrefetchControl() .
+            $this->owner->metaRefresh() .
+            $this->owner->metaDates() .
 
-            $this->metaViewport() .
-            $this->metaReferrer() .
-            $this->metaLang() .
-            $this->metaCSRF() .
-            $this->metaRobots() .
-            $this->metaApplicationName() .
-            $this->metaIdentifierURL() .
-            $this->metaVerifications() .
-            $this->metaTheme() .
-            $this->metaRating() .
+            $this->owner->metaViewport() .
+            $this->owner->metaReferrer() .
+            $this->owner->metaLang() .
+            $this->owner->metaCSRF() .
+            $this->owner->metaRobots() .
+            $this->owner->metaApplicationName() .
+            $this->owner->metaIdentifierURL() .
+            $this->owner->metaVerifications() .
+            $this->owner->metaTheme() .
+            $this->owner->metaRating() .
 
-            $this->metaNewsKeywords() . // only for article
-            $this->metaGeo() . // perhaps contact page only
-            $this->metaDescription() .
-            $this->metaCategory() . // for sites catalogs
+            $this->owner->metaNewsKeywords() . // only for article
+            $this->owner->metaGeo() . // perhaps contact page only
+            $this->owner->metaDescription() .
+            $this->owner->metaCategory() . // for sites catalogs
 
-            $this->metaMobile() .
-            $this->metaFormatDetection() .
-            $this->metaAppleMobile() .
-            $this->metaWindowsPhone() .
-            $this->metaXCMS() .
-            $this->metaAuthor() .
-            $this->metaCopyright() .
+            $this->owner->metaMobile() .
+            $this->owner->metaFormatDetection() .
+            $this->owner->metaAppleMobile() .
+            $this->owner->metaWindowsPhone() .
+            $this->owner->metaXCMS() .
+            $this->owner->metaAuthor() .
+            $this->owner->metaCopyright() .
 
-            $this->OpenGraph() .
+            $this->owner->OpenGraph() .
 
-            $this->linkHome() .
-            $this->linkCanonical() .
-            $this->linkShortlink() .
-            $this->linkSearch() .
-            $this->linkPreconnect() .
-            $this->linkAmphtml() .
-            $this->linkImageSrc() .
-            $this->linkAppleMobile() .
-            $this->linkIcons() .
-            $this->linkHumans() .
+            $this->owner->linkHome() .
+            $this->owner->linkCanonical() .
+            $this->owner->linkShortlink() .
+            $this->owner->linkSearch() .
+            $this->owner->linkPreconnect() .
+            $this->owner->linkAmphtml() .
+            $this->owner->linkImageSrc() .
+            $this->owner->linkAppleMobile() .
+            $this->owner->linkIcons() .
+            $this->owner->linkHumans() .
 
             PHP_EOL .
-            $this->SchemaData()
+            $this->owner->SchemaData()
         ;
 
         $html = preg_replace(['/\s{2,}/', '/\n/'], PHP_EOL, $html);
@@ -546,13 +547,13 @@ trait MetaUniverse
 
         $cfg = SiteConfig::current_site_config();
 
-        if ($this->MetaTitle)
+        if ($this->owner->MetaTitle)
         {
-            $title = $this->MetaTitle;
+            $title = $this->owner->MetaTitle;
         }
         else
         {
-            $title = $this->Title . ' - ' . $cfg->Title;
+            $title = $this->owner->Title . ' - ' . $cfg->Title;
         }
 
         $output = '
@@ -622,7 +623,7 @@ trait MetaUniverse
         }
 
         $output = '
-        <meta name="description" content="' . strip_tags($this->MetaDescription ?? '') . '">
+        <meta name="description" content="' . strip_tags($this->owner->MetaDescription ?? '') . '">
         ';
 
         return $output;
@@ -690,23 +691,23 @@ trait MetaUniverse
 
         $output = '';
 
-        if (Permission::check('CMS_ACCESS_CMSMain') && $this->ID > 0)
+        if (Permission::check('CMS_ACCESS_CMSMain') && $this->owner->ID > 0)
         {
             $output = '
-            <meta name="x-page-id" content="' . $this->ID . '">
+            <meta name="x-page-id" content="' . $this->owner->ID . '">
             ';
 
             try
             {
                 $output .= '
-                <meta name="x-cms-edit-link" content="' . $this->CMSEditLink() . '">
+                <meta name="x-cms-edit-link" content="' . $this->owner->CMSEditLink() . '">
                 ';
             } catch (BadMethodCallException $e) {}
 
             try
             {
                 $output .= '
-                <meta name="x-cms-logout-link" content="' . $this->LogoutURL() . '">
+                <meta name="x-cms-logout-link" content="' . $this->owner->LogoutURL() . '">
                 ';
             } catch (BadMethodCallException $e) {}
         }
