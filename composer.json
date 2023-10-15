@@ -19,7 +19,7 @@
         "spatie/schema-org": "^3.14",
         "unclecheese/display-logic": "^3.0",
         "tractorcow/silverstripe-robots": "^4",
-        "silvershop/silverstripe-hasonefield": "^4.0"
+        "silvershop/silverstripe-hasonefield": "dev-main"
     },
     "autoload": {
         "psr-4": {
