@@ -14,3 +14,7 @@ SilverStripe\Control\Director:
   rules:
     'humans.txt': 'Goldfinch\Seo\Humans'
     'manifest.webmanifest': 'Goldfinch\Seo\Webmanifest'
+
+PageController:
+  extensions:
+    - Goldfinch\Seo\Extensions\MetaUniverse
