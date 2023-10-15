@@ -2,6 +2,7 @@
 
 namespace Goldfinch\Seo;
 
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\RequestHandler;
 
