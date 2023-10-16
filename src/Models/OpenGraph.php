@@ -3,7 +3,10 @@
 namespace Goldfinch\Seo\Models;
 
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Security\Permission;
+use UncleCheese\DisplayLogic\Forms\Wrapper;
 
 class OpenGraph extends DataObject
 {
@@ -73,7 +76,32 @@ class OpenGraph extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        //
+        $types = [
+          'website' => 'website',
+          'article' => 'article',
+          'book' => 'book',
+          'profile' => 'profile',
+
+          'music.song' => 'music.song',
+          'music.album' => 'music.album',
+          'music.playlist' => 'music.playlist',
+          'music.radio_station' => 'music.radio_station',
+
+          'video.movie' => 'video.movie',
+          'video.episode' => 'video.episode',
+          'video.tv_show' => 'video.tv_show',
+          'video.other' => 'video.other',
+        ];
+
+        $fields->addFieldsToTab('Root.Main', [
+
+          DropdownField::create('OG_Type', 'Choose a type', $types)->setEmptyString('-- choose --'),
+          Wrapper::create(
+
+            TextField::create('MetaFacebookAppSecret', 'App Secret')
+
+          )->displayIf('OG_Type')->contains('website')->end()
+        ]);
 
         return $fields;
     }
