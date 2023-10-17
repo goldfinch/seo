@@ -10,3 +10,4 @@ SilverStripe\Admin\LeftAndMain:
       children:
         - Goldfinch-Seo-Admin-SEOSchemaAdmin
         - Goldfinch-Seo-Admin-SEOOpenGraphAdmin
+        - Goldfinch-Seo-Admin-SEOTwitterCardAdmin

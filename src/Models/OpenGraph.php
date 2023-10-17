@@ -18,6 +18,18 @@ use Bummzack\SortableFile\Forms\SortableUploadField;
 
 class OpenGraph extends DataObject
 {
+    /**
+     * The Open Graph protocol
+     *
+     * https://ogp.me/
+     *
+     * Facebook Open Graph Markup
+     * https://developers.facebook.com/docs/sharing/webmasters/
+     *
+     * Validator
+     *
+     * https://developers.facebook.com/tools/debug/
+     */
     private static $singular_name = 'open graph';
 
     private static $plural_name = 'open graphs';
@@ -58,6 +70,8 @@ class OpenGraph extends DataObject
         'OG_Determiner' => 'Varchar',
         'OG_Locale' => 'Varchar',
         'OG_LocaleAlternate' => 'Text',
+
+        'FB_AppID' => 'Varchar',
     ];
 
     // private static $casting = [];
@@ -143,6 +157,35 @@ class OpenGraph extends DataObject
         $fields->removeByName([
           'Title',
           'Disabled',
+
+          'OG_Title',
+          'OG_Type',
+          'OG_Url',
+
+          'OG_Article_Author',
+          'OG_Article_PublishedTime',
+          'OG_Article_ModifiedTime',
+          'OG_Article_ExpirationTime',
+          'OG_Article_Section',
+          'OG_Article_Tags',
+
+          'OG_Profile_FirstName',
+          'OG_Profile_LastName',
+          'OG_Profile_Username',
+          'OG_Profile_Gender',
+
+          'OG_Book_Author',
+          'OG_Book_Isbn',
+          'OG_Book_ReleaseDate',
+          'OG_Book_Tags',
+
+          'OG_SiteName',
+          'OG_Description',
+          'OG_Determiner',
+          'OG_Locale',
+          'OG_LocaleAlternate',
+
+          'FB_AppID',
         ]);
 
         $types = [
@@ -179,10 +222,10 @@ class OpenGraph extends DataObject
 
             LiteralField::create('LF', '<h2 style="font-size: 1.5rem">Basic metadata</h2><p class="mb-4">The four required properties for every page are:</p>'),
 
-            TextField::create('OG_Title', 'Title')->setDescription('The title of your object as it should appear within the graph, e.g., "The Rock".'),
-            DropdownField::create('OG_Type', 'Type', $types)->setDescription('The type of your object, e.g., "video.movie". Depending on the type you specify, other properties may also be required.'),
-            SortableUploadField::create('OG_Images', 'Images')->setDescription('An image URL which should represent your object within the graph.'),
-            TextField::create('OG_Url', 'URL')->setDescription('The canonical URL of your object that will be used as its permanent ID in the graph, e.g., "https://www.imdb.com/title/tt0117500/".'),
+            TextField::create('OG_Title', 'Title')->setDescription('The title of your object as it should appear within the graph, e.g., "The Rock".<br>---<br>The title of your article without any branding such as your site name.'),
+            DropdownField::create('OG_Type', 'Type', $types)->setDescription('The type of your object, e.g., "video.movie". Depending on the type you specify, other properties may also be required.<br>---<br>The type of media of your content. This tag impacts how your content shows up in Feed. If you don\'t specify a type,the default is website. Each URL should be a single object, so multiple og:type values are not possible. Find the full list of object types in <a href="https://ogp.me/#types" target="_blank">Object Types Reference</a>'),
+            SortableUploadField::create('OG_Images', 'Images')->setDescription('An image URL which should represent your object within the graph.<br>---<br>The URL of the image that appears when someone shares the content to Facebook. See <a href="https://developers.facebook.com/docs/sharing/webmasters/#images" target="_blank">below</a> for more info, and check out our <a href="https://developers.facebook.com/docs/sharing/best-practices#images" target="_blank">best practices guide</a> to learn how to specify a high quality preview image.'),
+            TextField::create('OG_Url', 'URL')->setDescription('The canonical URL of your object that will be used as its permanent ID in the graph, e.g., "https://www.imdb.com/title/tt0117500/".<br>---<br>The <a target="_blank" href="https://developers.facebook.com/docs/sharing/webmasters/getting-started/versioned-link">canonical URL</a> for your page. This should be the undecorated URL, without session variables, user identifying parameters, or counters. Likes and Shares for this URL will aggregate at this URL. For example, mobile domain URLs should point to the desktop version of the URL as the canonical URL to aggregate Likes and Shares across different versions of the page.'),
 
           )->addExtraClass('mb-5'),
 
@@ -239,14 +282,22 @@ class OpenGraph extends DataObject
             LiteralField::create('LF', '<h2 style="font-size: 1.5rem">Optional metadata</h2><p class="mb-4">The following properties are optional for any object and are generally recommended:</p>'),
 
             TextField::create('OG_SiteName', 'Site name')->setDescription('If your object is part of a larger web site, the name which should be displayed for the overall site. e.g., "IMDb".'),
-            TextareaField::create('OG_Description', 'Description')->setDescription('A one to two sentence description of your object.'),
+            TextareaField::create('OG_Description', 'Description')->setDescription('A one to two sentence description of your object.<br>---<br>A brief description of the content, usually between 2 and 4 sentences. This will displayed below the title of the post on Facebook.'),
             TextField::create('OG_Determiner', 'Determiner')->setDescription('The word that appears before this object\'s title in a sentence. An enum of (a, an, the, "", auto). If auto is chosen, the consumer of your data should chose between "a" or "an". Default is "" (blank).'),
 
-            TextField::create('OG_Locale', 'Locale')->setDescription('The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.'),
+            TextField::create('OG_Locale', 'Locale')->setDescription('The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.<br>---<br>The locale of the resource. Defaults to en_US. You can also use og:locale:alternate if you have other available language translations available. Learn about the locales we support in our <a href="https://developers.facebook.com/docs/javascript/internationalization#locales" target="_blank">documentation on localization</a>.'),
             TextareaField::create('OG_LocaleAlternate', 'Locale alternate')->setDescription('An array of other locales this page is available in.'),
 
             SortableUploadField::create('OG_Videos', 'Videos')->setDescription('A URL to a video file that complements this object.'),
             SortableUploadField::create('OG_Audios', 'Audios')->setDescription('A URL to an audio file to accompany this object.'),
+
+          ),
+
+          CompositeField::create(
+
+            LiteralField::create('LF', '<h2 style="font-size: 1.5rem">Facebook specific metadata</h2><p class="mb-4">The following properties are related to Facebook only:</p>'),
+
+            TextField::create('FB_AppID', 'Faceboook App ID')->setDescription('In order to use <a href="https://developers.facebook.com/docs/sharing/referral-insights" target="_blank">Facebook Insights</a> you must add the app ID to your page. Insights lets you view analytics for traffic to your site from Facebook. Find the app ID in your <a href="https://developers.facebook.com/apps/redirect/dashboard" target="_blank">App Dashboard</a>.'),
 
           ),
 
