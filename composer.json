@@ -20,7 +20,8 @@
         "unclecheese/display-logic": "^3.0",
         "tractorcow/silverstripe-robots": "^4",
         "silvershop/silverstripe-hasonefield": "dev-main",
-        "kinglozzer/multiselectfield": "^2.0"
+        "kinglozzer/multiselectfield": "^2.0",
+        "goldfinch/json-editor": "dev-master"
     },
     "autoload": {
         "psr-4": {
