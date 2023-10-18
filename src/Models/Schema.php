@@ -4,6 +4,7 @@ namespace Goldfinch\Seo\Models;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Permission;
+use ByWaterSolutions\JsonEditorField\JsonEditorField;
 
 class Schema extends DataObject
 {
@@ -19,6 +20,7 @@ class Schema extends DataObject
 
     private static $db = [
         'Title' => 'Varchar(255)',
+        'MyJson' => 'Text',
     ];
 
     // has_many works, but belongs_many_many will not
@@ -91,7 +93,7 @@ class Schema extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        //
+        $fields->insertAfter('Title', JsonEditorField::create('MyJson', 'My JSON Document', '{"name": "Jeremy Dorn","age": 25}', null));
 
         return $fields;
     }
