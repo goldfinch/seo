@@ -155,6 +155,10 @@ class OpenGraph extends DataObject
         $fields = parent::getCMSFields();
 
         $fields->removeByName([
+          'OG_Images',
+          'OG_Videos',
+          'OG_Audios',
+
           'Title',
           'Disabled',
 
