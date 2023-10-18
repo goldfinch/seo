@@ -4,6 +4,7 @@ namespace Goldfinch\Seo\Extensions;
 
 use Goldfinch\Seo\Models\SchemaMapping;
 use SilverStripe\Forms\GridField\GridField;
+use Kinglozzer\MultiSelectField\Forms\MultiSelectField;
 use Goldfinch\Helpers\Forms\GridField\GridFieldManyManyConfig;
 
 class SchemaExtension extends SeoDataExtension
@@ -23,17 +24,18 @@ class SchemaExtension extends SeoDataExtension
             $fields->addFieldsToTab(
                 $tab,
                 [
-                    $schemaGrid = GridField::create(
-                        'Schemas',
-                        'Schemas',
-                        $this->owner->Schemas(),
-                    )
+                    // $schemaGrid = GridField::create(
+                    //     'Schemas',
+                    //     'Schemas',
+                    //     $this->owner->Schemas(),
+                    // ),
+                    MultiSelectField::create('Schemas', 'Schemas', $this->owner, 'SortOrder'),
                 ]
             );
 
-            $config = GridFieldManyManyConfig::create();
+            // $config = GridFieldManyManyConfig::create();
 
-            $schemaGrid->setConfig($config);
+            // $schemaGrid->setConfig($config);
         }
     }
 }
