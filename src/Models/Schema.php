@@ -6,7 +6,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Security\Permission;
 use SilverStripe\Forms\CompositeField;
-use Goldfinch\Forms\JSONEditorField;
+use Goldfinch\JSONEditor\Forms\JSONEditorField;
 
 class Schema extends DataObject
 {
