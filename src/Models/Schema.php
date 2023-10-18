@@ -3,8 +3,10 @@
 namespace Goldfinch\Seo\Models;
 
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\TextField;
 use SilverStripe\Security\Permission;
-use ByWaterSolutions\JsonEditorField\JsonEditorField;
+use SilverStripe\Forms\CompositeField;
+use Goldfinch\JSONEditor\JSONEditorField;
 
 class Schema extends DataObject
 {
@@ -20,7 +22,7 @@ class Schema extends DataObject
 
     private static $db = [
         'Title' => 'Varchar(255)',
-        'MyJson' => 'Text',
+        'JsonLD' => 'Text',
     ];
 
     // has_many works, but belongs_many_many will not
@@ -93,7 +95,19 @@ class Schema extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $fields->insertAfter('Title', JsonEditorField::create('MyJson', 'My JSON Document', '{"name": "Jeremy Dorn","age": 25}', null));
+        $fields->removeByName(['Title', 'JsonLD']);
+
+        $fields->addFieldsToTab(
+          'Root.Main',
+          [
+              CompositeField::create(
+
+                TextField::create('Title', 'Title'),
+                JSONEditorField::create('JsonLD', 'Data', '{}', null),
+
+              ),
+          ]
+        );
 
         return $fields;
     }
