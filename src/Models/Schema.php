@@ -103,7 +103,7 @@ class Schema extends DataObject
               CompositeField::create(
 
                 TextField::create('Title', 'Title'),
-                JSONEditorField::create('JsonLD', 'Data', '{}', null),
+                JSONEditorField::create('JsonLD', 'Data', '{}', null, '{}'),
 
               ),
           ]
