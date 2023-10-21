@@ -2,8 +2,10 @@
 
 namespace Goldfinch\Seo\Admin;
 
-use Goldfinch\Seo\Models\OpenGraph;
 use SilverStripe\Admin\ModelAdmin;
+use Goldfinch\Seo\Models\OpenGraph;
+use JonoM\SomeConfig\SomeConfigAdmin;
+use Goldfinch\Seo\Models\OpenGraphConfig;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
@@ -11,6 +13,8 @@ use SilverStripe\Forms\GridField\GridFieldImportButton;
 
 class SEOOpenGraphAdmin extends ModelAdmin
 {
+    use SomeConfigAdmin;
+
     private static $url_segment = 'seo-open-graph';
 
     private static $menu_title = 'Open graph';
@@ -18,6 +22,9 @@ class SEOOpenGraphAdmin extends ModelAdmin
     private static $managed_models = [
         OpenGraph::class => [
             'title' => 'Open Graph records',
+        ],
+        OpenGraphConfig::class => [
+            'title'=> 'Settings',
         ],
     ];
 

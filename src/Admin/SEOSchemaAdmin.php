@@ -4,6 +4,8 @@ namespace Goldfinch\Seo\Admin;
 
 use Goldfinch\Seo\Models\Schema;
 use SilverStripe\Admin\ModelAdmin;
+use JonoM\SomeConfig\SomeConfigAdmin;
+use Goldfinch\Seo\Models\SchemaConfig;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
@@ -11,6 +13,8 @@ use SilverStripe\Forms\GridField\GridFieldImportButton;
 
 class SEOSchemaAdmin extends ModelAdmin
 {
+    use SomeConfigAdmin;
+
     private static $url_segment = 'seo-schema';
 
     private static $menu_title = 'Schema';
@@ -18,6 +22,9 @@ class SEOSchemaAdmin extends ModelAdmin
     private static $managed_models = [
         Schema::class => [
             'title' => 'Schema records',
+        ],
+        SchemaConfig::class => [
+            'title'=> 'Settings',
         ],
     ];
 

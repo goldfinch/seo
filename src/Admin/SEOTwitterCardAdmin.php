@@ -2,8 +2,10 @@
 
 namespace Goldfinch\Seo\Admin;
 
-use Goldfinch\Seo\Models\TwitterCard;
 use SilverStripe\Admin\ModelAdmin;
+use Goldfinch\Seo\Models\TwitterCard;
+use JonoM\SomeConfig\SomeConfigAdmin;
+use Goldfinch\Seo\Models\TwitterCardConfig;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
@@ -11,6 +13,8 @@ use SilverStripe\Forms\GridField\GridFieldImportButton;
 
 class SEOTwitterCardAdmin extends ModelAdmin
 {
+    use SomeConfigAdmin;
+
     private static $url_segment = 'seo-twitter-card';
 
     private static $menu_title = 'Twitter card';
@@ -18,6 +22,9 @@ class SEOTwitterCardAdmin extends ModelAdmin
     private static $managed_models = [
         TwitterCard::class => [
             'title' => 'Twitter Cards',
+        ],
+        TwitterCardConfig::class => [
+            'title'=> 'Settings',
         ],
     ];
 

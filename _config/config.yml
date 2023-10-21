@@ -2,10 +2,6 @@
 Name: goldfinch-seo
 ---
 
-SilverStripe\SiteConfig\SiteConfig:
-  extensions:
-    - Goldfinch\Seo\Extensions\SiteConfigExtension
-
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     - Goldfinch\Seo\Extensions\SEOExtension
