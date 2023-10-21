@@ -8,6 +8,9 @@ SilverStripe\Admin\LeftAndMain:
       priority: 47.3
       icon_class: "bi-wrench-adjustable-circle"
       children:
+        - Goldfinch-Seo-Admin-SEOMetaAdmin
+        - Goldfinch-Seo-Admin-SEORobotsAdmin
+        - Goldfinch-Seo-Admin-SEOManifestAdmin
         - Goldfinch-Seo-Admin-SEOSchemaAdmin
         - Goldfinch-Seo-Admin-SEOOpenGraphAdmin
         - Goldfinch-Seo-Admin-SEOTwitterCardAdmin

@@ -3,30 +3,42 @@
 namespace Goldfinch\Seo\Admin;
 
 use SilverStripe\Admin\ModelAdmin;
-use Goldfinch\Seo\Models\OpenGraph;
 use JonoM\SomeConfig\SomeConfigAdmin;
-use Goldfinch\Seo\Models\OpenGraphConfig;
+use Goldfinch\Seo\Models\ManifestConfig;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
 
-class SEOOpenGraphAdmin extends ModelAdmin
+class SEOManifestAdmin extends ModelAdmin
 {
     use SomeConfigAdmin;
 
-    private static $url_segment = 'seo-open-graph';
+    private static $url_segment = 'seo-manifest';
 
-    private static $menu_title = 'Open Graph';
+    private static $menu_title = 'Manifest';
 
     private static $managed_models = [
-        OpenGraph::class => [
-            'title' => 'Open Graph records',
-        ],
-        OpenGraphConfig::class => [
-            'title'=> 'Settings',
+        ManifestConfig::class => [
+            'title'=> 'Manifest',
         ],
     ];
+
+    protected function init()
+    {
+        parent::init();
+
+        $configSegment = $this->sanitiseClassName(ManifestConfig::class);
+
+        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false)
+        {
+            $config = ManifestConfig::current_config();
+            $configSegment = $this->sanitiseClassName(ManifestConfig::class);
+            $link = str_replace($configSegment, '', parent::Link(null)) . $configSegment . '/EditForm/field/' . $configSegment . '/item/' . $config->ID . '/edit';
+
+            return $this->redirect($link);
+        }
+    }
 
     // private static $managed_models = [
     //    ExampleProduct::class,
@@ -95,5 +107,14 @@ class SEOOpenGraphAdmin extends ModelAdmin
             // 'Name' => 'Name',
             // 'Category.Title' => 'Category'
         ];
+    }
+
+    public function Link($action = null)
+    {
+        if (!$action) {
+            $action = $this->sanitiseClassName($this->modelTab);
+        }
+
+        return parent::Link($action);
     }
 }
