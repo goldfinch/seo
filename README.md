@@ -5,6 +5,10 @@ Name: app-seo
 After: '#goldfinch-seo'
 ---
 
+Goldfinch\Seo\Models\OpenGraph:
+  has_many:
+    Pages: Page
+
 Page:
   extensions:
     - Goldfinch\Seo\Extensions\SchemaExtension
