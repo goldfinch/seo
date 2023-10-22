@@ -97,7 +97,11 @@ class Schema extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $fields->removeByName(['Title', 'JsonLD']);
+        $fields->removeByName([
+          'Title',
+          'JsonLD',
+          'Disabled',
+        ]);
 
         $fields->addFieldsToTab(
           'Root.Main',

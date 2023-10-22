@@ -9,6 +9,7 @@
 - Twitter Image (width/height/alt)
 - Twitter app:country ->country()
 - preconnect anonymous
+- Twitter card type info
 
 <meta name="category" content="">
 <meta http-equiv="date" content="date">
