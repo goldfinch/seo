@@ -26,6 +26,15 @@ class TwitterCard extends DataObject
      * Validator
      *
      * https://cards-dev.twitter.com/validator
+     *
+     *
+     * Twitter cards example
+     *
+     * https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup
+     *
+     * https://www.everywheremarketer.com/blog/how-to-use-twitter-cards
+     *
+     * https://aemkannika.medium.com/twitter-card-tags-html-69127ef391c0
      */
 
     private static $singular_name = 'twitter card';
@@ -44,7 +53,28 @@ class TwitterCard extends DataObject
 
         'TC_Title' => 'Varchar',
         'TC_Type' => 'Varchar',
+
+        'TC_Site' => 'Varchar',
+        'TC_SiteID' => 'Varchar',
+        'TC_Creator' => 'Varchar',
+        'TC_CreatorID' => 'Varchar',
+        'TC_Description' => 'Text',
+
+        'TC_AppNameIphone' => 'Varchar',
+        'TC_AppIdIphone' => 'Varchar',
+        'TC_AppUrlIphone' => 'Text',
+        'TC_AppNameIpad' => 'Varchar',
+        'TC_AppIdIpad' => 'Varchar',
+        'TC_AppUrlIpad' => 'Text',
+        'TC_AppNameGoogleplay' => 'Varchar',
+        'TC_AppIDGoogleplay' => 'Varchar',
+        'TC_AppUrlGoogleplay' => 'Text',
     ];
+
+    // TC_Player
+    // TC_PlayerWidth
+    // TC_PlayerHeight
+    // TC_PlayerStream
 
     // private static $casting = [];
 
@@ -111,6 +141,22 @@ class TwitterCard extends DataObject
 
           'TC_Title',
           'TC_Type',
+
+          'TC_Site',
+          'TC_SiteID',
+          'TC_Creator',
+          'TC_CreatorID',
+          'TC_Description',
+
+          'TC_AppNameIphone',
+          'TC_AppIdIphone',
+          'TC_AppUrlIphone',
+          'TC_AppNameIpad',
+          'TC_AppIdIpad',
+          'TC_AppUrlIpad',
+          'TC_AppNameGoogleplay',
+          'TC_AppIDGoogleplay',
+          'TC_AppUrlGoogleplay',
 
           'TC_Image',
         ]);

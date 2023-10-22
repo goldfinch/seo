@@ -14,3 +14,8 @@ SilverStripe\Control\Director:
 PageController:
   extensions:
     - Goldfinch\Seo\Extensions\MetaUniverse
+
+SilverStripe\Assets\File:
+  allowed_extensions:
+    - svg
+    - ico

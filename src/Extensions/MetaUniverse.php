@@ -2,16 +2,28 @@
 
 namespace Goldfinch\Seo\Extensions;
 
+use DateTime;
 use BadMethodCallException;
 use Spatie\SchemaOrg\Schema;
+use SilverStripe\Core\Extension;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Environment;
 use Astrotomic\OpenGraph\OpenGraph;
 use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
+use Goldfinch\Seo\Models\ManifestConfig;
 use SilverStripe\Security\SecurityToken;
+use Goldfinch\Seo\Models\OpenGraphConfig;
+use SilverStripe\ORM\ManyManyThroughList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\Core\Extension;
+use Goldfinch\Seo\Models\TwitterCardConfig;
+use Astrotomic\OpenGraph\Types\Twitter\Summary as SummaryTC;
+use Astrotomic\OpenGraph\Types\Twitter\SummaryLargeImage as SummaryLargeImageTC;
+use Astrotomic\OpenGraph\Types\Twitter\App as AppTC;
+use Astrotomic\OpenGraph\Types\Twitter\Player as PlayerTC;
+use Astrotomic\OpenGraph\StructuredProperties\Audio as AudioOG;
+use Astrotomic\OpenGraph\StructuredProperties\Image as ImageOG;
+use Astrotomic\OpenGraph\StructuredProperties\Video as VideoOG;
 
 class MetaUniverse extends Extension
 {
@@ -57,6 +69,7 @@ class MetaUniverse extends Extension
             $this->owner->metaCopyright() .
 
             $this->owner->OpenGraph() .
+            $this->owner->TwitterCard() .
 
             $this->owner->linkHome() .
             $this->owner->linkCanonical() .
@@ -67,6 +80,7 @@ class MetaUniverse extends Extension
             $this->owner->linkImageSrc() .
             $this->owner->linkAppleMobile() .
             $this->owner->linkIcons() .
+            $this->owner->linkManifest() .
             $this->owner->linkHumans() .
 
             PHP_EOL .
@@ -743,10 +757,9 @@ class MetaUniverse extends Extension
             return;
         }
 
-        // href : /__static__/semrush-opensearch.xml
-
+        // href : /__static__/semrush-opensearch.xml / https://web.dev/s/opensearch.xml / https://open.spotifycdn.com/cdn/generated/opensearch.4cd8879e.xml
         $output = '
-        <link rel="search" type="application/opensearchdescription+xml" href="" title="">
+        <link rel="search" type="application/opensearchdescription+xml" title="" href="">
         ';
 
         return $output;
@@ -841,83 +854,6 @@ class MetaUniverse extends Extension
      *
      *
      */
-    // <!-- Google CDN -->
-    // <link rel="dns-prefetch" href="//ajax.googleapis.com">
-    // <link href="//ajax.googleapis.com" rel="preconnect" crossorigin>
-
-    // <!-- Google API -->
-    // <link rel="dns-prefetch" href="//apis.google.com">
-    // <link href="apis.google.com" rel="preconnect" crossorigin>
-
-    // <!-- Google Fonts -->
-    // <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    // <link rel="dns-prefetch" href="//fonts.gstatic.com">
-
-    // <!-- Google Analytics -->
-    // <link rel="dns-prefetch" href="//www.google-analytics.com">
-    // <link href="//www.google-analytics.com" rel="preconnect" crossorigin>
-
-    // <!-- Google Tag Manager -->
-    // <link rel="dns-prefetch" href="//www.googletagmanager.com">
-    // <link href="//www.googletagmanager.com" rel="preconnect" crossorigin>
-
-    // <!-- Google Publisher Tag -->
-    // <link rel="dns-prefetch" href="//www.googletagservices.com">
-
-    // <!-- Google AdSense -->
-    // <link rel="dns-prefetch" href="//adservice.google.com">
-    // <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
-    // <link rel="dns-prefetch" href="//tpc.googlesyndication.com">
-
-
-    // <!-- Microsoft CDN -->
-    // <link rel="dns-prefetch" href="//ajax.microsoft.com">
-    // <link rel="dns-prefetch" href="//ajax.aspnetcdn.com">
-
-    // <!-- Amazon S3 -->
-    // <link rel="dns-prefetch" href="//s3.amazonaws.com">
-
-    // <!-- Cloudflare CDN -->
-    // <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-
-    // <!-- jQuery CDN -->
-    // <link rel="dns-prefetch" href="//code.jquery.com">
-
-    // <!-- Bootstrap CDN -->
-    // <link rel="dns-prefetch" href="//stackpath.bootstrapcdn.com">
-
-    // <!-- Font Awesome CDN -->
-    // <link rel="dns-prefetch" href="//use.fontawesome.com">
-
-    // <!-- Facebook -->
-    // <link rel="dns-prefetch" href="//connect.facebook.net">
-
-    // <!-- Twitter -->
-    // <link rel="dns-prefetch" href="//platform.twitter.com">
-
-    // <!-- Linkedin -->
-    // <link rel="dns-prefetch" href="//platform.linkedin.com">
-
-    // <!-- Vimeo -->
-    // <link rel="dns-prefetch" href="//player.vimeo.com">
-
-    // <!-- GitHub -->
-    // <link rel="dns-prefetch" href="//github.githubassets.com">
-
-    // <!-- Disqus -->
-    // <link rel="dns-prefetch" href="//referrer.disqus.com">
-    // <link rel="dns-prefetch" href="//c.disquscdn.com">
-
-    // <!-- Gravatar -->
-    // <link rel="dns-prefetch" href="//0.gravatar.com">
-    // <link rel="dns-prefetch" href="//2.gravatar.com">
-    // <link rel="dns-prefetch" href="//1.gravatar.com">
-
-    // <!-- DoubleClick -->
-    // <link rel="dns-prefetch" href="//ad.doubleclick.net">
-    // <link rel="dns-prefetch" href="//googleads.g.doubleclick.net">
-    // <link rel="dns-prefetch" href="//stats.g.doubleclick.net">
-    // <link rel="dns-prefetch" href="//cm.g.doubleclick.net">
     public function linkPreconnect()
     {
         if (!ss_config($this->universeClass, 'headrules', 'preconnect'))
@@ -925,32 +861,46 @@ class MetaUniverse extends Extension
             return;
         }
 
+        $output = '';
 
-        $defaults = [
-            'https://www.google.com',
-            'https://www.googletagmanager.com',
-            'https://www.google-analytics.com',
-            'https://www.gstatic.com',
-            'https://fonts.gstatic.com',
-            'https://maps.gstatic.com',
-            'https://maps.googleapis.com',
-            // 'https://googleadservices.com',
-            // 'https://www.facebook.com',
-            // 'https://connect.facebook.net',
-            // 'https://ad.doubleclick.net',
-        ];
+        $defaults = [];
 
-        // https://cdn.example.com
+        $cfg = ss_config($this->universeClass);
 
-        // <link rel="preconnect" href="//i.demo.com" crossorigin="anonymous" / crossorigin>
+        foreach ($cfg['preconnect'] as $link => $state)
+        {
+            if (!$state)
+            {
+                continue;
+            }
 
+            $crossorigin = '';
 
-        $output = '
-        <link rel="dns-prefetch" href="//www.googletagmanager.com">
-        <link href="//www.googletagmanager.com" rel="preconnect" crossorigin>
-        <link rel="dns-prefetch" href="//www.google-analytics.com">
-        <link href="//www.google-analytics.com" rel="preconnect" crossorigin>
-        ';
+            if (
+              isset($cfg['preconnect']['crossorigin']) &&
+              isset($cfg['preconnect']['crossorigin'][$link]) &&
+              $cfg['preconnect']['crossorigin'][$link]
+            )
+            {
+                $crossorigin = ' crossorigin';
+            }
+
+            $output .= '
+            <link rel="preconnect" href="' . $link . '"' . $crossorigin . '>
+            ';
+        }
+
+        foreach ($cfg['dnsprefetch'] as $link => $state)
+        {
+            if (!$state)
+            {
+                continue;
+            }
+
+            $output .= '
+            <link rel="dns-prefetch" href="' . $link . '">
+            ';
+        }
 
         return $output;
     }
@@ -993,6 +943,9 @@ class MetaUniverse extends Extension
      * - 32x32 (ico)
      * - apple-touch-icon : 180×180
      * -
+     *
+     * The request for the manifest is made without credentials (even if it's on the same domain), thus if the manifest requires credentials,
+     * you must include crossorigin="use-credentials" in the manifest tag.
      */
     public function linkIcons()
     {
@@ -1001,15 +954,276 @@ class MetaUniverse extends Extension
             return;
         }
 
-        // <link rel="shortcut icon" href="https://cdn.evbstatic.com/s3-bs/favicons/favicon.ico">
+        $output = '';
+
+        $cfg = ManifestConfig::current_config();
+
+        if ($cfg->IcoIcon->exists())
+        {
+            $url = $cfg->IcoIcon->getAbsoluteURL();
+
+            $output .= '
+            <link rel="shortcut icon" href="' . $url . '">
+            <link rel="icon" href="' . $url . '" sizes="32x32">
+            ';
+        }
+
+        if ($cfg->VectorIcon->exists())
+        {
+            $url = $cfg->VectorIcon->getAbsoluteURL();
+
+            $output .= '
+            <link rel="mask-icon" href="' . $url . '" color="' . ss_env('APP_THEME_COLOR') . '">
+            <link rel="icon" href="' . $url . '" type="image/svg+xml">
+            ';
+        }
+
+        if ($cfg->PortableImage->exists())
+        {
+            $url = $cfg->PortableImage->Fill(180, 180)->getAbsoluteURL();
+
+            $output .= '
+            <link rel="apple-touch-icon" href="' . $url . '">
+            ';
+        }
+
+        return $output;
+    }
+
+    public function linkManifest()
+    {
+        if (!ss_config($this->universeClass, 'headrules', 'manifest'))
+        {
+            return;
+        }
+
         $output = '
-        <link rel="mask-icon" href="/icon.svg" color="' . ss_env('APP_THEME_COLOR') . '">
-        <link rel="icon" href="/favicon.ico" sizes="32x32">
-        <link rel="icon" href="/icon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
         <link rel="manifest" href="/manifest.webmanifest">
         ';
 
         return $output;
+    }
+
+    public function OpenGraph()
+    {
+        // TODO
+        // OG video
+        // $graph
+        //     ->video('ww')
+        //     ->video(
+        //         Video::make('ww')
+        //             ->secureUrl('ss')
+        //             video/mp4, video/mpeg, video/webm, video/ogg
+        //             ->mimeType('application/x-shockwave-flash')
+        //             ->width(100)
+        //             ->height(200)
+        //             // ->alt('sss')
+        //     );
+
+        // // OG audio
+        // $graph
+        //     ->audio('https://example.com/image1.jpg')
+        //     ->audio(
+        //         Audio::make('https://example.com/image2.jpg')
+        //             ->secureUrl('ss')
+        //             ->mimeType('ss')
+        //     );
+
+        if ($this->owner->OpenGraphObject && $this->owner->OpenGraphObject->exists())
+        {
+            $og = $this->owner->OpenGraphObject;
+
+            $baseCfg = SiteConfig::current_site_config();
+            $ogCfg = OpenGraphConfig::current_config();
+
+            if ($og->OG_Type == 'website')
+            {
+                $graph = OpenGraph::website($og->OG_Title ?? $baseCfg->Title);
+            }
+            else if ($og->OG_Type == 'profile')
+            {
+                $graph = OpenGraph::profile($og->OG_Title ?? $baseCfg->Title);
+
+                if ($og->OG_Profile_FirstName) $graph->firstName($og->OG_Profile_FirstName);
+                if ($og->OG_Profile_LastName) $graph->lastName($og->OG_Profile_LastName);
+                if ($og->OG_Profile_Username) $graph->username($og->OG_Profile_Username);
+                if ($og->OG_Profile_Gender) $graph->gender($og->OG_Profile_Gender);
+            }
+            else if ($og->OG_Type == 'article')
+            {
+                $graph = OpenGraph::article($og->OG_Title ?? $baseCfg->Title);
+
+                // TODO
+                // if ($og->OG_Article_Author) $graph->author($og->OG_Article_Author);
+                if ($og->OG_Article_PublishedTime) $graph->publishedAt(new DateTime($og->OG_Article_PublishedTime));
+                if ($og->OG_Article_ModifiedTime) $graph->modifiedAt(new DateTime($og->OG_Article_ModifiedTime));
+                if ($og->OG_Article_ExpirationTime) $graph->expiresAt(new DateTime($og->OG_Article_ExpirationTime));
+                if ($og->OG_Article_Section) $graph->section($og->OG_Article_Section);
+                // TODO
+                // if ($og->OG_Article_Tags) $graph->tag($og->OG_Article_Tags);
+                // ->tag('tag1')
+                // ->tag('tag2')
+            }
+
+            if ($og->OG_Images() && $og->OG_Images()->Count())
+            {
+                foreach ($og->OG_Images() as $image)
+                {
+                    $ogImage = null;
+
+                    if ($image->OG_Image_Width && $image->OG_Image_Height)
+                    {
+                        $width = $image->OG_Image_Width;
+                        $height = $image->OG_Image_Height;
+                    }
+                    else
+                    {
+                        $width = 1200;
+                        $height = 630;
+                    }
+
+                    $link = $image->Fill($width, $height)->getAbsoluteURL();
+
+                    $ogImage = ImageOG::make($link)
+                      ->secureUrl($link)
+                      ->mimeType($image->getMimeType())
+                      ->width($width)
+                      ->height($height)
+                    ;
+
+                    if ($image->OG_Image_Alt || $image->Title) $ogImage->alt($image->OG_Image_Alt ?? $image->Title);
+
+                    $graph->image($ogImage);
+                }
+            }
+
+            // Optional & Basic meta (for all types)
+            $graph->url($og->OG_Url ?? Director::absoluteBaseURL());
+            $graph->siteName($og->OG_SiteName ?? $baseCfg->Title);
+            if ($og->OG_Description) $graph->description($og->OG_Description);
+            if ($og->OG_Determiner) $graph->locale($og->OG_Determiner);
+            if ($og->OG_Locale) $graph->locale($og->OG_Locale);
+            // TODO
+            // $graph->alternateLocale('ss')
+            // ->alternateLocale('en_GB')
+
+            if ($og->FB_AppID) $graph->setProperty('fb', 'app_id', $og->FB_AppID);
+
+            return '
+            ' . $graph->__toString();
+        }
+    }
+
+    public function TwitterCard()
+    {
+      if ($this->owner->TwitterCardObject && $this->owner->TwitterCardObject->exists())
+      {
+          $tc = $this->owner->TwitterCardObject;
+
+          $baseCfg = SiteConfig::current_site_config();
+          $tcCfg = TwitterCardConfig::current_config();
+
+          if ($tc->TC_Type == 'summary')
+          {
+              $graph = SummaryTC::make($tc->TC_Title ?? $baseCfg->Title);
+
+              if ($tc->TC_Description) $graph->description($tc->TC_Description);
+
+              if ($tc->TC_Image->exists())
+              {
+                  $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                  $graph->image($url, $tc->Title);
+              }
+
+              if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+              if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
+          }
+          else if ($tc->TC_Type == 'summary_large_image')
+          {
+              $graph = SummaryLargeImageTC::make($tc->TC_Title ?? $baseCfg->Title);
+              if ($tc->TC_Creator) $graph->creator($tc->TC_Creator);
+
+              if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
+              if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+              if ($tc->TC_Description) $graph->description($tc->TC_Description);
+
+              if ($tc->TC_Image->exists())
+              {
+                  $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                  $graph->image($url, $tc->Title);
+              }
+
+          }
+          else if ($tc->TC_Type == 'app')
+          {
+              $graph = AppTC::make($tc->TC_Title ?? $baseCfg->Title);
+
+              if ($tc->TC_AppNameIphone && $tc->TC_AppIdIphone)
+              {
+                  $graph->iPhoneApp($tc->TC_AppNameIphone, $tc->TC_AppIdIphone, $tc->TC_AppUrlIphone ?? null);
+              }
+
+              if ($tc->TC_AppNameIpad && $tc->TC_AppIdIpad)
+              {
+                  $graph->iPadApp($tc->TC_AppNameIpad, $tc->TC_AppIdIpad, $tc->TC_AppUrlIpad ?? null);
+              }
+
+              if ($tc->TC_AppNameGoogleplay && $tc->TC_AppIDGoogleplay)
+              {
+                  $graph->googlePlayApp($tc->TC_AppNameGoogleplay, $tc->TC_AppIDGoogleplay, $tc->TC_AppUrlGoogleplay ?? null);
+              }
+
+              // $graph->country('name');
+          }
+          else if ($tc->TC_Type == 'player')
+          {
+              $graph = PlayerTC::make($tc->TC_Title ?? $baseCfg->Title);
+
+              // 'http://www.example.com/player.iframe', 1920, 1080
+              // if ($tc->TC_Player && $tc->TC_PlayerWidth && $tc->TC_PlayerHeight)
+              // {
+              //     $graph->player($tc->TC_Player, $tc->TC_PlayerWidth, $tc->TC_PlayerHeight);
+              // }
+
+              if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+              if ($tc->TC_Description) $graph->description($tc->TC_Description);
+
+              if ($tc->TC_Image->exists())
+              {
+                  $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                  $graph->image($url, $tc->Title);
+              }
+          }
+
+          if ($tc->TC_Site) $graph->site($tc->TC_Site);
+
+          return '
+          ' . $graph->__toString();
+      }
+    }
+
+    public function SchemaData()
+    {
+        if (
+          isset($this->owner->manyMany()['Schemas']) &&
+          get_class($this->owner->Schemas()) == ManyManyThroughList::class &&
+          $this->owner->Schemas()->Count()
+        )
+        {
+            $schema = [
+                '@context' => 'https://schema.org',
+                '@graph' => [],
+            ];
+
+            foreach ($this->owner->Schemas() as $schemaType)
+            {
+                if (!$schemaType->Disabled)
+                {
+                    $schema['@graph'][] = json_decode($schemaType->JsonLD, true);
+                }
+            }
+
+            return '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES).'</script>';
+        }
     }
 }

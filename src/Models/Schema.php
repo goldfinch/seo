@@ -4,6 +4,7 @@ namespace Goldfinch\Seo\Models;
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Security\Permission;
 use SilverStripe\Forms\CompositeField;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
@@ -22,6 +23,7 @@ class Schema extends DataObject
 
     private static $db = [
         'Title' => 'Varchar(255)',
+        'Disabled' => 'Boolean',
         'JsonLD' => 'Text',
     ];
 
@@ -103,6 +105,7 @@ class Schema extends DataObject
               CompositeField::create(
 
                 TextField::create('Title', 'Title'),
+                CheckboxField::create('Disabled', 'Disable this schema')->setDescription('Any page that is using this schema record will not be displayed'),
                 JSONEditorField::create('JsonLD', 'Data', '{}', null, '{}'),
 
               ),

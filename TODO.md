@@ -1,3 +1,15 @@
+- favicon.ico (root)
+- og profile/gender dropdown
+- EOL fields in OG
+- Datetime fields in OG
+- Video OG
+- Audio OG
+- Grid editable fields OG
+- Twitter Player
+- Twitter Image (width/height/alt)
+- Twitter app:country ->country()
+- preconnect anonymous
+
 <meta name="category" content="">
 <meta http-equiv="date" content="date">
 <meta http-equiv="last-modified" content="date">

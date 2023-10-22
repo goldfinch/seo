@@ -3,6 +3,95 @@ Name: goldfinch-seo-meta
 ---
 
 Goldfinch\Seo\Traits\MetaUniverse:
+  preconnect:
+    # Google Analytics
+    '//www.google-analytics.com': true
+
+    '//www.gstatic.com': true
+    '//fonts.gstatic.com': true
+    '//www.google.com': false
+    '//fonts.googleapis.com': false
+    # Google API
+    '//apis.google.com': false
+
+    '//maps.gstatic.com': false
+    '//maps.googleapis.com': false
+    '//googleadservices.com': false
+    '//www.facebook.com': false
+    '//connect.facebook.net': false
+    '//ad.doubleclick.net': false
+    # Google Tag Manager
+    '//www.googletagmanager.com': false
+    # Google CDN
+    '//ajax.googleapis.com': false
+
+  dnsprefetch:
+    # Google Analytics
+    '//www.google-analytics.com': true
+    # DoubleClick
+    '//ad.doubleclick.net': false
+    '//googleads.g.doubleclick.net': false
+    '//stats.g.doubleclick.net': false
+    '//cm.g.doubleclick.net': false
+    # Gravatar
+    '//0.gravatar.com': false
+    '//2.gravatar.com': false
+    '//1.gravatar.com': false
+    # Disqus
+    '//referrer.disqus.com': false
+    '//c.disquscdn.com': false
+    # GitHub
+    '//github.githubassets.com': false
+    # Vimeo
+    '//player.vimeo.com': false
+    # Linkedin
+    '//platform.linkedin.com': false
+    # Twitter
+    '//platform.twitter.com': false
+    # Facebook
+    '//connect.facebook.net': false
+    # Font Awesome CDN
+    '//use.fontawesome.com': false
+    # Bootstrap CDN
+    '//stackpath.bootstrapcdn.com': false
+    # jQuery CDN
+    '//code.jquery.com': false
+    # Cloudflare CDN
+    '//cdnjs.cloudflare.com': false
+    # Amazon S3
+    '//s3.amazonaws.com': false
+    # Microsoft CDN
+    '//ajax.microsoft.com': false
+    '//ajax.aspnetcdn.com': false
+    # Google AdSense
+    '//tpc.googlesyndication.com': false
+    '//adservice.google.com': false
+    '//pagead2.googlesyndication.com': false
+    # Google Publisher Tag
+    '//www.googletagservices.com': false
+    # Google Tag Manager
+    '//www.googletagmanager.com': false
+    # Google Fonts
+    '//fonts.googleapis.com': false
+    '//fonts.gstatic.com': false
+    # Google API
+    '//apis.google.com': false
+    # Google CDN
+    '//ajax.googleapis.com': false
+
+  crossorigin:
+    # Google Analytics
+    '//www.google-analytics.com': true
+
+    '//www.gstatic.com': true
+    '//fonts.gstatic.com': true
+    '//fonts.googleapis.com': false
+    # Google API
+    '//apis.google.com': false
+
+  # anonymous:
+  #   '//www.google-analytics.com': true
+
   headrules:
     'base': true
     'category': false
@@ -40,4 +129,5 @@ Goldfinch\Seo\Traits\MetaUniverse:
     'preconnect': false
     'canonical': true
     'amphtml': false
-    'icon': false
+    'icon': true
+    'manifest': true
