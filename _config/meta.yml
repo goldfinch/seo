@@ -27,7 +27,7 @@ Goldfinch\Seo\Traits\MetaUniverse:
 
   dnsprefetch:
     # Google Analytics
-    '//www.google-analytics.com': true
+    '//www.google-analytics.com': false
     # DoubleClick
     '//ad.doubleclick.net': false
     '//googleads.g.doubleclick.net': false
