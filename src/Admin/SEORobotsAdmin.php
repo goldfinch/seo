@@ -24,22 +24,6 @@ class SEORobotsAdmin extends ModelAdmin
         ],
     ];
 
-    protected function init()
-    {
-        parent::init();
-
-        $configSegment = $this->sanitiseClassName(RobotsConfig::class);
-
-        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false)
-        {
-            $config = RobotsConfig::current_config();
-            $configSegment = $this->sanitiseClassName(RobotsConfig::class);
-            $link = str_replace($configSegment, '', parent::Link(null)) . $configSegment . '/EditForm/field/' . $configSegment . '/item/' . $config->ID . '/edit';
-
-            return $this->redirect($link);
-        }
-    }
-
     // private static $managed_models = [
     //    ExampleProduct::class,
     //
@@ -62,6 +46,22 @@ class SEORobotsAdmin extends ModelAdmin
     public $showSearchForm = true;
 
     private static $page_length = 30;
+
+    protected function init()
+    {
+        parent::init();
+
+        $configSegment = $this->sanitiseClassName(RobotsConfig::class);
+
+        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false)
+        {
+            $config = RobotsConfig::current_config();
+            $configSegment = $this->sanitiseClassName(RobotsConfig::class);
+            $link = str_replace($configSegment, '', parent::Link(null)) . $configSegment . '/EditForm/field/' . $configSegment . '/item/' . $config->ID . '/edit';
+
+            return $this->redirect($link);
+        }
+    }
 
     public function getList()
     {

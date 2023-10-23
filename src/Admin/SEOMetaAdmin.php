@@ -47,6 +47,22 @@ class SEOMetaAdmin extends ModelAdmin
 
     private static $page_length = 30;
 
+    protected function init()
+    {
+        parent::init();
+
+        $configSegment = $this->sanitiseClassName(MetaConfig::class);
+
+        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false)
+        {
+            $config = MetaConfig::current_config();
+            $configSegment = $this->sanitiseClassName(MetaConfig::class);
+            $link = str_replace($configSegment, '', parent::Link(null)) . $configSegment . '/EditForm/field/' . $configSegment . '/item/' . $config->ID . '/edit';
+
+            return $this->redirect($link);
+        }
+    }
+
     public function getList()
     {
         $list =  parent::getList();

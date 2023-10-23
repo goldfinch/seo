@@ -9,6 +9,7 @@ use SilverStripe\Core\Extension;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Environment;
 use Astrotomic\OpenGraph\OpenGraph;
+use Goldfinch\Seo\Models\MetaConfig;
 use SilverStripe\Security\Permission;
 use Goldfinch\Seo\Models\SchemaConfig;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -497,25 +498,63 @@ class MetaUniverse extends Extension
         // config : ../browserconfig.xml
         // task : name=Search;action-uri=https://demo.com/search.ico
 
-        $output = '
-        <meta name="msapplication-starturl" content="/">
-        <meta name="msapplication-navbutton-color" content="">
-        <meta name="msapplication-TileColor" content="">
-        <meta name="msapplication-TileImage" content="">
-        <meta name="msapplication-tooltip" content="">
-        <meta name="msapplication-task" content="">
-        <meta name="msapplication-config" content="">
-        <meta name="msapplication-badge" content="">
-        <meta name="msapplication-square70x70logo" content="">
-        <meta name="msapplication-square150x150logo" content="">
-        <meta name="msapplication-square310x310logo" content="">
-        <meta name="msapplication-wide310x150logo" content="">
+        $baseCfg = SiteConfig::current_site_config();
+
+        $metaCfg = MetaConfig::current_config();
+
+        $output = '';
+
+        $output .= '
+        <meta name="msapplication-starturl" content="'. Director::absoluteBaseURL() .'">
+        <meta name="msapplication-navbutton-color" content="#ffffff">
+        <meta name="msapplication-tooltip" content="'.$baseCfg->Title.'">
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="msapplication-notification" content="">
-        <meta name="msapplication-window" content="">
-        <meta name="msapplication-allowDomainMetaTags" content="true">
-        <meta name="msapplication-allowDomainApiCalls" content="true">
         ';
+
+        if ($metaCfg->MsapplicationTileColor)
+        {
+            $output .= '
+            <meta name="msapplication-TileColor" content="'.$metaCfg->MsapplicationTileColor.'">
+            ';
+        }
+
+        if ($metaCfg->MsapplicationBackgroundImage && $metaCfg->MsapplicationBackgroundImage->exists())
+        {
+            $url = $metaCfg->MsapplicationBackgroundImage->Fill(500, 500)->getAbsoluteURL();
+
+            $output .= '
+            <meta name="msapplication-TileImage" content="'.$url.'">
+            ';
+        }
+
+        if ($metaCfg->MsapplicationTileImage && $metaCfg->MsapplicationTileImage->exists())
+        {
+            $url70x70 = $metaCfg->MsapplicationTileImage->Fill(70, 70)->getAbsoluteURL();
+            $url150x150 = $metaCfg->MsapplicationTileImage->Fill(150, 150)->getAbsoluteURL();
+            $url310x310 = $metaCfg->MsapplicationTileImage->Fill(310, 310)->getAbsoluteURL();
+            $url310x150 = $metaCfg->MsapplicationTileImage->Fill(310, 150)->getAbsoluteURL();
+
+            $output .= '
+            <meta name="msapplication-square70x70logo" content="'.$url70x70.'">
+            <meta name="msapplication-square150x150logo" content="'.$url150x150.'">
+            <meta name="msapplication-square310x310logo" content="'.$url310x310.'">
+            <meta name="msapplication-wide310x150logo" content="'.$url310x150.'">
+            ';
+        }
+
+        // TODO
+        // $output .= '
+        // <meta name="msapplication-config" content="browserconfig.xml">
+        // <meta name="msapplication-window" content="width=1024;height=768">
+        // <meta name="msapplication-notification" content="frequency=30; polling-uri=;">
+        // <meta name="msapplication-badge" content="frequency=30; polling-uri=">
+        // ';
+
+        // $output .= '
+        // <meta name="msapplication-task" content="">
+        // <meta name="msapplication-allowDomainMetaTags" content="true">
+        // <meta name="msapplication-allowDomainApiCalls" content="true">
+        // ';
 
         return $output;
     }

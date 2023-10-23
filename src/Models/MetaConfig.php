@@ -2,10 +2,13 @@
 
 namespace Goldfinch\Seo\Models;
 
-use SilverStripe\Forms\DropdownField;
+use SilverStripe\Assets\Image;
 use JonoM\SomeConfig\SomeConfig;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\View\TemplateGlobalProvider;
+use SilverStripe\AssetAdmin\Forms\UploadField;
 
 class MetaConfig extends DataObject implements TemplateGlobalProvider
 {
@@ -18,6 +21,17 @@ class MetaConfig extends DataObject implements TemplateGlobalProvider
         'GeoRegion' => 'Varchar',
         'GeoPlacename' => 'Varchar',
         'Rating' => 'Varchar',
+        'MsapplicationTileColor' => 'Varchar',
+    ];
+
+    private static $has_one = [
+        'MsapplicationTileImage' => Image::class,
+        'MsapplicationBackgroundImage' => Image::class,
+    ];
+
+    private static $owns = [
+        'MsapplicationTileImage',
+        'MsapplicationBackgroundImage',
     ];
 
     public function getCMSFields()
@@ -45,7 +59,10 @@ class MetaConfig extends DataObject implements TemplateGlobalProvider
             'Rating',
             'Rating',
             $ratingTypes
-          )->setDescription('Labels a page as containing sexually-explicit adult content, to signal that it be filtered by SafeSearch results. <a href="https://developers.google.com/search/docs/crawling-indexing/safesearch" target="_blank">Learn more about labeling SafeSearch pages</a>.')
+          )->setDescription('Labels a page as containing sexually-explicit adult content, to signal that it be filtered by SafeSearch results. <a href="https://developers.google.com/search/docs/crawling-indexing/safesearch" target="_blank">Learn more about labeling SafeSearch pages</a>.'),
+          UploadField::create('MsapplicationTileImage', 'Tile image, logo (msapplication meta tag)')->setDescription('used for msapplication meta tags'),
+          UploadField::create('MsapplicationBackgroundImage', 'Background image for live tile (msapplication meta tag)')->setDescription('used for msapplication meta tags'),
+          TextField::create('MsapplicationTileColor', 'Background color for live tile (msapplication meta tag)'),
 
         ]);
 
