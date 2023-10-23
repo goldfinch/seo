@@ -877,9 +877,9 @@ class MetaUniverse extends Extension
             $crossorigin = '';
 
             if (
-              isset($cfg['preconnect']['crossorigin']) &&
-              isset($cfg['preconnect']['crossorigin'][$link]) &&
-              $cfg['preconnect']['crossorigin'][$link]
+              isset($cfg['crossorigin']) &&
+              isset($cfg['crossorigin'][$link]) &&
+              $cfg['crossorigin'][$link]
             )
             {
                 $crossorigin = ' crossorigin';
