@@ -131,3 +131,4 @@ Goldfinch\Seo\Traits\MetaUniverse:
     'amphtml': false
     'icon': true
     'manifest': true
+    'robots': false
