@@ -336,6 +336,7 @@ class MetaUniverse extends Extension
         if (isset($geoPosition))
         {
             $output .= '
+            <meta name="ICBM" content="' . str_replace(';', ',', $geoPosition) . '">
             <meta name="geo.position" content="' . $geoPosition . '">
             ';
         }
