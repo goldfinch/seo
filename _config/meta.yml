@@ -105,7 +105,7 @@ Goldfinch\Seo\Traits\MetaUniverse:
     'rating': false
     'mobile-web-app-capable': false
     'refresh': false
-    'apple': false
+    'apple-webapp': false
     'format-detection': false
     'msapplication': false
     'author': false
@@ -117,7 +117,7 @@ Goldfinch\Seo\Traits\MetaUniverse:
     'verifications': false
     'csrf': true
     'description': true
-    'theme': false
+    'theme': true
     'viewport': true
     'x-cms': true
     'search': false

@@ -10,6 +10,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\Environment;
 use Astrotomic\OpenGraph\OpenGraph;
 use SilverStripe\Security\Permission;
+use Goldfinch\Seo\Models\SchemaConfig;
 use SilverStripe\SiteConfig\SiteConfig;
 use Goldfinch\Seo\Models\ManifestConfig;
 use SilverStripe\Security\SecurityToken;
@@ -17,13 +18,13 @@ use Goldfinch\Seo\Models\OpenGraphConfig;
 use SilverStripe\ORM\ManyManyThroughList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use Goldfinch\Seo\Models\TwitterCardConfig;
-use Astrotomic\OpenGraph\Types\Twitter\Summary as SummaryTC;
-use Astrotomic\OpenGraph\Types\Twitter\SummaryLargeImage as SummaryLargeImageTC;
 use Astrotomic\OpenGraph\Types\Twitter\App as AppTC;
 use Astrotomic\OpenGraph\Types\Twitter\Player as PlayerTC;
+use Astrotomic\OpenGraph\Types\Twitter\Summary as SummaryTC;
 use Astrotomic\OpenGraph\StructuredProperties\Audio as AudioOG;
 use Astrotomic\OpenGraph\StructuredProperties\Image as ImageOG;
 use Astrotomic\OpenGraph\StructuredProperties\Video as VideoOG;
+use Astrotomic\OpenGraph\Types\Twitter\SummaryLargeImage as SummaryLargeImageTC;
 
 class MetaUniverse extends Extension
 {
@@ -216,9 +217,14 @@ class MetaUniverse extends Extension
         // <meta http-equiv="content-script-type" content="language“> - The default script language for the script element is javascript. This informs the browser which type of scripting language you are using by default.
         // <meta name="google" content="notranslate">
         // <meta name="locale" content="en-NZ">
-        $output = '
-        <meta name="language" content="en">
-        ';
+        $output = '';
+
+        if (ss_env('APP_META_LOCALE'))
+        {
+            $output .= '
+            <meta name="language" content="'.ss_env('APP_META_LOCALE').'">
+            ';
+        }
 
         return $output;
     }
@@ -297,24 +303,53 @@ class MetaUniverse extends Extension
 
         $output = '';
 
-        if (ss_env('APP_SEO_GEO_POSITION'))
+        $cfg = MetaConfig::current_config();
+
+        if ($cfg->GeoPosition)
+        {
+            $geoPosition = $cfg->GeoPosition;
+        }
+        else if (ss_env('APP_SEO_GEO_POSITION'))
+        {
+            $geoPosition = ss_env('APP_SEO_GEO_POSITION');
+        }
+
+        if ($cfg->GeoRegion)
+        {
+            $geoRegion = $cfg->GeoRegion;
+        }
+        else if (ss_env('APP_SEO_GEO_REGION'))
+        {
+            $geoRegion = ss_env('APP_SEO_GEO_REGION');
+        }
+
+        if ($cfg->GeoPlacename)
+        {
+            $geoPlacename = $cfg->GeoPlacename;
+        }
+        else if (ss_env('APP_SEO_GEO_PLACENAME'))
+        {
+            $geoPlacename = ss_env('APP_SEO_GEO_PLACENAME');
+        }
+
+        if (isset($geoPosition))
         {
             $output .= '
-            <meta name="geo.position" content="' . ss_env('APP_SEO_GEO_POSITION') . '">
+            <meta name="geo.position" content="' . $geoPosition . '">
             ';
         }
 
-        if (ss_env('APP_SEO_GEO_REGION'))
+        if (isset($geoRegion))
         {
             $output .= '
-            <meta name="geo.region" content="' . ss_env('APP_SEO_GEO_REGION') . '">
+            <meta name="geo.region" content="' . $geoRegion . '">
             ';
         }
 
-        if (ss_env('APP_SEO_GEO_PLACENAME'))
+        if (isset($geoPlacename))
         {
             $output .= '
-            <meta name="geo.placename" content="' . ss_env('APP_SEO_GEO_PLACENAME') . '">
+            <meta name="geo.placename" content="' . $geoPlacename . '">
             ';
         }
 
@@ -337,10 +372,21 @@ class MetaUniverse extends Extension
 
         $output = '';
 
-        if (ss_env('APP_SEO_RATING'))
+        $cfg = MetaConfig::current_config();
+
+        if ($cfg->Rating)
+        {
+            $rating = $cfg->Rating;
+        }
+        else if (ss_env('APP_SEO_RATING'))
+        {
+            $rating = ss_env('APP_SEO_RATING');
+        }
+
+        if (isset($rating))
         {
             $output .= '
-            <meta name="rating" content="' . ss_env('APP_SEO_RATING') . '">
+            <meta name="rating" content="' . $rating . '">
             ';
         }
 
@@ -388,16 +434,35 @@ class MetaUniverse extends Extension
      */
     public function metaAppleMobile()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'apple'))
+        if (!ss_config($this->universeClass, 'headrules', 'apple-webapp'))
         {
             return;
         }
 
-        $output = '
-        <meta name="apple-mobile-web-app-title" content="">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        ';
+        $cfg = SiteConfig::current_site_config();
+
+        $output = '';
+
+        if (ss_env('APP_APPLE_WEBAPP_TITLE') || $cfg->Title)
+        {
+            $output .= '
+            <meta name="apple-mobile-web-app-title" content="'.(ss_env('APP_APPLE_WEBAPP_TITLE') ?? $cfg->Title).'">
+            ';
+        }
+
+        if (ss_env('APP_APPLE_WEBAPP_CAPABLE')) // yes|no
+        {
+            $output .= '
+            <meta name="apple-mobile-web-app-capable" content="'.ss_env('APP_APPLE_WEBAPP_CAPABLE').'">
+            ';
+        }
+
+        if (ss_env('APP_APPLE_WEBAPP_STATUS_BAR_STYLE')) // black | black-translucent | default
+        {
+            $output .= '
+            <meta name="apple-mobile-web-app-status-bar-style" content="'.ss_env('APP_APPLE_WEBAPP_STATUS_BAR_STYLE').'">
+            ';
+        }
 
         return $output;
     }
@@ -675,10 +740,21 @@ class MetaUniverse extends Extension
         // theme-color : Chrome, Firefox OS and Opera
         // <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F6F7F8">
         // <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111317">
-        $output = '
-        <meta name="color-scheme" content="' . ss_env('APP_COLOR_SCHEME') . '">
-        <meta name="theme-color" content="' . ss_env('APP_THEME_COLOR') . '">
-        ';
+        $output = '';
+
+        if (ss_env('APP_COLOR_SCHEME'))
+        {
+            $output .= '
+            <meta name="color-scheme" content="' . ss_env('APP_COLOR_SCHEME') . '">
+            ';
+        }
+
+        if (ss_env('APP_THEME_COLOR'))
+        {
+            $output .= '
+            <meta name="theme-color" content="' . ss_env('APP_THEME_COLOR') . '">
+            ';
+        }
 
         return $output;
     }
@@ -829,7 +905,7 @@ class MetaUniverse extends Extension
         }
 
         $output = '
-        <link rel="shortlink" href="'. Director::absoluteBaseURL() .'">
+        <link rel="shortlink" href="'. Director::absoluteURL($_SERVER['REQUEST_URI']) .'">
         ';
 
         return $output;
@@ -913,7 +989,7 @@ class MetaUniverse extends Extension
         }
 
         $output = '
-        <link rel="canonical" href="' . Director::absoluteBaseURL() . '">
+        <link rel="canonical" href="' . Director::absoluteURL($_SERVER['REQUEST_URI']) . '">
         ';
 
         return $output;
@@ -1028,13 +1104,20 @@ class MetaUniverse extends Extension
         //             ->secureUrl('ss')
         //             ->mimeType('ss')
         //     );
+        $ogCfg = OpenGraphConfig::current_config();
 
         if ($this->owner->OpenGraphObject && $this->owner->OpenGraphObject->exists())
         {
             $og = $this->owner->OpenGraphObject;
+        }
+        else if (!$this->owner->DisableDefaultOpenGraphObject && $ogCfg->DefaultObject && $ogCfg->DefaultObject->exists())
+        {
+            $og = $ogCfg->DefaultObject;
+        }
 
+        if (isset($og))
+        {
             $baseCfg = SiteConfig::current_site_config();
-            $ogCfg = OpenGraphConfig::current_config();
 
             if ($og->OG_Type == 'website')
             {
@@ -1116,105 +1199,113 @@ class MetaUniverse extends Extension
 
     public function TwitterCard()
     {
-      if ($this->owner->TwitterCardObject && $this->owner->TwitterCardObject->exists())
-      {
-          $tc = $this->owner->TwitterCardObject;
+        $tcCfg = TwitterCardConfig::current_config();
 
-          $baseCfg = SiteConfig::current_site_config();
-          $tcCfg = TwitterCardConfig::current_config();
+        if ($this->owner->TwitterCardObject && $this->owner->TwitterCardObject->exists())
+        {
+            $tc = $this->owner->TwitterCardObject;
+        }
+        else if (!$this->owner->DisableDefaultTwitterCardObject && $tcCfg->DefaultObject && $tcCfg->DefaultObject->exists())
+        {
+            $tc = $tcCfg->DefaultObject;
+        }
 
-          if ($tc->TC_Type == 'summary')
-          {
-              $graph = SummaryTC::make($tc->TC_Title ?? $baseCfg->Title);
+        if (isset($tc))
+        {
+            $baseCfg = SiteConfig::current_site_config();
 
-              if ($tc->TC_Description) $graph->description($tc->TC_Description);
+            if ($tc->TC_Type == 'summary')
+            {
+                $graph = SummaryTC::make($tc->TC_Title ?? $baseCfg->Title);
 
-              if ($tc->TC_Image->exists())
-              {
-                  $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
-                  $graph->image($url, $tc->Title);
-              }
+                if ($tc->TC_Description) $graph->description($tc->TC_Description);
 
-              if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
-              if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
-          }
-          else if ($tc->TC_Type == 'summary_large_image')
-          {
-              $graph = SummaryLargeImageTC::make($tc->TC_Title ?? $baseCfg->Title);
-              if ($tc->TC_Creator) $graph->creator($tc->TC_Creator);
+                if ($tc->TC_Image->exists())
+                {
+                    $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                    $graph->image($url, $tc->Title);
+                }
 
-              if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
-              if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
-              if ($tc->TC_Description) $graph->description($tc->TC_Description);
+                if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+                if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
+            }
+            else if ($tc->TC_Type == 'summary_large_image')
+            {
+                $graph = SummaryLargeImageTC::make($tc->TC_Title ?? $baseCfg->Title);
+                if ($tc->TC_Creator) $graph->creator($tc->TC_Creator);
 
-              if ($tc->TC_Image->exists())
-              {
-                  $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
-                  $graph->image($url, $tc->Title);
-              }
+                if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
+                if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+                if ($tc->TC_Description) $graph->description($tc->TC_Description);
 
-          }
-          else if ($tc->TC_Type == 'app')
-          {
-              $graph = AppTC::make($tc->TC_Title ?? $baseCfg->Title);
+                if ($tc->TC_Image->exists())
+                {
+                    $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                    $graph->image($url, $tc->Title);
+                }
 
-              if ($tc->TC_AppNameIphone && $tc->TC_AppIdIphone)
-              {
-                  $graph->iPhoneApp($tc->TC_AppNameIphone, $tc->TC_AppIdIphone, $tc->TC_AppUrlIphone ?? null);
-              }
+            }
+            else if ($tc->TC_Type == 'app')
+            {
+                $graph = AppTC::make($tc->TC_Title ?? $baseCfg->Title);
 
-              if ($tc->TC_AppNameIpad && $tc->TC_AppIdIpad)
-              {
-                  $graph->iPadApp($tc->TC_AppNameIpad, $tc->TC_AppIdIpad, $tc->TC_AppUrlIpad ?? null);
-              }
+                if ($tc->TC_AppNameIphone && $tc->TC_AppIdIphone)
+                {
+                    $graph->iPhoneApp($tc->TC_AppNameIphone, $tc->TC_AppIdIphone, $tc->TC_AppUrlIphone ?? null);
+                }
 
-              if ($tc->TC_AppNameGoogleplay && $tc->TC_AppIDGoogleplay)
-              {
-                  $graph->googlePlayApp($tc->TC_AppNameGoogleplay, $tc->TC_AppIDGoogleplay, $tc->TC_AppUrlGoogleplay ?? null);
-              }
+                if ($tc->TC_AppNameIpad && $tc->TC_AppIdIpad)
+                {
+                    $graph->iPadApp($tc->TC_AppNameIpad, $tc->TC_AppIdIpad, $tc->TC_AppUrlIpad ?? null);
+                }
 
-              // $graph->country('name');
-          }
-          else if ($tc->TC_Type == 'player')
-          {
-              $graph = PlayerTC::make($tc->TC_Title ?? $baseCfg->Title);
+                if ($tc->TC_AppNameGoogleplay && $tc->TC_AppIDGoogleplay)
+                {
+                    $graph->googlePlayApp($tc->TC_AppNameGoogleplay, $tc->TC_AppIDGoogleplay, $tc->TC_AppUrlGoogleplay ?? null);
+                }
 
-              // 'http://www.example.com/player.iframe', 1920, 1080
-              // if ($tc->TC_Player && $tc->TC_PlayerWidth && $tc->TC_PlayerHeight)
-              // {
-              //     $graph->player($tc->TC_Player, $tc->TC_PlayerWidth, $tc->TC_PlayerHeight);
-              // }
+                // $graph->country('name');
+            }
+            else if ($tc->TC_Type == 'player')
+            {
+                $graph = PlayerTC::make($tc->TC_Title ?? $baseCfg->Title);
 
-              if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
-              if ($tc->TC_Description) $graph->description($tc->TC_Description);
+                // 'http://www.example.com/player.iframe', 1920, 1080
+                // if ($tc->TC_Player && $tc->TC_PlayerWidth && $tc->TC_PlayerHeight)
+                // {
+                //     $graph->player($tc->TC_Player, $tc->TC_PlayerWidth, $tc->TC_PlayerHeight);
+                // }
 
-              if ($tc->TC_Image->exists())
-              {
-                  $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
-                  $graph->image($url, $tc->Title);
-              }
-          }
+                if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+                if ($tc->TC_Description) $graph->description($tc->TC_Description);
 
-          if ($tc->TC_Site) $graph->site($tc->TC_Site);
+                if ($tc->TC_Image->exists())
+                {
+                    $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                    $graph->image($url, $tc->Title);
+                }
+            }
 
-          return '
-          ' . $graph->__toString();
-      }
+            if ($tc->TC_Site) $graph->site($tc->TC_Site);
+
+            return '
+            ' . $graph->__toString();
+        }
     }
 
     public function SchemaData()
     {
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@graph' => [],
+        ];
+
         if (
           isset($this->owner->manyMany()['Schemas']) &&
           get_class($this->owner->Schemas()) == ManyManyThroughList::class &&
           $this->owner->Schemas()->Count()
         )
         {
-            $schema = [
-                '@context' => 'https://schema.org',
-                '@graph' => [],
-            ];
-
             foreach ($this->owner->Schemas() as $schemaType)
             {
                 if (!$schemaType->Disabled)
@@ -1222,7 +1313,23 @@ class MetaUniverse extends Extension
                     $schema['@graph'][] = json_decode($schemaType->JsonLD, true);
                 }
             }
+        }
 
+        $cfg = SchemaConfig::current_config();
+
+        if (!$this->owner->DisableDefaultSchema && $cfg->DefaultSchemas()->Count())
+        {
+            foreach ($cfg->DefaultSchemas() as $schemaType)
+            {
+                if (!$schemaType->Disabled)
+                {
+                    $schema['@graph'][] = json_decode($schemaType->JsonLD, true);
+                }
+            }
+        }
+
+        if (!empty($schema['@graph']))
+        {
             return '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES).'</script>';
         }
     }

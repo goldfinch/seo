@@ -3,12 +3,17 @@
 namespace Goldfinch\Seo\Extensions;
 
 use Goldfinch\Seo\Models\OpenGraph;
+use SilverStripe\Forms\CheckboxField;
 use SilverShop\HasOneField\HasOneButtonField;
 use SilverShop\HasOneField\GridFieldHasOneButtonRow;
 // use SilverShop\HasOneField\HasOneAddExistingAutoCompleter;
 
 class OpenGraphExtension extends SeoDataExtension
 {
+    private static $db = [
+        'DisableDefaultOpenGraphObject' => 'Boolean',
+    ];
+
     private static $has_one = [
         'OpenGraphObject' => OpenGraph::class,
     ];
@@ -21,6 +26,7 @@ class OpenGraphExtension extends SeoDataExtension
                 $tab,
                 [
                     $og = HasOneButtonField::create($this->owner, 'OpenGraphObject'),
+                    CheckboxField::create('DisableDefaultOpenGraphObject', 'Disable default OG for this page'),
                 ]
             );
         }
