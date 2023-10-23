@@ -19,3 +19,7 @@ SilverStripe\Assets\File:
   allowed_extensions:
     - svg
     - ico
+
+TractorCow\Robots\Robots:
+  extensions:
+    - Goldfinch\Seo\Extensions\RobotsExtension
