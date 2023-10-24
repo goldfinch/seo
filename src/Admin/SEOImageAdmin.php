@@ -4,6 +4,7 @@ namespace Goldfinch\Seo\Admin;
 
 use SilverStripe\Assets\Image;
 use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
@@ -31,6 +32,12 @@ class SEOImageAdmin extends ModelAdmin
     public $showSearchForm = true;
 
     private static $page_length = 30;
+
+    public function init()
+    {
+        parent::init();
+        Requirements::javascript('goldfinch/seo: javascript/image-editor.js');
+    }
 
     public function getList()
     {

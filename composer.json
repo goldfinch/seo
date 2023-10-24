@@ -23,6 +23,7 @@
         "kinglozzer/multiselectfield": "^2.0",
         "goldfinch/json-editor": "dev-master",
         "goldfinch/focuspoint-extra": "dev-master",
+        "silverstripe/redirectedurls": "3.0.0-beta1",
         "axllent/silverstripe-meta-editor": "dev-extended"
     },
     "autoload": {
