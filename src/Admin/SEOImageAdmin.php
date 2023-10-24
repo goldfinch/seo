@@ -14,13 +14,13 @@ use Goldfinch\FocusPointExtra\Forms\GridField\GridFieldManyManyFocusConfig;
 
 class SEOImageAdmin extends ModelAdmin
 {
-    private static $url_segment = 'seo-images';
+    private static $url_segment = 'image-editor';
 
     private static $menu_title = 'Images';
 
     private static $managed_models = [
         Image::class => [
-            'title' => 'Images',
+            'title' => 'Image editor',
         ],
     ];
 
