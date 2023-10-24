@@ -22,7 +22,8 @@
         "silvershop/silverstripe-hasonefield": "dev-main",
         "kinglozzer/multiselectfield": "^2.0",
         "goldfinch/json-editor": "dev-master",
-        "goldfinch/focuspoint-extra": "dev-master"
+        "goldfinch/focuspoint-extra": "dev-master",
+        "axllent/silverstripe-meta-editor": "dev-extended"
     },
     "autoload": {
         "psr-4": {
