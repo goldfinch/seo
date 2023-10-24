@@ -21,6 +21,7 @@ use SilverStripe\Forms\GridField\GridField_URLHandler;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use TractorCow\Fluent\Extension\FluentSiteTreeExtension;
+use Axllent\MetaEditor\Forms\MetaEditorDescriptionColumn;
 use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 
 class MetaEditorFocusPointColumn extends GridFieldDataColumns implements GridField_ColumnProvider, GridField_HTMLProvider, GridField_URLHandler
