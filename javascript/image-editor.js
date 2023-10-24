@@ -1,12 +1,12 @@
 (function ($) {
   $.entwine('ss', function ($) {
-      console.log('init')
+
       /* counter */
       $('body').append($('<div id="AltEditorCharCounter"></div>').hide());
 
       $('.image-editor fieldset.grid .ss-gridfield-item input, .image-editor fieldset.grid .ss-gridfield-item textarea').entwine({
 
-          onkeydown: function (e) {console.log(123)
+          onkeydown: function (e) {
               if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
                   e.preventDefault();
                   $(this).trigger('change');
@@ -28,7 +28,7 @@
           },
 
           onchange: function () {
-            console.log('changed')
+
               // prevent changes to the form / popup
               $('.cms-edit-form').removeClass('changed');
 
