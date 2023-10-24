@@ -6,6 +6,7 @@ use SilverStripe\Assets\Image;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridFieldConfig;
+use Goldfinch\Seo\Forms\GridField\MetaEditorFocusPointColumn;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
@@ -61,6 +62,8 @@ class SEOImageAdmin extends ModelAdmin
     {
         $config = GridFieldManyManyFocusConfig::create();
 
+        $config->addComponent(MetaEditorFocusPointColumn::create());
+
         return $config;
     }
 
@@ -68,7 +71,7 @@ class SEOImageAdmin extends ModelAdmin
     {
         $form = parent::getEditForm($id, $fields);
 
-        // ..
+        $form->addExtraClass('image-editor');
 
         return $form;
     }
