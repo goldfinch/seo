@@ -26,6 +26,11 @@
         "silverstripe/redirectedurls": "3.0.0-beta1",
         "axllent/silverstripe-meta-editor": "dev-extended"
     },
+    "extra": {
+        "expose": [
+            "javascript"
+        ]
+    },
     "autoload": {
         "psr-4": {
             "Goldfinch\\Seo\\": "src/"
