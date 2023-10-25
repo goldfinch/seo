@@ -1269,9 +1269,16 @@ class MetaUniverse extends Extension
 
             if ($og->FB_AppID) $graph->setProperty('fb', 'app_id', $og->FB_AppID);
 
+            $this->updateOpenGraph($graph);
+
             return '
             ' . $graph->__toString();
         }
+    }
+
+    public function updateOpenGraph(&$graph)
+    {
+        // use to update open graph within an actual page/object
     }
 
     public function TwitterCard()
@@ -1365,9 +1372,16 @@ class MetaUniverse extends Extension
 
             if ($tc->TC_Site) $graph->site($tc->TC_Site);
 
+            $this->updateTwitterCard($graph);
+
             return '
             ' . $graph->__toString();
         }
+    }
+
+    public function updateTwitterCard(&$graph)
+    {
+        // use to update twitter card within an actual page/object
     }
 
     public function SchemaData()
@@ -1405,9 +1419,16 @@ class MetaUniverse extends Extension
             }
         }
 
+        $this->updateSchemaData($schema);
+
         if (!empty($schema['@graph']))
         {
             return '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES).'</script>';
         }
+    }
+
+    public function updateSchemaData(&$schema)
+    {
+        // use to update schema within an actual page/object
     }
 }
