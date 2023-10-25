@@ -23,3 +23,7 @@ SilverStripe\Assets\File:
 TractorCow\Robots\Robots:
   extensions:
     - Goldfinch\Seo\Extensions\RobotsExtension
+
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_css:
+    - 'goldfinch/seo: styles/seo.css'

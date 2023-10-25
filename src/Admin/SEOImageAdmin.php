@@ -11,6 +11,7 @@ use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
 use Goldfinch\FocusPointExtra\Forms\GridField\GridFieldManyManyFocusConfig;
+use Axllent\MetaEditor\MetaEditor;
 
 class SEOImageAdmin extends ModelAdmin
 {

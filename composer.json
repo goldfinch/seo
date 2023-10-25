@@ -28,7 +28,8 @@
     },
     "extra": {
         "expose": [
-            "javascript"
+            "javascript",
+            "styles",
         ]
     },
     "autoload": {
