@@ -15,5 +15,5 @@ SilverStripe\Admin\LeftAndMain:
         - Goldfinch-Seo-Admin-SEOSchemaAdmin
         - Goldfinch-Seo-Admin-SEOOpenGraphAdmin
         - Goldfinch-Seo-Admin-SEOTwitterCardAdmin
-        - Axllent-MetaEditor-MetaEditor
         - SilverStripe-RedirectedURLs-Admin-RedirectedURLAdmin
+        - Axllent-MetaEditor-MetaEditor

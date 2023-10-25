@@ -259,6 +259,8 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
                     {
                         $link = $ma->getCMSEditLinkForManagedDataObject($schema);
 
+                        if ($schemaHTML != '') $schemaHTML .= ', ';
+
                         $schemaHTML .= '<a href="'.$link.'">'.$schema->Title.'</a>';
                     }
                 }
@@ -271,6 +273,8 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
                     foreach ($schemas as $schema)
                     {
                         $link = $ma->getCMSEditLinkForManagedDataObject($schema);
+
+                        if ($schemaHTML != '') $schemaHTML .= ', ';
 
                         $schemaHTML .= '<a href="'.$link.'">'.$schema->Title.' (default)</a>';
                     }
