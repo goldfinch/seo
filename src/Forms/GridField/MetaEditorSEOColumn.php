@@ -7,6 +7,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\TextareaField;
 use Axllent\MetaEditor\Lib\MetaEditorPermissions;
+use Axllent\MetaEditor\Forms\MetaEditorTitleColumn;
 
 class MetaEditorSEOColumn extends MetaEditorTitleColumn
 {
