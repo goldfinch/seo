@@ -2,10 +2,18 @@
 
 namespace Goldfinch\Seo\Forms\GridField;
 
+use BadMethodCallException;
 use Axllent\MetaEditor\MetaEditor;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\TextareaField;
+use Goldfinch\Seo\Models\SchemaConfig;
+use Goldfinch\Seo\Admin\SEOSchemaAdmin;
+use Goldfinch\Seo\Models\OpenGraphConfig;
+use Goldfinch\Seo\Admin\SEOOpenGraphAdmin;
+use Goldfinch\Seo\Models\TwitterCardConfig;
+use Goldfinch\Seo\Admin\SEOTwitterCardAdmin;
 use Axllent\MetaEditor\Lib\MetaEditorPermissions;
 use Axllent\MetaEditor\Forms\MetaEditorTitleColumn;
 
@@ -139,7 +147,157 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
                 Config::inst()->get(MetaEditor::class, 'show_in_search_field')
             );
             if (MetaEditorPermissions::canEdit($record)) {
-                $ShowInSearch_field = CheckboxField::create('ShowInSearch', 'Show in search?');
+
+                $html = '';
+
+                if ($record->ShowInMenus !== null)
+                {
+                    if ($record->ShowInMenus)
+                    {
+                        $showInMenusHTML = '<spna style="color: green">yes</span>';
+                    }
+                    else
+                    {
+                        $showInMenusHTML = '<spna style="color: red">no</span>';
+                    }
+                }
+
+                if ($record->ShowInSearch !== null)
+                {
+                    if ($record->ShowInSearch)
+                    {
+                        $showInSearchHTML = '<spna style="color: green">yes</span>';
+                    }
+                    else
+                    {
+                        $showInSearchHTML = '<spna style="color: red">no</span>';
+                    }
+                }
+
+                $ogCfg = OpenGraphConfig::current_config();
+
+                if (method_exists($record, 'OpenGraph') && $record->OpenGraph())
+                {
+                    $openGraphHTML = '<i>code based</i>';
+                }
+                else if ($record->OpenGraphObject && $record->OpenGraphObject->exists())
+                {
+                    $og = $record->OpenGraphObject;
+
+                    $ma = new SEOOpenGraphAdmin;
+                    $link = $ma->getCMSEditLinkForManagedDataObject($og);
+
+                    $openGraphHTML = '<a href="'.$link.'">'.$og->Title.'</a>';
+                }
+                else if ($record->DisableDefaultOpenGraphObject && $ogCfg->DefaultObject && $ogCfg->DefaultObject->exists())
+                {
+                    $og = $ogCfg->DefaultObject;
+
+                    $ma = new SEOOpenGraphAdmin;
+                    $link = $ma->getCMSEditLinkForManagedDataObject($og);
+
+                    $openGraphHTML = '<a href="'.$link.'">'.$og->Title.' (default)</a>';
+                }
+                else
+                {
+                    $openGraphHTML = '<spna style="color: red">no</span>';
+                }
+
+                $tcCfg = TwitterCardConfig::current_config();
+
+                if (method_exists($record, 'TwitterCard') && $record->TwitterCard())
+                {
+                    $twitterCardHTML = '<i>code based</i>';
+                }
+                else if ($record->TwitterCardObject && $record->TwitterCardObject->exists())
+                {
+                    $tc = $record->TwitterCardObject;
+
+                    $ma = new SEOTwitterCardAdmin;
+                    $link = $ma->getCMSEditLinkForManagedDataObject($tc);
+
+                    $twitterCardHTML = '<a href="'.$link.'">'.$tc->Title.'</a>';
+                }
+                else if ($record->DisableDefaultTwitterCardObject && $tcCfg->DefaultObject && $tcCfg->DefaultObject->exists())
+                {
+                    $tc = $tcCfg->DefaultObject;
+
+                    $ma = new SEOTwitterCardAdmin;
+                    $link = $ma->getCMSEditLinkForManagedDataObject($tc);
+
+                    $twitterCardHTML = '<a href="'.$link.'">'.$tc->Title.' (default)</a>';
+                }
+                else
+                {
+                    $twitterCardHTML = '<spna style="color: red">no</span>';
+                }
+
+
+
+                $recordException = false;
+                $schemaHTML = '';
+
+                $scCfg = SchemaConfig::current_config();
+
+                try {
+                  $record->Schemas();
+                } catch (BadMethodCallException $e) {
+                  $recordException = true;
+                }
+
+                if (method_exists($record, 'SchemaData') && $record->SchemaData())
+                {
+                    $schemaHTML = '<i>code based</i>';
+                }
+                else if (!$recordException && $record->Schemas() && $record->Schemas()->count())
+                {
+                    $schemas = $record->Schemas();
+
+                    $ma = new SEOSchemaAdmin;
+
+                    foreach ($schemas as $schema)
+                    {
+                        $link = $ma->getCMSEditLinkForManagedDataObject($schema);
+
+                        $schemaHTML .= '<a href="'.$link.'">'.$schema->Title.'</a>';
+                    }
+                }
+                else if ($record->DisableDefaultSchema && $scCfg->DefaultSchemas()->count())
+                {
+                    $schemas = $scCfg->DefaultSchemas();
+
+                    $ma = new SEOSchemaAdmin;
+
+                    foreach ($schemas as $schema)
+                    {
+                        $link = $ma->getCMSEditLinkForManagedDataObject($schema);
+
+                        $schemaHTML .= '<a href="'.$link.'">'.$schema->Title.' (default)</a>';
+                    }
+                }
+                else
+                {
+                    $schemaHTML = '<spna style="color: red">no</span>';
+                }
+
+                if (isset($showInMenusHTML))
+                {
+                    $html .= '<div>Show in menu: '.$showInMenusHTML.'</div>';
+                }
+
+                if (isset($showInSearchHTML))
+                {
+                    $html .= '<div>Show in search: '.$showInSearchHTML.'</div>';
+                }
+
+                $html .= '
+                <div>Open Graph: '.$openGraphHTML.'</div>
+                <div>Twitter Card: '.$twitterCardHTML.'</div>
+                <div>Schema: '.$schemaHTML.'</div>
+                ';
+
+
+                $ShowInSearch_field = LiteralField::create('Info', $html);
                 $ShowInSearch_field->setName(
                     $this->getFieldName(
                         $ShowInSearch_field->getName(),
@@ -147,7 +305,8 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
                         $record
                     )
                 );
-                $ShowInSearch_field->setValue($record->ShowInSearch ? true : false);
+
+                // $ShowInSearch_field->setValue($record->ShowInSearch ? true : false);
 
                 return $ShowInSearch_field->Field() . $this->getErrorMessages();
             }
@@ -172,30 +331,6 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
             'meta_description_max_length'
         );
 
-        return '<div class="meta-editor-errors">' .
-            '<span class="meta-editor-message meta-editor-message-too-short">' .
-            _t(
-                self::class . '.DESCRIPTION_TOO_SHORT',
-                'Too short: should be between {description_min} &amp; {description_max} characters.',
-                [
-                    'description_min' => $description_min,
-                    'description_max' => $description_max,
-                ]
-            ) . '</span>' .
-            '<span class="meta-editor-message meta-editor-message-too-long">' .
-            _t(
-                self::class . '.DESCRIPTION_TOO_LONG',
-                'Too long: should be between {description_min} &amp; {description_max} characters.',
-                [
-                    'description_min' => $description_min,
-                    'description_max' => $description_max,
-                ]
-            ) . '</span>' .
-            '<span class="meta-editor-message meta-editor-message-duplicate">' .
-            _t(
-                self::class . '.DESCRIPTION_DUPLICATE',
-                'This description is a duplicate of another page.'
-            ) . '</span>' .
-            '</div>';
+        return '<div class="meta-editor-errors"></div>';
     }
 }
