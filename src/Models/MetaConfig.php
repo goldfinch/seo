@@ -25,11 +25,13 @@ class MetaConfig extends DataObject implements TemplateGlobalProvider
     ];
 
     private static $has_one = [
+        'ImageSRC' => Image::class,
         'MsapplicationTileImage' => Image::class,
         'MsapplicationBackgroundImage' => Image::class,
     ];
 
     private static $owns = [
+        'ImageSRC',
         'MsapplicationTileImage',
         'MsapplicationBackgroundImage',
     ];
@@ -63,6 +65,8 @@ class MetaConfig extends DataObject implements TemplateGlobalProvider
           UploadField::create('MsapplicationTileImage', 'Tile image, logo (msapplication meta tag)')->setDescription('used for msapplication meta tags'),
           UploadField::create('MsapplicationBackgroundImage', 'Background image for live tile (msapplication meta tag)')->setDescription('used for msapplication meta tags'),
           TextField::create('MsapplicationTileColor', 'Background color for live tile (msapplication meta tag)'),
+
+          UploadField::create('ImageSRC', 'Image src tag'),
 
         ]);
 

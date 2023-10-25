@@ -121,7 +121,7 @@ Goldfinch\Seo\Traits\MetaUniverse:
     'viewport': true
     'x-cms': true
     'search': false
-    'image_src': false
+    'image_src': true
     'humans': false
     'apple-touch': false
     'home': true

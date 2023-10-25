@@ -36,111 +36,117 @@ class MetaUniverse extends Extension
 {
     public $universeClass = 'Goldfinch\Seo\Traits\MetaUniverse';
 
+    public function GenerateMetaCached()
+    {
+        return $this->owner->customise([
+          'GenerateMeta' => $this->owner->GenerateMeta(),
+        ])->renderWith('Goldfinch/SEO/GenerateMetaCached');
+    }
+
     public function GenerateMeta()
     {
         $output = DBHTMLText::create();
 
-        $cache = Injector::inst()->get(CacheInterface::class . '.MetaUniverse');
+        // $cache = Injector::inst()->get(CacheInterface::class . '.MetaUniverse');
 
-        $objectKey = crypt($this->owner->ID, get_class($this->owner));
+        // $objectKey = crypt($this->owner->ID, get_class($this->owner));
 
-        if (!$cache->has($objectKey))
+        // if (!$cache->has($objectKey))
+        // {
+        $html =
+            $this->owner->metaBase() .
+
+            $this->owner->metaTitle() .
+
+            $this->owner->metaContentTypeCharset() .
+            $this->owner->metaCompatible() .
+            $this->owner->metaDnsPrefetchControl() .
+            $this->owner->metaRefresh() .
+            $this->owner->metaDates() .
+
+            $this->owner->metaViewport() .
+            $this->owner->metaReferrer() .
+            $this->owner->metaLang() .
+            $this->owner->metaCSRF() .
+            $this->owner->metaRobots() .
+            $this->owner->metaApplicationName() .
+            $this->owner->metaIdentifierURL() .
+            $this->owner->metaVerifications() .
+            $this->owner->metaTheme() .
+            $this->owner->metaRating() .
+
+            $this->owner->metaNewsKeywords() . // only for article
+            $this->owner->metaGeo() . // perhaps contact page only
+            $this->owner->metaDescription() .
+            $this->owner->metaCategory() . // for sites catalogs
+
+            $this->owner->metaMobile() .
+            $this->owner->metaFormatDetection() .
+            $this->owner->metaAppleMobile() .
+            $this->owner->metaWindowsPhone() .
+            $this->owner->metaXCMS() .
+            $this->owner->metaAuthor() .
+            $this->owner->metaCopyright() .
+
+            $this->owner->OpenGraph() .
+            $this->owner->TwitterCard() .
+
+            $this->owner->linkHome() .
+            $this->owner->linkCanonical() .
+            $this->owner->linkShortlink() .
+            $this->owner->linkSearch() .
+            $this->owner->linkPreconnect() .
+            $this->owner->linkAmphtml() .
+            $this->owner->linkImageSrc() .
+            $this->owner->linkAppleMobile() .
+            $this->owner->linkIcons() .
+            $this->owner->linkManifest() .
+            $this->owner->linkHumans() .
+
+            PHP_EOL .
+            $this->owner->SchemaData()
+        ;
+
+        $html = preg_replace(['/\s{2,}/', '/\n/'], PHP_EOL, $html);
+        $html = preg_replace('/^[ \t]*[\r\n]+/m', '', $html);
+
+        $tags = explode(PHP_EOL, $html);
+
+        if ($space = Environment::getEnv('APP_META_SOURCESPACE'))
         {
-            $html =
-                $this->owner->metaBase() .
+            $spacing = '';
 
-                $this->owner->metaTitle() .
-
-                $this->owner->metaContentTypeCharset() .
-                $this->owner->metaCompatible() .
-                $this->owner->metaDnsPrefetchControl() .
-                $this->owner->metaRefresh() .
-                $this->owner->metaDates() .
-
-                $this->owner->metaViewport() .
-                $this->owner->metaReferrer() .
-                $this->owner->metaLang() .
-                $this->owner->metaCSRF() .
-                $this->owner->metaRobots() .
-                $this->owner->metaApplicationName() .
-                $this->owner->metaIdentifierURL() .
-                $this->owner->metaVerifications() .
-                $this->owner->metaTheme() .
-                $this->owner->metaRating() .
-
-                $this->owner->metaNewsKeywords() . // only for article
-                $this->owner->metaGeo() . // perhaps contact page only
-                $this->owner->metaDescription() .
-                $this->owner->metaCategory() . // for sites catalogs
-
-                $this->owner->metaMobile() .
-                $this->owner->metaFormatDetection() .
-                $this->owner->metaAppleMobile() .
-                $this->owner->metaWindowsPhone() .
-                $this->owner->metaXCMS() .
-                $this->owner->metaAuthor() .
-                $this->owner->metaCopyright() .
-
-                $this->owner->OpenGraph() .
-                $this->owner->TwitterCard() .
-
-                $this->owner->linkHome() .
-                $this->owner->linkCanonical() .
-                $this->owner->linkShortlink() .
-                $this->owner->linkSearch() .
-                $this->owner->linkPreconnect() .
-                $this->owner->linkAmphtml() .
-                $this->owner->linkImageSrc() .
-                $this->owner->linkAppleMobile() .
-                $this->owner->linkIcons() .
-                $this->owner->linkManifest() .
-                $this->owner->linkHumans() .
-
-                PHP_EOL .
-                $this->owner->SchemaData()
-            ;
-
-            $html = preg_replace(['/\s{2,}/', '/\n/'], PHP_EOL, $html);
-            $html = preg_replace('/^[ \t]*[\r\n]+/m', '', $html);
-
-            $tags = explode(PHP_EOL, $html);
-
-            if ($space = Environment::getEnv('APP_META_SOURCESPACE'))
+            for ($i = 0; $space > $i; $i++)
             {
-                $spacing = '';
-
-                for ($i = 0; $space > $i; $i++)
-                {
-                    $spacing .= ' ';
-                }
+                $spacing .= ' ';
             }
-            else
-            {
-                // 4 space by default
-                $spacing = '    ';
-            }
-
-            $html = '';
-
-            foreach ($tags as $key => $tag)
-            {
-                if ($key !== 0)
-                {
-                    $html .= $spacing . $tag . PHP_EOL;
-                }
-                else
-                {
-                    $html .= $tag . PHP_EOL;
-                }
-            }
-
-            // set cache
-            $cache->set($objectKey, $html, 600);
         }
         else
         {
-            $html = $cache->get($objectKey);
+            // 4 space by default
+            $spacing = '    ';
         }
+
+        $html = '';
+
+        foreach ($tags as $key => $tag)
+        {
+            if ($key !== 0)
+            {
+                $html .= $spacing . $tag . PHP_EOL;
+            }
+            else
+            {
+                $html .= $tag . PHP_EOL;
+            }
+        }
+        //     // set cache
+        //     $cache->set($objectKey, $html, 600);
+        // }
+        // else
+        // {
+        //     $html = $cache->get($objectKey);
+        // }
 
         $output->setValue($html);
 
@@ -907,9 +913,21 @@ class MetaUniverse extends Extension
             return;
         }
 
-        $output = '
-        <link rel="image_src" href="" type="image/jpeg">
-        ';
+        $output = '';
+
+        $cfg = MetaConfig::current_config();
+
+        if ($cfg->ImageSRC && $cfg->ImageSRC->exists())
+        {
+            $width = 1200;
+            $height = 630;
+
+            $link = $cfg->ImageSRC->Fill($width, $height)->getAbsoluteURL();
+
+            $output = '
+            <link rel="image_src" href="'.$link.'" type="'.$cfg->ImageSRC->getMimeType().'">
+            ';
+        }
 
         return $output;
     }
