@@ -16,6 +16,7 @@ SilverStripe\Control\Director:
   rules:
     'humans.txt': 'Goldfinch\Seo\Humans'
     'manifest.webmanifest': 'Goldfinch\Seo\Webmanifest'
+    'favicon.ico': 'Goldfinch\Seo\Favicon'
 
 PageController:
   extensions:
