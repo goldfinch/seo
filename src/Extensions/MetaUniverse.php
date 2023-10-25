@@ -39,6 +39,7 @@ class MetaUniverse extends Extension
     public function GenerateMetaCached()
     {
         return $this->owner->customise([
+          'CacheKey' => crypt($this->owner->ID, get_class($this->owner)),
           'GenerateMeta' => $this->owner->GenerateMeta(),
         ])->renderWith('Goldfinch/SEO/GenerateMetaCached');
     }

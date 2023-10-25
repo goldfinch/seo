@@ -1,3 +1,3 @@
-<% cached 'GenerateMeta' %>
+<% cached $CacheKey %>
 $GenerateMeta
 <% end_cached %>
