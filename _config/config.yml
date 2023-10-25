@@ -2,6 +2,12 @@
 Name: goldfinch-seo
 ---
 
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.MetaUniverse:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: "MetaUniverse"
+
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     - Goldfinch\Seo\Extensions\SEOExtension

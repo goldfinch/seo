@@ -9,16 +9,21 @@ use SilverStripe\Core\Extension;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Environment;
 use Astrotomic\OpenGraph\OpenGraph;
+use Psr\SimpleCache\CacheInterface;
 use Goldfinch\Seo\Models\MetaConfig;
+use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\Security\Permission;
 use Goldfinch\Seo\Models\SchemaConfig;
 use SilverStripe\SiteConfig\SiteConfig;
 use Goldfinch\Seo\Models\ManifestConfig;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\SecurityToken;
 use Goldfinch\Seo\Models\OpenGraphConfig;
 use SilverStripe\ORM\ManyManyThroughList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use Goldfinch\Seo\Models\TwitterCardConfig;
+use Astrotomic\OpenGraph\StructuredProperties\Audio;
+use Astrotomic\OpenGraph\StructuredProperties\Video;
 use Astrotomic\OpenGraph\Types\Twitter\App as AppTC;
 use Astrotomic\OpenGraph\Types\Twitter\Player as PlayerTC;
 use Astrotomic\OpenGraph\Types\Twitter\Summary as SummaryTC;
@@ -35,92 +40,106 @@ class MetaUniverse extends Extension
     {
         $output = DBHTMLText::create();
 
-        $html =
-            $this->owner->metaBase() .
+        $cache = Injector::inst()->get(CacheInterface::class . '.MetaUniverse');
 
-            $this->owner->metaTitle() .
+        $objectKey = crypt($this->owner->ID, get_class($this->owner));
 
-            $this->owner->metaContentTypeCharset() .
-            $this->owner->metaCompatible() .
-            $this->owner->metaDnsPrefetchControl() .
-            $this->owner->metaRefresh() .
-            $this->owner->metaDates() .
-
-            $this->owner->metaViewport() .
-            $this->owner->metaReferrer() .
-            $this->owner->metaLang() .
-            $this->owner->metaCSRF() .
-            $this->owner->metaRobots() .
-            $this->owner->metaApplicationName() .
-            $this->owner->metaIdentifierURL() .
-            $this->owner->metaVerifications() .
-            $this->owner->metaTheme() .
-            $this->owner->metaRating() .
-
-            $this->owner->metaNewsKeywords() . // only for article
-            $this->owner->metaGeo() . // perhaps contact page only
-            $this->owner->metaDescription() .
-            $this->owner->metaCategory() . // for sites catalogs
-
-            $this->owner->metaMobile() .
-            $this->owner->metaFormatDetection() .
-            $this->owner->metaAppleMobile() .
-            $this->owner->metaWindowsPhone() .
-            $this->owner->metaXCMS() .
-            $this->owner->metaAuthor() .
-            $this->owner->metaCopyright() .
-
-            $this->owner->OpenGraph() .
-            $this->owner->TwitterCard() .
-
-            $this->owner->linkHome() .
-            $this->owner->linkCanonical() .
-            $this->owner->linkShortlink() .
-            $this->owner->linkSearch() .
-            $this->owner->linkPreconnect() .
-            $this->owner->linkAmphtml() .
-            $this->owner->linkImageSrc() .
-            $this->owner->linkAppleMobile() .
-            $this->owner->linkIcons() .
-            $this->owner->linkManifest() .
-            $this->owner->linkHumans() .
-
-            PHP_EOL .
-            $this->owner->SchemaData()
-        ;
-
-        $html = preg_replace(['/\s{2,}/', '/\n/'], PHP_EOL, $html);
-        $html = preg_replace('/^[ \t]*[\r\n]+/m', '', $html);
-
-        $tags = explode(PHP_EOL, $html);
-
-        if ($space = Environment::getEnv('APP_META_SOURCESPACE'))
+        if (!$cache->has($objectKey))
         {
-            $spacing = '';
+            $html =
+                $this->owner->metaBase() .
 
-            for ($i = 0; $space > $i; $i++)
+                $this->owner->metaTitle() .
+
+                $this->owner->metaContentTypeCharset() .
+                $this->owner->metaCompatible() .
+                $this->owner->metaDnsPrefetchControl() .
+                $this->owner->metaRefresh() .
+                $this->owner->metaDates() .
+
+                $this->owner->metaViewport() .
+                $this->owner->metaReferrer() .
+                $this->owner->metaLang() .
+                $this->owner->metaCSRF() .
+                $this->owner->metaRobots() .
+                $this->owner->metaApplicationName() .
+                $this->owner->metaIdentifierURL() .
+                $this->owner->metaVerifications() .
+                $this->owner->metaTheme() .
+                $this->owner->metaRating() .
+
+                $this->owner->metaNewsKeywords() . // only for article
+                $this->owner->metaGeo() . // perhaps contact page only
+                $this->owner->metaDescription() .
+                $this->owner->metaCategory() . // for sites catalogs
+
+                $this->owner->metaMobile() .
+                $this->owner->metaFormatDetection() .
+                $this->owner->metaAppleMobile() .
+                $this->owner->metaWindowsPhone() .
+                $this->owner->metaXCMS() .
+                $this->owner->metaAuthor() .
+                $this->owner->metaCopyright() .
+
+                $this->owner->OpenGraph() .
+                $this->owner->TwitterCard() .
+
+                $this->owner->linkHome() .
+                $this->owner->linkCanonical() .
+                $this->owner->linkShortlink() .
+                $this->owner->linkSearch() .
+                $this->owner->linkPreconnect() .
+                $this->owner->linkAmphtml() .
+                $this->owner->linkImageSrc() .
+                $this->owner->linkAppleMobile() .
+                $this->owner->linkIcons() .
+                $this->owner->linkManifest() .
+                $this->owner->linkHumans() .
+
+                PHP_EOL .
+                $this->owner->SchemaData()
+            ;
+
+            $html = preg_replace(['/\s{2,}/', '/\n/'], PHP_EOL, $html);
+            $html = preg_replace('/^[ \t]*[\r\n]+/m', '', $html);
+
+            $tags = explode(PHP_EOL, $html);
+
+            if ($space = Environment::getEnv('APP_META_SOURCESPACE'))
             {
-                $spacing .= ' ';
-            }
-        }
-        else
-        {
-            // 4 space by default
-            $spacing = '    ';
-        }
+                $spacing = '';
 
-        $html = '';
-
-        foreach ($tags as $key => $tag)
-        {
-            if ($key !== 0)
-            {
-                $html .= $spacing . $tag . PHP_EOL;
+                for ($i = 0; $space > $i; $i++)
+                {
+                    $spacing .= ' ';
+                }
             }
             else
             {
-                $html .= $tag . PHP_EOL;
+                // 4 space by default
+                $spacing = '    ';
             }
+
+            $html = '';
+
+            foreach ($tags as $key => $tag)
+            {
+                if ($key !== 0)
+                {
+                    $html .= $spacing . $tag . PHP_EOL;
+                }
+                else
+                {
+                    $html .= $tag . PHP_EOL;
+                }
+            }
+
+            // set cache
+            $cache->set($objectKey, $html, 600);
+        }
+        else
+        {
+            $html = $cache->get($objectKey);
         }
 
         $output->setValue($html);
