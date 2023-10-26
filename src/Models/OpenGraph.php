@@ -289,7 +289,7 @@ class OpenGraph extends DataObject
             TextareaField::create('OG_Description', 'Description')->setDescription('A one to two sentence description of your object.<br>---<br>A brief description of the content, usually between 2 and 4 sentences. This will displayed below the title of the post on Facebook.'),
             TextField::create('OG_Determiner', 'Determiner')->setDescription('The word that appears before this object\'s title in a sentence. An enum of (a, an, the, "", auto). If auto is chosen, the consumer of your data should chose between "a" or "an". Default is "" (blank).'),
 
-            TextField::create('OG_Locale', 'Locale')->setDescription('The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.<br>---<br>The locale of the resource. Defaults to en_US. You can also use og:locale:alternate if you have other available language translations available. Learn about the locales we support in our <a href="https://developers.facebook.com/docs/javascript/internationalization#locales" target="_blank">documentation on localization</a>.'),
+            TextField::create('OG_Locale', 'Locale')->setDescription('The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.<br>---<br>The locale of the resource. Defaults to en_US. You can also use og:locale:alternate if you have other available language translations available. Learn about the locales we support in our <a href="https://developers.facebook.com/docs/javascript/internationalization#locales" target="_blank">documentation on localization</a>.<br>If this field is empty, this value refers to the general value in the config.'),
             TextareaField::create('OG_LocaleAlternate', 'Locale alternate')->setDescription('An array of other locales this page is available in.'),
 
             SortableUploadField::create('OG_Videos', 'Videos')->setDescription('A URL to a video file that complements this object.'),
@@ -301,7 +301,7 @@ class OpenGraph extends DataObject
 
             LiteralField::create('LF', '<h2 style="font-size: 1.5rem">Facebook specific metadata</h2><p class="mb-4">The following properties are related to Facebook only:</p>'),
 
-            TextField::create('FB_AppID', 'Faceboook App ID')->setDescription('In order to use <a href="https://developers.facebook.com/docs/sharing/referral-insights" target="_blank">Facebook Insights</a> you must add the app ID to your page. Insights lets you view analytics for traffic to your site from Facebook. Find the app ID in your <a href="https://developers.facebook.com/apps/redirect/dashboard" target="_blank">App Dashboard</a>.'),
+            TextField::create('FB_AppID', 'Faceboook App ID')->setDescription('In order to use <a href="https://developers.facebook.com/docs/sharing/referral-insights" target="_blank">Facebook Insights</a> you must add the app ID to your page. Insights lets you view analytics for traffic to your site from Facebook. Find the app ID in your <a href="https://developers.facebook.com/apps/redirect/dashboard" target="_blank">App Dashboard</a>.<br>If this field is empty, this value refers to the general value in the config.'),
 
           ),
 

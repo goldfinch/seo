@@ -182,9 +182,9 @@ class TwitterCard extends DataObject
             LiteralField::create('LF', '<h2 style="font-size: 1.5rem">Card metadata</h2>'),
 
             DropdownField::create('TC_Type', 'Type', $types)->setDescription('The card type'),
-            TextField::create('TC_Site', 'Site')->setDescription('@username of website. Either twitter:site or twitter:site:id is required.'),
+            TextField::create('TC_Site', 'Site')->setDescription('@username of website. Either twitter:site or twitter:site:id is required.<br>If this field is empty, this value refers to the general value in the config.'),
 
-            TextField::create('TC_SiteID', 'Site ID')->setDescription('Same as twitter:site, but the user’s Twitter ID. Either twitter:site or twitter:site:id is required.')
+            TextField::create('TC_SiteID', 'Site ID')->setDescription('Same as twitter:site, but the user’s Twitter ID. Either twitter:site or twitter:site:id is required.<br>If this field is empty, this value refers to the general value in the config.')
               ->displayIf('TC_Type')->contains('summary')
               ->orIf()->contains('summary_large_image')
               ->orIf()->contains('player')

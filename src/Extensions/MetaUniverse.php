@@ -1257,18 +1257,54 @@ class MetaUniverse extends Extension
                     $graph->image($ogImage);
                 }
             }
+            else if ($ogCfg->DefaultImage && $ogCfg->DefaultImage->exists())
+            {
+                $image = $ogCfg->DefaultImage;
+
+                $width = 1200;
+                $height = 630;
+
+                $link = $image->Fill($width, $height)->getAbsoluteURL();
+
+                $ogImage = ImageOG::make($link)
+                  ->secureUrl($link)
+                  ->mimeType($image->getMimeType())
+                  ->width($width)
+                  ->height($height)
+                ;
+
+                if ($image->Title) $ogImage->alt($image->Title);
+
+                $graph->image($ogImage);
+            }
 
             // Optional & Basic meta (for all types)
             $graph->url($og->OG_Url ?? Director::absoluteBaseURL());
             $graph->siteName($og->OG_SiteName ?? $baseCfg->Title);
             if ($og->OG_Description) $graph->description($og->OG_Description);
-            if ($og->OG_Determiner) $graph->locale($og->OG_Determiner);
-            if ($og->OG_Locale) $graph->locale($og->OG_Locale);
+            if ($og->OG_Determiner) $graph->determiner($og->OG_Determiner);
+
+            if ($og->OG_Locale)
+            {
+                $graph->locale($og->OG_Locale);
+            }
+            else if ($ogCfg->OG_Locale)
+            {
+                $graph->locale($ogCfg->OG_Locale);
+            }
+
             // TODO
             // $graph->alternateLocale('ss')
             // ->alternateLocale('en_GB')
 
-            if ($og->FB_AppID) $graph->setProperty('fb', 'app_id', $og->FB_AppID);
+            if ($og->FB_AppID)
+            {
+                $graph->setProperty('fb', 'app_id', $og->FB_AppID);
+            }
+            else if ($ogCfg->FB_AppID)
+            {
+                $graph->setProperty('fb', 'app_id', $ogCfg->FB_AppID);
+            }
 
             $this->updateOpenGraph($graph);
 
@@ -1305,13 +1341,15 @@ class MetaUniverse extends Extension
 
                 if ($tc->TC_Description) $graph->description($tc->TC_Description);
 
-                if ($tc->TC_Image->exists())
+                if ($tc->TC_SiteID)
                 {
-                    $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
-                    $graph->image($url, $tc->Title);
+                    $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+                }
+                else if ($tcCfg->TC_SiteID)
+                {
+                    $graph->setProperty('twitter', 'site:id', $tcCfg->TC_SiteID);
                 }
 
-                if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
                 if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
             }
             else if ($tc->TC_Type == 'summary_large_image')
@@ -1320,15 +1358,17 @@ class MetaUniverse extends Extension
                 if ($tc->TC_Creator) $graph->creator($tc->TC_Creator);
 
                 if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
-                if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
-                if ($tc->TC_Description) $graph->description($tc->TC_Description);
 
-                if ($tc->TC_Image->exists())
+                if ($tc->TC_SiteID)
                 {
-                    $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
-                    $graph->image($url, $tc->Title);
+                    $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+                }
+                else if ($tcCfg->TC_SiteID)
+                {
+                    $graph->setProperty('twitter', 'site:id', $tcCfg->TC_SiteID);
                 }
 
+                if ($tc->TC_Description) $graph->description($tc->TC_Description);
             }
             else if ($tc->TC_Type == 'app')
             {
@@ -1361,17 +1401,42 @@ class MetaUniverse extends Extension
                 //     $graph->player($tc->TC_Player, $tc->TC_PlayerWidth, $tc->TC_PlayerHeight);
                 // }
 
-                if ($tc->TC_SiteID) $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
-                if ($tc->TC_Description) $graph->description($tc->TC_Description);
+                if ($tc->TC_SiteID)
+                {
+                    $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+                }
+                else if ($tcCfg->TC_SiteID)
+                {
+                    $graph->setProperty('twitter', 'site:id', $tcCfg->TC_SiteID);
+                }
 
+                if ($tc->TC_Description) $graph->description($tc->TC_Description);
+            }
+
+            if ($tc->TC_Type == 'player' || $tc->TC_Type == 'summary_large_image' || $tc->TC_Type == 'summary')
+            {
                 if ($tc->TC_Image->exists())
                 {
                     $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
                     $graph->image($url, $tc->Title);
                 }
+                else if ($tcCfg->DefaultImage && $tcCfg->DefaultImage->exists())
+                {
+                    $image = $tcCfg->DefaultImage;
+
+                    $url = $tcCfg->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                    $graph->image($url, $tcCfg->Title);
+                }
             }
 
-            if ($tc->TC_Site) $graph->site($tc->TC_Site);
+            if ($tc->TC_Site)
+            {
+                $graph->site($tc->TC_Site);
+            }
+            else if ($tcCfg->TC_Site)
+            {
+                $graph->site($tcCfg->TC_Site);
+            }
 
             $this->updateTwitterCard($graph);
 
