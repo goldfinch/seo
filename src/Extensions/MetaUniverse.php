@@ -1424,7 +1424,7 @@ class MetaUniverse extends Extension
                 {
                     $image = $tcCfg->DefaultImage;
 
-                    $url = $tcCfg->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                    $url = $tcCfg->DefaultImage->Fill(1200, 630)->getAbsoluteURL();
                     $graph->image($url, $tcCfg->Title);
                 }
             }
