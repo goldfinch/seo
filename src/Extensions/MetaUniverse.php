@@ -4,19 +4,16 @@ namespace Goldfinch\Seo\Extensions;
 
 use DateTime;
 use BadMethodCallException;
-use Spatie\SchemaOrg\Schema;
 use SilverStripe\Core\Extension;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Environment;
 use Astrotomic\OpenGraph\OpenGraph;
-use Psr\SimpleCache\CacheInterface;
 use Goldfinch\Seo\Models\MetaConfig;
 use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\Security\Permission;
 use Goldfinch\Seo\Models\SchemaConfig;
 use SilverStripe\SiteConfig\SiteConfig;
 use Goldfinch\Seo\Models\ManifestConfig;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\SecurityToken;
 use Goldfinch\Seo\Models\OpenGraphConfig;
 use SilverStripe\ORM\ManyManyThroughList;
@@ -36,24 +33,27 @@ class MetaUniverse extends Extension
 {
     public $universeClass = 'Goldfinch\Seo\Traits\MetaUniverse';
 
-    public function GenerateMetaCached()
+    public function MetaUniverse()
+    {
+      return $this->owner->customise([
+        'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
+        'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
+        'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
+      ])->renderWith('Goldfinch/SEO/MetaUniverse');
+    }
+
+    public function MetaUniverseCached()
     {
         return $this->owner->customise([
           'CacheKey' => crypt($this->owner->ID, get_class($this->owner)),
-          'GenerateMeta' => $this->owner->GenerateMeta(),
-        ])->renderWith('Goldfinch/SEO/GenerateMetaCached');
+          'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
+          'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
+          'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
+        ])->renderWith('Goldfinch/SEO/MetaUniverseCached');
     }
 
-    public function GenerateMeta()
+    public function uCommonMeta()
     {
-        $output = DBHTMLText::create();
-
-        // $cache = Injector::inst()->get(CacheInterface::class . '.MetaUniverse');
-
-        // $objectKey = crypt($this->owner->ID, get_class($this->owner));
-
-        // if (!$cache->has($objectKey))
-        // {
         $html =
             $this->owner->metaBase() .
 
@@ -68,7 +68,6 @@ class MetaUniverse extends Extension
             $this->owner->metaViewport() .
             $this->owner->metaReferrer() .
             $this->owner->metaLang() .
-            $this->owner->metaCSRF() .
             $this->owner->metaRobots() .
             $this->owner->metaApplicationName() .
             $this->owner->metaIdentifierURL() .
@@ -87,8 +86,24 @@ class MetaUniverse extends Extension
             $this->owner->metaWindowsPhone() .
             $this->owner->metaXCMS() .
             $this->owner->metaAuthor() .
-            $this->owner->metaCopyright() .
+            $this->owner->metaCopyright()
+        ;
 
+        return $html;
+    }
+
+    public function uSensitiveMeta()
+    {
+        $html =
+            $this->owner->metaCSRF()
+        ;
+
+        return $html;
+    }
+
+    public function uCommonLinks()
+    {
+        $html =
             $this->owner->OpenGraph() .
             $this->owner->TwitterCard() .
 
@@ -107,6 +122,13 @@ class MetaUniverse extends Extension
             PHP_EOL .
             $this->owner->SchemaData()
         ;
+
+        return $html;
+    }
+
+    public function uTagsFormatter($html)
+    {
+        $output = DBHTMLText::create();
 
         $html = preg_replace(['/\s{2,}/', '/\n/'], PHP_EOL, $html);
         $html = preg_replace('/^[ \t]*[\r\n]+/m', '', $html);
@@ -141,13 +163,6 @@ class MetaUniverse extends Extension
                 $html .= $tag . PHP_EOL;
             }
         }
-        //     // set cache
-        //     $cache->set($objectKey, $html, 600);
-        // }
-        // else
-        // {
-        //     $html = $cache->get($objectKey);
-        // }
 
         $output->setValue($html);
 
