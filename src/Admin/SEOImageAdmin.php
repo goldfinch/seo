@@ -3,15 +3,16 @@
 namespace Goldfinch\Seo\Admin;
 
 use SilverStripe\Assets\Image;
+use Axllent\MetaEditor\MetaEditor;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridFieldConfig;
-use Goldfinch\Seo\Forms\GridField\MetaEditorFocusPointColumn;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldPrintButton;
 use SilverStripe\Forms\GridField\GridFieldExportButton;
 use SilverStripe\Forms\GridField\GridFieldImportButton;
+use Goldfinch\Seo\Forms\GridField\MetaEditorFocusPointColumn;
 use Goldfinch\FocusPointExtra\Forms\GridField\GridFieldManyManyFocusConfig;
-use Axllent\MetaEditor\MetaEditor;
 
 class SEOImageAdmin extends ModelAdmin
 {
@@ -33,7 +34,6 @@ class SEOImageAdmin extends ModelAdmin
 
     public $showSearchForm = true;
 
-    private static $page_length = 30;
 
     public function init()
     {
@@ -43,7 +43,7 @@ class SEOImageAdmin extends ModelAdmin
 
     public function getList()
     {
-        $list =  parent::getList();
+        $list = parent::getList();
 
         // ..
 
@@ -64,6 +64,7 @@ class SEOImageAdmin extends ModelAdmin
         $config = GridFieldManyManyFocusConfig::create();
 
         $config->addComponent(MetaEditorFocusPointColumn::create());
+        $config->addComponent(GridFieldPaginator::create(20));
 
         return $config;
     }
