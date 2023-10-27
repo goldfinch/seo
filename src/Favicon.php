@@ -36,6 +36,6 @@ class Favicon extends RequestHandler
             }
         }
 
-        exit;
+        return new HTTPResponse('Page not found', 404);
     }
 }

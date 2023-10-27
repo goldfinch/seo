@@ -90,6 +90,13 @@ class MetaUniverse extends Extension
         ;
 
         return $html;
+
+        // metaCategory
+        // metaNewsKeywords
+        // metaDates
+        // linkAmphtml
+
+        // linkSearch
     }
 
     public function uSensitiveMeta()
@@ -1321,16 +1328,24 @@ class MetaUniverse extends Extension
                 $graph->setProperty('fb', 'app_id', $ogCfg->FB_AppID);
             }
 
+            // a wire to page elements (blocks)
+            if ($this->owner->ElementalArea && $this->owner->ElementalArea->exists())
+            {
+                foreach ($this->owner->ElementalArea->Elements() as $element)
+                {
+                    try {
+                      $element->updateOpenGraph($graph);
+                    }
+                    catch(BadMethodCallException $exception) {}
+                }
+            }
+
+            // a wire to parent page
             $this->updateOpenGraph($graph);
 
             return '
             ' . $graph->__toString();
         }
-    }
-
-    public function updateOpenGraph(&$graph)
-    {
-        // use to update open graph within an actual page/object
     }
 
     public function TwitterCard()
@@ -1453,16 +1468,24 @@ class MetaUniverse extends Extension
                 $graph->site($tcCfg->TC_Site);
             }
 
+            // a wire to page elements (blocks)
+            if ($this->owner->ElementalArea && $this->owner->ElementalArea->exists())
+            {
+                foreach ($this->owner->ElementalArea->Elements() as $element)
+                {
+                    try {
+                      $element->updateTwitterCard($graph);
+                    }
+                    catch(BadMethodCallException $exception) {}
+                }
+            }
+
+            // a wire to parent page
             $this->updateTwitterCard($graph);
 
             return '
             ' . $graph->__toString();
         }
-    }
-
-    public function updateTwitterCard(&$graph)
-    {
-        // use to update twitter card within an actual page/object
     }
 
     public function SchemaData()
@@ -1500,12 +1523,35 @@ class MetaUniverse extends Extension
             }
         }
 
+        // a wire to page elements (blocks)
+        if ($this->owner->ElementalArea && $this->owner->ElementalArea->exists())
+        {
+            foreach ($this->owner->ElementalArea->Elements() as $element)
+            {
+                try {
+                  $element->updateSchemaData($schema);
+                }
+                catch(BadMethodCallException $exception) {}
+            }
+        }
+
+        // a wire to parent page
         $this->updateSchemaData($schema);
 
         if (!empty($schema['@graph']))
         {
             return '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES).'</script>';
         }
+    }
+
+    public function updateOpenGraph(&$graph)
+    {
+        // use to update open graph within an actual page/object
+    }
+
+    public function updateTwitterCard(&$graph)
+    {
+        // use to update twitter card within an actual page/object
     }
 
     public function updateSchemaData(&$schema)

@@ -6,7 +6,7 @@ SilverStripe\Core\Injector\Injector:
   Psr\SimpleCache\CacheInterface.MetaUniverse:
     factory: SilverStripe\Core\Cache\CacheFactory
     constructor:
-      namespace: "MetaUniverse"
+      namespace: 'MetaUniverse'
 
 SilverStripe\CMS\Model\SiteTree:
   extensions:
@@ -17,6 +17,7 @@ SilverStripe\Control\Director:
     'humans.txt': 'Goldfinch\Seo\Humans'
     'manifest.webmanifest': 'Goldfinch\Seo\Webmanifest'
     'favicon.ico': 'Goldfinch\Seo\Favicon'
+    # 'opensearch.xml': 'Goldfinch\Seo\Opensearch'
 
 PageController:
   extensions:
