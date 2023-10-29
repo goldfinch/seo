@@ -17,7 +17,17 @@ SilverStripe\Control\Director:
     'humans.txt': 'Goldfinch\Seo\Humans'
     'manifest.webmanifest': 'Goldfinch\Seo\Webmanifest'
     'favicon.ico': 'Goldfinch\Seo\Favicon'
-    # 'opensearch.xml': 'Goldfinch\Seo\Opensearch'
+    'opensearch.xml': 'Goldfinch\Seo\Opensearch'
+
+Goldfinch\Seo\Opensearch:
+  opensearch:
+    'enable': false
+    'encoding': 'UTF-8'
+    'title': ''
+    'icoIcon': ''
+    'searchURL': ''
+    'suggestionURL': ''
+    'searchForm': ''
 
 PageController:
   extensions:

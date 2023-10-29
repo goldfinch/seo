@@ -10,15 +10,29 @@ class Opensearch extends RequestHandler
 {
     public function index()
     {
-        $response = new HTTPResponse('', 200);
+        $cfg = $this->config()->opensearch;
 
-        $response->addHeader('Content-Type', 'application/xml; charset="utf-8"');
-        $response->addHeader('X-Robots-Tag', 'noindex');
+        if ($cfg['enable'])
+        {
+            $xml = $this->customise(new ArrayData([
+              'Title' => $cfg['title'],
+              'Encoding' => $cfg['encoding'],
+              'IcoIcon' => $cfg['icoIcon'],
+              'SearchURL' => $cfg['searchURL'],
+              'SuggestionURL' => $cfg['suggestionURL'],
+              'SearchForm' => $cfg['searchForm'],
+            ]))->renderWith('Goldfinch/Seo/xml-opensearch');
 
-        return $this->customise(new ArrayData([
-          'BaseURL' => '',
-        ]))->renderWith(__CLASS__);
+            $response = new HTTPResponse($xml, 200);
 
-        // return new HTTPResponse('Page not found', 404);
+            $response->addHeader('Content-Type', 'application/xml; charset="utf-8"');
+            $response->addHeader('X-Robots-Tag', 'noindex');
+
+            return $response;
+        }
+        else
+        {
+            return new HTTPResponse('Page not found', 404);
+        }
     }
 }

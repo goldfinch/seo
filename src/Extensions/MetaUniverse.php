@@ -40,7 +40,7 @@ class MetaUniverse extends Extension
           'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
           'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
           'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
-        ])->renderWith('Goldfinch/SEO/MetaUniverse');
+        ])->renderWith('Goldfinch/Seo/MetaUniverse');
     }
 
     public function MetaUniverseCached()
@@ -53,7 +53,7 @@ class MetaUniverse extends Extension
           'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
           'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
           'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
-        ])->renderWith('Goldfinch/SEO/MetaUniverseCached');
+        ])->renderWith('Goldfinch/Seo/MetaUniverseCached');
     }
 
     public function uCommonMeta()

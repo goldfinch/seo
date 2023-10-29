@@ -3,9 +3,9 @@
   xmlns:moz="http://www.mozilla.org/2006/browser/search/">
   <ShortName>$Title</ShortName>
   <Description>$Title</Description>
-  <InputEncoding>UTF-8</InputEncoding>
-  <Image width="32" height="32" type="image/x-icon">$IcoIcon</Image>
-  <Url type="text/html" template="[searchURL]"/>
-  <Url type="application/x-suggestions+json" template="[suggestionURL]"/>
-  <moz:SearchForm>[https://example.com/search]</moz:SearchForm>
+  <InputEncoding>$Encoding</InputEncoding>
+  <% if IcoIcon %><Image width="32" height="32" type="image/x-icon">$IcoIcon</Image><% end_if %>
+  <% if SearchURL %><Url type="text/html" template="{$SearchURL}"/><% end_if %>
+  <% if SuggestionURL %><Url type="application/x-suggestions+json" template="$SuggestionURL"/><% end_if %>
+  <% if SearchForm %><moz:SearchForm>$SearchForm</moz:SearchForm><% end_if %>
 </OpenSearchDescription>
