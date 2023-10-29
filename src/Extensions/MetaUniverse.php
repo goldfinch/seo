@@ -573,7 +573,7 @@ class MetaUniverse extends Extension
 
         if ($metaCfg->MsapplicationBackgroundImage && $metaCfg->MsapplicationBackgroundImage->exists())
         {
-            $url = $metaCfg->MsapplicationBackgroundImage->Fill(500, 500)->getAbsoluteURL();
+            $url = $metaCfg->MsapplicationBackgroundImage->FocusFill(500, 500)->getAbsoluteURL();
 
             $output .= '
             <meta name="msapplication-TileImage" content="'.$url.'">
@@ -582,10 +582,10 @@ class MetaUniverse extends Extension
 
         if ($metaCfg->MsapplicationTileImage && $metaCfg->MsapplicationTileImage->exists())
         {
-            $url70x70 = $metaCfg->MsapplicationTileImage->Fill(70, 70)->getAbsoluteURL();
-            $url150x150 = $metaCfg->MsapplicationTileImage->Fill(150, 150)->getAbsoluteURL();
-            $url310x310 = $metaCfg->MsapplicationTileImage->Fill(310, 310)->getAbsoluteURL();
-            $url310x150 = $metaCfg->MsapplicationTileImage->Fill(310, 150)->getAbsoluteURL();
+            $url70x70 = $metaCfg->MsapplicationTileImage->FocusFill(70, 70)->getAbsoluteURL();
+            $url150x150 = $metaCfg->MsapplicationTileImage->FocusFill(150, 150)->getAbsoluteURL();
+            $url310x310 = $metaCfg->MsapplicationTileImage->FocusFill(310, 310)->getAbsoluteURL();
+            $url310x150 = $metaCfg->MsapplicationTileImage->FocusFill(310, 150)->getAbsoluteURL();
 
             $output .= '
             <meta name="msapplication-square70x70logo" content="'.$url70x70.'">
@@ -949,7 +949,7 @@ class MetaUniverse extends Extension
             $width = 1200;
             $height = 630;
 
-            $link = $cfg->ImageSRC->Fill($width, $height)->getAbsoluteURL();
+            $link = $cfg->ImageSRC->FocusFill($width, $height)->getAbsoluteURL();
 
             $output = '
             <link rel="image_src" href="'.$link.'" type="'.$cfg->ImageSRC->getMimeType().'">
@@ -1160,7 +1160,7 @@ class MetaUniverse extends Extension
 
         if ($cfg->PortableImage->exists())
         {
-            $url = $cfg->PortableImage->Fill(180, 180)->getAbsoluteURL();
+            $url = $cfg->PortableImage->FocusFill(180, 180)->getAbsoluteURL();
 
             $output .= '
             <link rel="apple-touch-icon" href="' . $url . '">
@@ -1269,7 +1269,7 @@ class MetaUniverse extends Extension
                         $height = 630;
                     }
 
-                    $link = $image->Fill($width, $height)->getAbsoluteURL();
+                    $link = $image->FocusFill($width, $height)->getAbsoluteURL();
 
                     $ogImage = ImageOG::make($link)
                       ->secureUrl($link)
@@ -1290,7 +1290,7 @@ class MetaUniverse extends Extension
                 $width = 1200;
                 $height = 630;
 
-                $link = $image->Fill($width, $height)->getAbsoluteURL();
+                $link = $image->FocusFill($width, $height)->getAbsoluteURL();
 
                 $ogImage = ImageOG::make($link)
                   ->secureUrl($link)
@@ -1460,14 +1460,14 @@ class MetaUniverse extends Extension
             {
                 if ($tc->TC_Image->exists())
                 {
-                    $url = $tc->TC_Image->Fill(1200, 630)->getAbsoluteURL();
+                    $url = $tc->TC_Image->FocusFill(1200, 630)->getAbsoluteURL();
                     $graph->image($url, $tc->Title);
                 }
                 else if ($tcCfg->DefaultImage && $tcCfg->DefaultImage->exists())
                 {
                     $image = $tcCfg->DefaultImage;
 
-                    $url = $tcCfg->DefaultImage->Fill(1200, 630)->getAbsoluteURL();
+                    $url = $tcCfg->DefaultImage->FocusFill(1200, 630)->getAbsoluteURL();
                     $graph->image($url, $tcCfg->Title);
                 }
             }
