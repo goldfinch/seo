@@ -1,7 +1,7 @@
-<% cached $CacheKey, 'meta' %>
+<% cached $CacheKey, $URI, 'meta' %>
 $CommonMeta
 <% end_cached %>
 $SensitiveMeta
-<% cached $CacheKey, 'links' %>
+<% cached $CacheKey, $URI, 'links' %>
 $CommonLinks
 <% end_cached %>

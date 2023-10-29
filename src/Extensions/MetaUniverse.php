@@ -35,17 +35,20 @@ class MetaUniverse extends Extension
 
     public function MetaUniverse()
     {
-      return $this->owner->customise([
-        'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
-        'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
-        'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
-      ])->renderWith('Goldfinch/SEO/MetaUniverse');
+        return $this->owner->customise([
+          'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
+          'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
+          'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
+        ])->renderWith('Goldfinch/SEO/MetaUniverse');
     }
 
     public function MetaUniverseCached()
     {
+        $cacheKey = crypt($this->owner->ID . get_class($this->owner) , ss_env('APP_KEY'));
+
         return $this->owner->customise([
-          'CacheKey' => crypt($this->owner->ID, get_class($this->owner)),
+          'CacheKey' => $cacheKey,
+          'URI' => $_SERVER['REQUEST_URI'],
           'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
           'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
           'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
