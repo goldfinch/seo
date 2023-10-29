@@ -19,6 +19,7 @@ use Goldfinch\Seo\Models\OpenGraphConfig;
 use SilverStripe\ORM\ManyManyThroughList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use Goldfinch\Seo\Models\TwitterCardConfig;
+use SilverStripe\CMS\Controllers\ContentController;
 use Astrotomic\OpenGraph\StructuredProperties\Audio;
 use Astrotomic\OpenGraph\StructuredProperties\Video;
 use Astrotomic\OpenGraph\Types\Twitter\App as AppTC;
@@ -1343,6 +1344,15 @@ class MetaUniverse extends Extension
                 }
             }
 
+            // additional check for controllers
+            if (is_subclass_of($this->owner, ContentController::class))
+            {
+                if (method_exists($this->owner, 'updateOpenGraph'))
+                {
+                    $this->owner->updateOpenGraph($graph);
+                }
+            }
+
             // a wire to parent page
             $this->updateOpenGraph($graph);
 
@@ -1483,6 +1493,15 @@ class MetaUniverse extends Extension
                 }
             }
 
+            // additional check for controllers
+            if (is_subclass_of($this->owner, ContentController::class))
+            {
+                if (method_exists($this->owner, 'updateTwitterCard'))
+                {
+                    $this->owner->updateTwitterCard($graph);
+                }
+            }
+
             // a wire to parent page
             $this->updateTwitterCard($graph);
 
@@ -1535,6 +1554,15 @@ class MetaUniverse extends Extension
                   $element->updateSchemaData($schema);
                 }
                 catch(BadMethodCallException $exception) {}
+            }
+        }
+
+        // additional check for controllers
+        if (is_subclass_of($this->owner, ContentController::class))
+        {
+            if (method_exists($this->owner, 'updateSchemaData'))
+            {
+                $this->owner->updateSchemaData($schema);
             }
         }
 
