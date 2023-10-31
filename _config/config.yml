@@ -8,9 +8,17 @@ SilverStripe\Core\Injector\Injector:
     constructor:
       namespace: 'MetaUniverse'
 
+
+Goldfinch\Seo\Models\OpenGraph:
+  has_many:
+    Pages: SilverStripe\CMS\Model\SiteTree
+
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     - Goldfinch\Seo\Extensions\SEOExtension
+    - Goldfinch\Seo\Extensions\SchemaExtension
+    - Goldfinch\Seo\Extensions\OpenGraphExtension
+    - Goldfinch\Seo\Extensions\TwitterCardExtension
 
 SilverStripe\Control\Director:
   rules:
