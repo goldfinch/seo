@@ -28,19 +28,6 @@ class SEOOpenGraphAdmin extends ModelAdmin
         ],
     ];
 
-    // private static $managed_models = [
-    //    ExampleProduct::class,
-    //
-    //    ExampleCategory::class => [
-    //        'title' => 'All categories',
-    //    ],
-    //
-    //    'product-category' => [
-    //        'dataClass' => ExampleCategory::class,
-    //        'title' => 'Product categories',
-    //    ],
-    // ];
-
     private static $menu_priority = -0.5;
 
     private static $menu_icon_class = 'font-icon-database';
@@ -73,9 +60,7 @@ class SEOOpenGraphAdmin extends ModelAdmin
     {
         $config = parent::getGridFieldConfig();
 
-        // $config->removeComponentsByType(GridFieldExportButton::class);
-        // $config->removeComponentsByType(GridFieldPrintButton::class);
-        // $config->removeComponentsByType(GridFieldImportButton::class);
+        // ..
 
         return $config;
     }
@@ -87,13 +72,5 @@ class SEOOpenGraphAdmin extends ModelAdmin
         // ..
 
         return $form;
-    }
-
-    public function getExportFields()
-    {
-        return [
-            // 'Name' => 'Name',
-            // 'Category.Title' => 'Category'
-        ];
     }
 }

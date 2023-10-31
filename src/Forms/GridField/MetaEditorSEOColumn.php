@@ -6,8 +6,6 @@ use BadMethodCallException;
 use Axllent\MetaEditor\MetaEditor;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\TextareaField;
 use Goldfinch\Seo\Models\SchemaConfig;
 use Goldfinch\Seo\Admin\SEOSchemaAdmin;
 use Goldfinch\Seo\Models\OpenGraphConfig;

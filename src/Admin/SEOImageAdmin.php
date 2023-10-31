@@ -77,12 +77,4 @@ class SEOImageAdmin extends ModelAdmin
 
         return $form;
     }
-
-    public function getExportFields()
-    {
-        return [
-            // 'Name' => 'Name',
-            // 'Category.Title' => 'Category'
-        ];
-    }
 }
