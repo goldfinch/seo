@@ -64,7 +64,6 @@ class SEOImageAdmin extends ModelAdmin
         $config = GridFieldManyManyFocusConfig::create();
 
         $config->addComponent(MetaEditorFocusPointColumn::create());
-        $config->addComponent(GridFieldPaginator::create(20));
 
         return $config;
     }
