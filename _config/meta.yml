@@ -4,16 +4,17 @@ Name: goldfinch-seo-meta
 
 Goldfinch\Seo\Traits\MetaUniverse:
   preconnect:
+    # '//cdn.site..': false
     # # Google Analytics
     # '//www.google-analytics.com': false
-
+    # --
     # '//www.gstatic.com': false
     # '//fonts.gstatic.com': false
     # '//www.google.com': false
     # '//fonts.googleapis.com': false
     # # Google API
     # '//apis.google.com': false
-
+    # --
     # '//maps.gstatic.com': false
     # '//maps.googleapis.com': false
     # '//googleadservices.com': false
@@ -25,6 +26,7 @@ Goldfinch\Seo\Traits\MetaUniverse:
     # # Google CDN
     # '//ajax.googleapis.com': false
   dnsprefetch:
+    # '//cdn.site..': false
     # # Google Analytics
     # '//www.google-analytics.com': false
     # # DoubleClick
@@ -78,9 +80,10 @@ Goldfinch\Seo\Traits\MetaUniverse:
     # # Google CDN
     # '//ajax.googleapis.com': false
   crossorigin:
+    # '//cdn.site..': false
     # # Google Analytics
     # '//www.google-analytics.com': false
-
+    # --
     # '//www.gstatic.com': false
     # '//fonts.gstatic.com': false
     # '//fonts.googleapis.com': false
