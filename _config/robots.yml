@@ -1,0 +1,8 @@
+---
+Name: goldfinch-seo-robotsroute
+After:
+  - "#robotsroute"
+---
+SilverStripe\Control\Director:
+  rules:
+    "robots.txt": 'Goldfinch\Seo\Robots'

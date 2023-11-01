@@ -12,5 +12,17 @@ class RobotsConfig extends DataObject implements TemplateGlobalProvider
 
     private static $table_name = 'RobotsConfig';
 
-    private static $db = [];
+    private static $db = [
+        'CustomRules' => 'Text',
+        'CompleteRewrite' => 'Boolean',
+    ];
+
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+
+        $fields->dataFieldByName('CompleteRewrite')->setDescription('If ticked, auto-generated rules will be completely overwritten and the <strong>Custom rules</strong> will be the rules specified above.');
+
+        return $fields;
+    }
 }
