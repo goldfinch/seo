@@ -1,13 +1,11 @@
 ---
 Name: goldfinch-seo
 ---
-
 SilverStripe\Core\Injector\Injector:
   Psr\SimpleCache\CacheInterface.MetaUniverse:
     factory: SilverStripe\Core\Cache\CacheFactory
     constructor:
-      namespace: 'MetaUniverse'
-
+      namespace: "MetaUniverse"
 
 Goldfinch\Seo\Models\OpenGraph:
   has_many:
@@ -22,22 +20,22 @@ SilverStripe\CMS\Model\SiteTree:
 
 SilverStripe\Control\Director:
   rules:
-    'humans.txt': 'Goldfinch\Seo\Humans'
-    'manifest.webmanifest': 'Goldfinch\Seo\Webmanifest'
-    'favicon.ico': 'Goldfinch\Seo\Favicon'
-    'opensearch.xml': 'Goldfinch\Seo\Opensearch'
+    "humans.txt": 'Goldfinch\Seo\Humans'
+    "manifest.webmanifest": 'Goldfinch\Seo\Webmanifest'
+    "favicon.ico": 'Goldfinch\Seo\Favicon'
+    "opensearch.xml": 'Goldfinch\Seo\Opensearch'
 
 Goldfinch\Seo\Opensearch:
   opensearch:
-    'enable': false
-    'encoding': 'UTF-8'
-    'title': ''
-    'icoIcon': ''
-    'searchURL': ''
-    'suggestionURL': ''
-    'searchForm': ''
+    "enable": false
+    "encoding": "UTF-8"
+    "title": ""
+    "icoIcon": ""
+    "searchURL": ""
+    "suggestionURL": ""
+    "searchForm": ""
 
-PageController:
+SilverStripe\CMS\Controllers\ContentController:
   extensions:
     - Goldfinch\Seo\Extensions\MetaUniverse
 
@@ -52,4 +50,4 @@ TractorCow\Robots\Robots:
 
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
-    - 'goldfinch/seo: styles/seo.css'
+    - "goldfinch/seo: styles/seo.css"
