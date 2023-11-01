@@ -778,6 +778,13 @@ class MetaUniverse extends Extension
             ';
         }
 
+        if (ss_env('APP_SEO_YANDEX'))
+        {
+            $output .= '
+            <meta name="yandex-verification" content="' . ss_env('APP_SEO_YANDEX') . '" />
+            ';
+        }
+
         if (ss_env('APP_SEO_PINTEREST'))
         {
             $output .= '
