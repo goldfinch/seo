@@ -85,7 +85,7 @@ class Schema extends DataObject
 
                 TextField::create('Title', 'Title'),
                 CheckboxField::create('Disabled', 'Disable this schema')->setDescription('Any page that is using this schema record will not be displayed'),
-                JSONEditorField::create('JsonLD', 'Data'),
+                JSONEditorField::create('JsonLD', 'Data', $this),
 
               ),
           ]
