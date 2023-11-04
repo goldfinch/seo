@@ -45,15 +45,22 @@ class MetaUniverse extends Extension
 
     public function MetaUniverseCached()
     {
-        $cacheKey = crypt($this->owner->ID . get_class($this->owner) , ss_env('APP_KEY'));
+        if (Director::isLive())
+        {
+            $cacheKey = crypt($this->owner->ID . get_class($this->owner) , ss_env('APP_KEY'));
 
-        return $this->owner->customise([
-          'CacheKey' => $cacheKey,
-          'URI' => $_SERVER['REQUEST_URI'],
-          'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
-          'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
-          'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
-        ])->renderWith('Goldfinch/Seo/MetaUniverseCached');
+            return $this->owner->customise([
+              'CacheKey' => $cacheKey,
+              'URI' => $_SERVER['REQUEST_URI'],
+              'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
+              'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
+              'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
+            ])->renderWith('Goldfinch/Seo/MetaUniverseCached');
+        }
+        else
+        {
+            return $this->MetaUniverse();
+        }
     }
 
     public function uCommonMeta()
