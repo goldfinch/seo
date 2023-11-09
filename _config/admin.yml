@@ -4,7 +4,7 @@ Name: goldfinch-seo-admin
 
 SilverStripe\Admin\LeftAndMain:
   menu_groups:
-    SEO:
+    'SEO & Tools':
       priority: 47.3
       icon_class: "bi-wrench-adjustable-circle"
       children:
