@@ -24,7 +24,7 @@
         "goldfinch/json-editor": "dev-master",
         "goldfinch/focuspoint-extra": "dev-master",
         "silverstripe/redirectedurls": "3.0.0-beta1",
-        "axllent/silverstripe-meta-editor": "dev-extended"
+        "goldfinch/silverstripe-meta-editor": "^1.2"
     },
     "extra": {
         "expose": [
