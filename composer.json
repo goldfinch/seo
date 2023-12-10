@@ -17,7 +17,7 @@
         "goldfinch/taz": "^1.0",
         "goldfinch/silverstripe-grouped-cms-menu": "^4",
         "goldfinch/sitemap": "^1.0",
-        "goldfinch/json-editor": "dev-master",
+        "goldfinch/json-editor": "^1.0",
         "goldfinch/focuspoint-extra": "dev-master",
         "goldfinch/silverstripe-meta-editor": "^1.2",
         "astrotomic/php-open-graph": "^1.0",
