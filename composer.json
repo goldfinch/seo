@@ -15,6 +15,7 @@
         "silverstripe/admin": "^2.0",
         "goldfinch/helpers": "^1.0",
         "goldfinch/taz": "^1.0",
+        "goldfinch/silverstripe-grouped-cms-menu": "^4",
         "goldfinch/sitemap": "^1.0",
         "goldfinch/json-editor": "dev-master",
         "goldfinch/focuspoint-extra": "dev-master",
@@ -26,7 +27,8 @@
         "silvershop/silverstripe-hasonefield": "dev-main",
         "kinglozzer/multiselectfield": "^2.0",
         "silverstripe/redirectedurls": "3.0.0-beta1",
-        "jonom/silverstripe-someconfig": "^1.0"
+        "jonom/silverstripe-someconfig": "^1.0",
+        "symbiote/silverstripe-gridfieldextensions": "^4"
     },
     "extra": {
         "expose": [

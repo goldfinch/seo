@@ -6,7 +6,7 @@ SilverStripe\Admin\LeftAndMain:
   menu_groups:
     'SEO & Tools':
       priority: 47.3
-      icon_class: "bi-wrench-adjustable-circle"
+      icon_class: "font-icon-chart-pie"
       children:
         - Goldfinch-Seo-Admin-SEOImageAdmin
         - Goldfinch-Seo-Admin-SEOMetaAdmin
@@ -17,3 +17,15 @@ SilverStripe\Admin\LeftAndMain:
         - Goldfinch-Seo-Admin-SEOTwitterCardAdmin
         - SilverStripe-RedirectedURLs-Admin-RedirectedURLAdmin
         - Axllent-MetaEditor-MetaEditor
+
+
+---
+Name: goldfinch-seo-admin-icon
+Only:
+  moduleexists: 'goldfinch/enchantment'
+---
+
+SilverStripe\Admin\LeftAndMain:
+  menu_groups:
+    'SEO & Tools':
+      icon_class: "bi-wrench-adjustable-circle"
