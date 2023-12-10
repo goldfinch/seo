@@ -15,7 +15,7 @@
         "silverstripe/admin": "^2.0",
         "goldfinch/helpers": "^1.0",
         "goldfinch/taz": "^1.0",
-        "goldfinch/sitemap": "dev-master",
+        "goldfinch/sitemap": "^1.0",
         "goldfinch/json-editor": "dev-master",
         "goldfinch/focuspoint-extra": "dev-master",
         "goldfinch/silverstripe-meta-editor": "^1.2",
