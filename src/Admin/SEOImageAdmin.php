@@ -61,8 +61,7 @@ class SEOImageAdmin extends ModelAdmin
 
     protected function getGridFieldConfig(): GridFieldConfig
     {
-        $config = GridFieldManyManyFocusConfig::create();
-
+        $config = GridFieldManyManyFocusConfig::create(null, 'SortOrder', [], $this->modelClass);
         $config->addComponent(MetaEditorFocusPointColumn::create());
 
         return $config;
