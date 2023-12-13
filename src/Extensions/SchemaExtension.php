@@ -34,7 +34,7 @@ class SchemaExtension extends SeoDataExtension
                     //     'Schemas',
                     //     $this->owner->Schemas(),
                     // ),
-                    MultiSelectField::create('Schemas', 'Schemas', $this->owner, 'SortOrder'),
+                    MultiSelectField::create('Schemas', 'Schemas', $this->owner, 'SortExtra'),
                     CheckboxField::create('DisableDefaultSchema', 'Disable default schema for this page'),
                 ]
             );

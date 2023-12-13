@@ -88,18 +88,18 @@ class OpenGraph extends DataObject
 
     private static $many_many_extraFields = [
         'OG_Images' => [
-            'SortOrder' => 'Int',
+            'SortExtra' => 'Int',
             'OG_Image_Width' => 'Int',
             'OG_Image_Height' => 'Int',
             'OG_Image_Alt' => 'Varchar',
         ],
         'OG_Videos' => [
-          'SortOrder' => 'Int',
+          'SortExtra' => 'Int',
           'OG_Image_Width' => 'Int',
           'OG_Image_Height' => 'Int',
         ],
         'OG_Audios' => [
-          'SortOrder' => 'Int',
+          'SortExtra' => 'Int',
         ],
     ];
 

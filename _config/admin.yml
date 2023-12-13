@@ -5,7 +5,7 @@ Name: goldfinch-seo-admin
 SilverStripe\Admin\LeftAndMain:
   menu_groups:
     'SEO & Tools':
-      priority: 47.3
+      priority: 10
       icon_class: "font-icon-chart-pie"
       children:
         - Goldfinch-Seo-Admin-SEOImageAdmin

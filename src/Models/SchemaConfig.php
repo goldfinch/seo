@@ -22,7 +22,7 @@ class SchemaConfig extends DataObject implements TemplateGlobalProvider
 
     private static $many_many_extraFields = [
         'DefaultSchemas' => [
-            'SortOrder' => 'Int',
+            'SortExtra' => 'Int',
         ]
     ];
 
@@ -34,7 +34,7 @@ class SchemaConfig extends DataObject implements TemplateGlobalProvider
 
         $fields->addFieldsToTab('Root.Main', [
 
-          MultiSelectField::create('DefaultSchemas', 'Default Schemas', $this, 'SortOrder'),
+          MultiSelectField::create('DefaultSchemas', 'Default Schemas', $this, 'SortExtra'),
 
         ]);
 
