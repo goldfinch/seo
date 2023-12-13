@@ -55,9 +55,7 @@ APP_SEO_MANIFEST_DISPLAY_OVERRIDE= (["window-control-overlay", "minimal-ui"])
 
 https://ogp.me/#no_vertical
 
-
 https://ogvideo.app/
-
 
 FYI:
 
