@@ -62,11 +62,11 @@ class MetaConfig extends DataObject implements TemplateGlobalProvider
             'Rating',
             $ratingTypes
           )->setDescription('Labels a page as containing sexually-explicit adult content, to signal that it be filtered by SafeSearch results. <a href="https://developers.google.com/search/docs/crawling-indexing/safesearch" target="_blank">Learn more about labeling SafeSearch pages</a>.'),
-          UploadField::create('MsapplicationTileImage', 'Tile image, logo (msapplication meta tag)')->setDescription('used for msapplication meta tags'),
-          UploadField::create('MsapplicationBackgroundImage', 'Background image for live tile (msapplication meta tag)')->setDescription('used for msapplication meta tags'),
+          UploadField::create('MsapplicationTileImage', 'Tile image, logo (msapplication meta tag)')->setDescription('used for msapplication meta tags')->setFolderName('seo'),
+          UploadField::create('MsapplicationBackgroundImage', 'Background image for live tile (msapplication meta tag)')->setDescription('used for msapplication meta tags')->setFolderName('seo'),
           TextField::create('MsapplicationTileColor', 'Background color for live tile (msapplication meta tag)'),
 
-          UploadField::create('ImageSRC', 'Image src tag'),
+          UploadField::create('ImageSRC', 'Image src tag')->setFolderName('seo'),
 
         ]);
 

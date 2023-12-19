@@ -40,7 +40,7 @@ class OpenGraphConfig extends DataObject implements TemplateGlobalProvider
         $fields->addFieldsToTab('Root.Main', [
 
             HasOneButtonField::create($this, 'DefaultObject', 'DefaultObjectID', 'Default object'),
-            UploadField::create('DefaultImage', 'Default image')->setDescription('Default image for all OG records.'),
+            UploadField::create('DefaultImage', 'Default image')->setDescription('Default image for all OG records.')->setFolderName('seo'),
             TextField::create('FB_AppID', 'Faceboook App ID')->setDescription('Default value for all OG records.'),
             TextField::create('OG_Locale', 'Locale')->setDescription('Default value for all OG records.'),
 

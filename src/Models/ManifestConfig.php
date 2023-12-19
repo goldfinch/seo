@@ -37,19 +37,19 @@ class ManifestConfig extends DataObject implements TemplateGlobalProvider
         $fields = parent::getCMSFields();
 
         $fields->dataFieldByName('PortableImage')
-          ->setFolderName('webmanifest')
+          ->setFolderName('seo')
           ->setAllowedExtensions('png')
           ->setDescription('png 512x512')
         ;
 
         $fields->dataFieldByName('VectorIcon')
-          ->setFolderName('webmanifest')
+          ->setFolderName('seo')
           ->setAllowedExtensions('svg')
           ->setDescription('svg 512x512')
         ;
 
         $fields->dataFieldByName('IcoIcon')
-          ->setFolderName('webmanifest')
+          ->setFolderName('seo')
           ->setAllowedExtensions('ico')
           ->setDescription('ico 32x32')
         ;

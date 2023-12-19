@@ -14,7 +14,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Forms\CompositeField;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
 use SilverStripe\AssetAdmin\Forms\UploadField;
-use Bummzack\SortableFile\Forms\SortableUploadField;
 
 class TwitterCard extends DataObject
 {
@@ -185,7 +184,7 @@ class TwitterCard extends DataObject
               ->orIf()->contains('summary_large_image')
               ->orIf()->contains('player')
             ->end(),
-            UploadField::create('TC_Image', 'Image')->setDescription('URL of image to use in the card. Images must be less than 5MB in size. JPG, PNG, WEBP and GIF formats are supported. Only the first frame of an animated GIF will be used. SVG is not supported.')
+            UploadField::create('TC_Image', 'Image')->setDescription('URL of image to use in the card. Images must be less than 5MB in size. JPG, PNG, WEBP and GIF formats are supported. Only the first frame of an animated GIF will be used. SVG is not supported.')->setFolderName('seo')
               ->displayIf('TC_Type')->contains('summary')
               ->orIf()->contains('summary_large_image')
               ->orIf()->contains('player')
