@@ -18,7 +18,7 @@
         "goldfinch/silverstripe-grouped-cms-menu": "^4",
         "goldfinch/sitemap": "^1.0",
         "goldfinch/json-editor": "^1.0",
-        "goldfinch/focuspoint-extra": "^1.0",
+        "goldfinch/image-editor": "^1.0",
         "goldfinch/silverstripe-meta-editor": "^1.2",
         "astrotomic/php-open-graph": "^1.0",
         "spatie/schema-org": "^3.14",
