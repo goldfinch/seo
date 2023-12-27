@@ -8,7 +8,7 @@ SilverStripe\Admin\LeftAndMain:
       priority: 10
       icon_class: "font-icon-chart-pie"
       children:
-        - Goldfinch-Seo-Admin-SEOImageAdmin
+        - Goldfinch-ImageEditor-Admin-ImageEditorAdmin
         - Goldfinch-Seo-Admin-SEOMetaAdmin
         - Goldfinch-Seo-Admin-SEORobotsAdmin
         - Goldfinch-Seo-Admin-SEOManifestAdmin
