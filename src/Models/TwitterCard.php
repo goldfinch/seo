@@ -2,7 +2,6 @@
 
 namespace Goldfinch\Seo\Models;
 
-use SilverStripe\Assets\File;
 use SilverStripe\Assets\Image;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
@@ -10,9 +9,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\TextareaField;
-use SilverStripe\Security\Permission;
 use SilverStripe\Forms\CompositeField;
-use UncleCheese\DisplayLogic\Forms\Wrapper;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 
 class TwitterCard extends DataObject
@@ -82,29 +79,6 @@ class TwitterCard extends DataObject
     private static $owns = [
         'TC_Image',
     ];
-
-    public function validate()
-    {
-        $result = parent::validate();
-
-        // $result->addError('Error message');
-
-        return $result;
-    }
-
-    public function onBeforeWrite()
-    {
-        // ..
-
-        parent::onBeforeWrite();
-    }
-
-    public function onBeforeDelete()
-    {
-        // ..
-
-        parent::onBeforeDelete();
-    }
 
     public function getCMSFields()
     {

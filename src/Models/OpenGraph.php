@@ -10,10 +10,8 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\TextareaField;
-use SilverStripe\Security\Permission;
 use SilverStripe\Forms\CompositeField;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
-use SilverStripe\AssetAdmin\Forms\UploadField;
 use Bummzack\SortableFile\Forms\SortableUploadField;
 
 class OpenGraph extends DataObject

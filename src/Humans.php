@@ -2,8 +2,8 @@
 
 namespace Goldfinch\Seo;
 
-use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Control\HTTPResponse;
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Control\RequestHandler;
 
 class Humans extends RequestHandler

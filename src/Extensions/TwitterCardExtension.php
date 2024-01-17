@@ -5,7 +5,6 @@ namespace Goldfinch\Seo\Extensions;
 use Goldfinch\Seo\Models\TwitterCard;
 use SilverStripe\Forms\CheckboxField;
 use SilverShop\HasOneField\HasOneButtonField;
-use SilverShop\HasOneField\GridFieldHasOneButtonRow;
 // use SilverShop\HasOneField\HasOneAddExistingAutoCompleter;
 
 class TwitterCardExtension extends SeoDataExtension

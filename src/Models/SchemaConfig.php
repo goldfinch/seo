@@ -14,8 +14,6 @@ class SchemaConfig extends DataObject implements TemplateGlobalProvider
 
     private static $table_name = 'SchemaConfig';
 
-    private static $db = [];
-
     private static $many_many = [
         'DefaultSchemas' => Schema::class,
     ];

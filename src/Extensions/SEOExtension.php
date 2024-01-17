@@ -2,10 +2,8 @@
 
 namespace Goldfinch\Seo\Extensions;
 
-use SilverStripe\ORM\FieldType\DBHTMLText;
-use Astrotomic\OpenGraph\OpenGraph;
 use SilverStripe\Core\Extension;
-use Spatie\SchemaOrg\Schema;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 
 class SEOExtension extends Extension
 {

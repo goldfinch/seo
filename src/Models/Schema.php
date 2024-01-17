@@ -5,7 +5,6 @@ namespace Goldfinch\Seo\Models;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Security\Permission;
 use SilverStripe\Forms\CompositeField;
 use Goldfinch\JSONEditor\Forms\JSONEditorField;
 
@@ -43,29 +42,6 @@ class Schema extends DataObject
         foreach ($this->SchemaMappings() as $mapping) {
             yield $mapping->Parent();
         }
-    }
-
-    public function validate()
-    {
-        $result = parent::validate();
-
-        // $result->addError('Error message');
-
-        return $result;
-    }
-
-    public function onBeforeWrite()
-    {
-        // ..
-
-        parent::onBeforeWrite();
-    }
-
-    public function onBeforeDelete()
-    {
-        // ..
-
-        parent::onBeforeDelete();
     }
 
     public function getCMSFields()

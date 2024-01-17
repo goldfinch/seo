@@ -6,10 +6,6 @@ use Goldfinch\Seo\Models\Schema;
 use SilverStripe\Admin\ModelAdmin;
 use JonoM\SomeConfig\SomeConfigAdmin;
 use Goldfinch\Seo\Models\SchemaConfig;
-use SilverStripe\Forms\GridField\GridFieldConfig;
-use SilverStripe\Forms\GridField\GridFieldPrintButton;
-use SilverStripe\Forms\GridField\GridFieldExportButton;
-use SilverStripe\Forms\GridField\GridFieldImportButton;
 
 class SEOSchemaAdmin extends ModelAdmin
 {
@@ -18,15 +14,6 @@ class SEOSchemaAdmin extends ModelAdmin
     private static $url_segment = 'seo-schema';
 
     private static $menu_title = 'Schema';
-
-    private static $managed_models = [
-        Schema::class => [
-            'title' => 'Schema records',
-        ],
-        SchemaConfig::class => [
-            'title'=> 'Settings',
-        ],
-    ];
 
     private static $menu_priority = -0.5;
 
@@ -38,39 +25,12 @@ class SEOSchemaAdmin extends ModelAdmin
 
     private static $page_length = 30;
 
-    public function getList()
-    {
-        $list =  parent::getList();
-
-        // ..
-
-        return $list;
-    }
-
-    public function getSearchContext()
-    {
-        $context = parent::getSearchContext();
-
-        // ..
-
-        return $context;
-    }
-
-    protected function getGridFieldConfig(): GridFieldConfig
-    {
-        $config = parent::getGridFieldConfig();
-
-        // ..
-
-        return $config;
-    }
-
-    public function getEditForm($id = null, $fields = null)
-    {
-        $form = parent::getEditForm($id, $fields);
-
-        // ..
-
-        return $form;
-    }
+    private static $managed_models = [
+        Schema::class => [
+            'title' => 'Schema records',
+        ],
+        SchemaConfig::class => [
+            'title'=> 'Settings',
+        ],
+    ];
 }

@@ -3,7 +3,6 @@
 namespace Goldfinch\Seo\Models;
 
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Permission;
 
 class SchemaMapping extends DataObject
 {
