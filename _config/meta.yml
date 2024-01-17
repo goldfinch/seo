@@ -1,7 +1,6 @@
 ---
 Name: goldfinch-seo-meta
 ---
-
 Goldfinch\Seo\Traits\MetaUniverse:
   preconnect:
     # '//cdn.site..': false
@@ -93,43 +92,43 @@ Goldfinch\Seo\Traits\MetaUniverse:
     # '//www.google-analytics.com': false
   headrules:
     # --- turned on
-    'base': true
-    'viewport': true
-    'compatible': true
-    'content-type-charset': true
-    'title': true
-    'csrf': true
-    'home': true
-    'shortlink': true
-    'canonical': true
-    'description': true
-    'language': true
-    'identifier-URL': true
-    'theme': true
-    'x-cms': true
-    'image_src': true
-    'icon': true
-    'manifest': true
+    "base": true
+    "viewport": true
+    "compatible": true
+    "content-type-charset": true
+    "title": true
+    "csrf": true
+    "home": true
+    "shortlink": true
+    "canonical": true
+    "description": true
+    "language": true
+    "identifier-URL": true
+    "theme": true
+    "x-cms": true
+    "image_src": true
+    "icon": true
+    "manifest": true
     # --- turned off
-    'category': false
-    'dns-prefetch-control': false
-    'news_keywords': false
-    'dates': false
-    'geo': false
-    'rating': false
-    'mobile-web-app-capable': false
-    'refresh': false
-    'apple-webapp': false
-    'format-detection': false
-    'msapplication': false
-    'author': false
-    'copyright': false
-    'referrer': false
-    'application-name': false
-    'verifications': false
-    'search': false
-    'humans': false
-    'apple-touch': false
-    'preconnect': false
-    'amphtml': false
-    'robots': false
+    "category": false
+    "dns-prefetch-control": false
+    "news_keywords": false
+    "dates": false
+    "geo": false
+    "rating": false
+    "mobile-web-app-capable": false
+    "refresh": false
+    "apple-webapp": false
+    "format-detection": false
+    "msapplication": false
+    "author": false
+    "copyright": false
+    "referrer": false
+    "application-name": false
+    "verifications": false
+    "search": false
+    "humans": false
+    "apple-touch": false
+    "preconnect": false
+    "amphtml": false
+    "robots": false

@@ -12,26 +12,27 @@ class Favicon extends RequestHandler
     {
         $manifestCfg = ManifestConfig::current_config();
 
-        if ($manifestCfg->IcoIcon && $manifestCfg->IcoIcon->exists())
-        {
+        if ($manifestCfg->IcoIcon && $manifestCfg->IcoIcon->exists()) {
             $path = PUBLIC_PATH . $manifestCfg->IcoIcon->getSourceURL();
 
-            if (file_exists($path))
-            {
+            if (file_exists($path)) {
                 $response = new HTTPResponse(file_get_contents($path), 200);
-                $response->addHeader("Content-Type", $manifestCfg->IcoIcon->getMimeType());
+                $response->addHeader(
+                    'Content-Type',
+                    $manifestCfg->IcoIcon->getMimeType(),
+                );
                 return $response;
             }
-        }
-        else
-        {
+        } else {
             // load local file if exists
             $path = PUBLIC_PATH . '/favicon.ico';
 
-            if (file_exists($path))
-            {
+            if (file_exists($path)) {
                 $response = new HTTPResponse(file_get_contents($path), 200);
-                $response->addHeader("Content-Type", $manifestCfg->IcoIcon->getMimeType()); // "image/x-icon"
+                $response->addHeader(
+                    'Content-Type',
+                    $manifestCfg->IcoIcon->getMimeType(),
+                ); // "image/x-icon"
                 return $response;
             }
         }

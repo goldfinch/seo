@@ -11,20 +11,17 @@ class SeoDataExtension extends DataExtension
     {
         $tab = 'Root.SEO';
 
-        if ($fields->findTab($tab))
-        {
+        if ($fields->findTab($tab)) {
             $this->seoFieldsTab($fields, $tab);
         }
     }
 
     public function updateCMSFields(FieldList $fields)
     {
-        if (!method_exists($this->owner, 'getSettingsFields'))
-        {
+        if (!method_exists($this->owner, 'getSettingsFields')) {
             $tab = 'Root.Settings.SEO.SEO_Inner';
 
-            if ($fields->findTab($tab))
-            {
+            if ($fields->findTab($tab)) {
                 $this->seoFieldsTab($fields, $tab);
             }
         }

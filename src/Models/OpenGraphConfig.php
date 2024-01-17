@@ -27,9 +27,7 @@ class OpenGraphConfig extends DataObject implements TemplateGlobalProvider
         'DefaultObject' => OpenGraph::class,
     ];
 
-    private static $owns = [
-        'DefaultImage',
-    ];
+    private static $owns = ['DefaultImage'];
 
     public function getCMSFields()
     {
@@ -38,12 +36,21 @@ class OpenGraphConfig extends DataObject implements TemplateGlobalProvider
         $fields->removeByName(['DefaultObjectID']);
 
         $fields->addFieldsToTab('Root.Main', [
-
-            HasOneButtonField::create($this, 'DefaultObject', 'DefaultObjectID', 'Default object'),
-            UploadField::create('DefaultImage', 'Default image')->setDescription('Default image for all OG records.')->setFolderName('seo'),
-            TextField::create('FB_AppID', 'Faceboook App ID')->setDescription('Default value for all OG records.'),
-            TextField::create('OG_Locale', 'Locale')->setDescription('Default value for all OG records.'),
-
+            HasOneButtonField::create(
+                $this,
+                'DefaultObject',
+                'DefaultObjectID',
+                'Default object',
+            ),
+            UploadField::create('DefaultImage', 'Default image')
+                ->setDescription('Default image for all OG records.')
+                ->setFolderName('seo'),
+            TextField::create('FB_AppID', 'Faceboook App ID')->setDescription(
+                'Default value for all OG records.',
+            ),
+            TextField::create('OG_Locale', 'Locale')->setDescription(
+                'Default value for all OG records.',
+            ),
         ]);
 
         return $fields;

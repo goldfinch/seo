@@ -2,9 +2,7 @@
     "name": "goldfinch/seo",
     "description": "",
     "type": "silverstripe-vendormodule",
-    "keywords": [
-        "silverstripe"
-    ],
+    "keywords": ["silverstripe"],
     "license": "MIT",
     "authors": [
         {
@@ -34,10 +32,7 @@
         "symbiote/silverstripe-gridfieldextensions": "^4"
     },
     "extra": {
-        "expose": [
-            "javascript",
-            "styles"
-        ]
+        "expose": ["javascript", "styles"]
     },
     "autoload": {
         "psr-4": {

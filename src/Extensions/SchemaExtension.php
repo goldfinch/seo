@@ -19,25 +19,29 @@ class SchemaExtension extends SeoDataExtension
             'through' => SchemaMapping::class,
             'from' => 'Parent',
             'to' => 'Schema',
-        ]
+        ],
     ];
 
     protected function seoFieldsTab(&$fields, $tab)
     {
-        if ($this->owner->ID)
-        {
-            $fields->addFieldsToTab(
-                $tab,
-                [
-                    // $schemaGrid = GridField::create(
-                    //     'Schemas',
-                    //     'Schemas',
-                    //     $this->owner->Schemas(),
-                    // ),
-                    MultiSelectField::create('Schemas', 'Schemas', $this->owner, 'SortOrder'),
-                    CheckboxField::create('DisableDefaultSchema', 'Disable default schema for this page'),
-                ]
-            );
+        if ($this->owner->ID) {
+            $fields->addFieldsToTab($tab, [
+                // $schemaGrid = GridField::create(
+                //     'Schemas',
+                //     'Schemas',
+                //     $this->owner->Schemas(),
+                // ),
+                MultiSelectField::create(
+                    'Schemas',
+                    'Schemas',
+                    $this->owner,
+                    'SortOrder',
+                ),
+                CheckboxField::create(
+                    'DisableDefaultSchema',
+                    'Disable default schema for this page',
+                ),
+            ]);
 
             // $config = GridFieldManyManyConfig::create();
 

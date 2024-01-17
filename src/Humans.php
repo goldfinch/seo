@@ -19,24 +19,30 @@ class Humans extends RequestHandler
 
         ';
 
-        if (ss_env('APP_HUMANS_CREATOR'))
-        {
-            $text .= '
-            Creator: ' . ss_env('APP_HUMANS_CREATOR') . '
+        if (ss_env('APP_HUMANS_CREATOR')) {
+            $text .=
+                '
+            Creator: ' .
+                ss_env('APP_HUMANS_CREATOR') .
+                '
             ';
         }
 
-        if (ss_env('APP_HUMANS_CREATOR'))
-        {
-            $text .= '
-            Site: ' . ss_env('APP_HUMANS_SITE') . '
+        if (ss_env('APP_HUMANS_CREATOR')) {
+            $text .=
+                '
+            Site: ' .
+                ss_env('APP_HUMANS_SITE') .
+                '
             ';
         }
 
-        if (ss_env('APP_HUMANS_CREATOR'))
-        {
-            $text .= '
-            Location: ' . ss_env('APP_HUMANS_LOCATION') . '
+        if (ss_env('APP_HUMANS_CREATOR')) {
+            $text .=
+                '
+            Location: ' .
+                ss_env('APP_HUMANS_LOCATION') .
+                '
             ';
         }
 
@@ -47,18 +53,24 @@ class Humans extends RequestHandler
         /* SITE */
         ';
 
-        if (ss_env('APP_HUMANS_CREATOR'))
-        {
-            $text .= '
-            Standards: ' . ss_env('APP_HUMANS_STANDARDS') . '
+        if (ss_env('APP_HUMANS_CREATOR')) {
+            $text .=
+                '
+            Standards: ' .
+                ss_env('APP_HUMANS_STANDARDS') .
+                '
             ';
         }
 
         $text = str_replace('        ', '', $text);
-        $text = preg_replace(['/[ \t]*($|\R)/u', '/^\n*|(\n)\n*$|(\n{3})\n+/'], ["\n", '\1\2'], $text);
+        $text = preg_replace(
+            ['/[ \t]*($|\R)/u', '/^\n*|(\n)\n*$|(\n{3})\n+/'],
+            ["\n", '\1\2'],
+            $text,
+        );
 
         $response = new HTTPResponse($text, 200);
-        $response->addHeader("Content-Type", "text/plain; charset=\"utf-8\"");
+        $response->addHeader('Content-Type', "text/plain; charset=\"utf-8\"");
         return $response;
     }
 }

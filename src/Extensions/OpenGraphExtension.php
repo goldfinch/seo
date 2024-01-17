@@ -19,15 +19,17 @@ class OpenGraphExtension extends SeoDataExtension
 
     protected function seoFieldsTab(&$fields, $tab)
     {
-        if ($this->owner->ID)
-        {
-            $fields->addFieldsToTab(
-                $tab,
-                [
-                    $og = HasOneButtonField::create($this->owner, 'OpenGraphObject'),
-                    CheckboxField::create('DisableDefaultOpenGraphObject', 'Disable default OG for this page'),
-                ]
-            );
+        if ($this->owner->ID) {
+            $fields->addFieldsToTab($tab, [
+                ($og = HasOneButtonField::create(
+                    $this->owner,
+                    'OpenGraphObject',
+                )),
+                CheckboxField::create(
+                    'DisableDefaultOpenGraphObject',
+                    'Disable default OG for this page',
+                ),
+            ]);
         }
 
         // $og

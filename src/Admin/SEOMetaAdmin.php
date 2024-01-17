@@ -26,7 +26,7 @@ class SEOMetaAdmin extends ModelAdmin
 
     private static $managed_models = [
         MetaConfig::class => [
-            'title'=> 'Meta',
+            'title' => 'Meta',
         ],
     ];
 
@@ -36,11 +36,17 @@ class SEOMetaAdmin extends ModelAdmin
 
         $configSegment = $this->sanitiseClassName(MetaConfig::class);
 
-        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false)
-        {
+        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false) {
             $config = MetaConfig::current_config();
             $configSegment = $this->sanitiseClassName(MetaConfig::class);
-            $link = str_replace($configSegment, '', parent::Link(null)) . $configSegment . '/EditForm/field/' . $configSegment . '/item/' . $config->ID . '/edit';
+            $link =
+                str_replace($configSegment, '', parent::Link(null)) .
+                $configSegment .
+                '/EditForm/field/' .
+                $configSegment .
+                '/item/' .
+                $config->ID .
+                '/edit';
 
             return $this->redirect($link);
         }

@@ -18,8 +18,8 @@ class TwitterCardConfig extends DataObject implements TemplateGlobalProvider
     private static $table_name = 'TwitterCardConfig';
 
     private static $db = [
-      'TC_Site' => 'Varchar',
-      'TC_SiteID' => 'Varchar',
+        'TC_Site' => 'Varchar',
+        'TC_SiteID' => 'Varchar',
     ];
 
     private static $has_one = [
@@ -27,9 +27,7 @@ class TwitterCardConfig extends DataObject implements TemplateGlobalProvider
         'DefaultObject' => TwitterCard::class,
     ];
 
-    private static $owns = [
-        'DefaultImage',
-    ];
+    private static $owns = ['DefaultImage'];
 
     public function getCMSFields()
     {
@@ -38,12 +36,21 @@ class TwitterCardConfig extends DataObject implements TemplateGlobalProvider
         $fields->removeByName(['DefaultObjectID']);
 
         $fields->addFieldsToTab('Root.Main', [
-
-            HasOneButtonField::create($this, 'DefaultObject', 'DefaultObjectID', 'Default object'),
-            UploadField::create('DefaultImage', 'Default image')->setDescription('Default image for all TC records.')->setFolderName('seo'),
-            TextField::create('TC_Site', 'Site')->setDescription('Default value for all TC records.'),
-            TextField::create('TC_SiteID', 'Site ID')->setDescription('Default value for all TC records.'),
-
+            HasOneButtonField::create(
+                $this,
+                'DefaultObject',
+                'DefaultObjectID',
+                'Default object',
+            ),
+            UploadField::create('DefaultImage', 'Default image')
+                ->setDescription('Default image for all TC records.')
+                ->setFolderName('seo'),
+            TextField::create('TC_Site', 'Site')->setDescription(
+                'Default value for all TC records.',
+            ),
+            TextField::create('TC_SiteID', 'Site ID')->setDescription(
+                'Default value for all TC records.',
+            ),
         ]);
 
         return $fields;

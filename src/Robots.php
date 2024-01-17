@@ -16,12 +16,9 @@ class Robots extends Robots_Origin
         // custom
         $cfg = RobotsConfig::current_config();
 
-        if ($cfg->CompleteRewrite)
-        {
+        if ($cfg->CompleteRewrite) {
             $body = $cfg->CustomRules;
-        }
-        else if ($cfg->CustomRules)
-        {
+        } elseif ($cfg->CustomRules) {
             $body .= $cfg->CustomRules;
         }
 

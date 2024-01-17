@@ -21,7 +21,11 @@ class RobotsConfig extends DataObject implements TemplateGlobalProvider
     {
         $fields = parent::getCMSFields();
 
-        $fields->dataFieldByName('CompleteRewrite')->setDescription('If ticked, auto-generated rules will be completely overwritten and the <strong>Custom rules</strong> will be the rules specified above.');
+        $fields
+            ->dataFieldByName('CompleteRewrite')
+            ->setDescription(
+                'If ticked, auto-generated rules will be completely overwritten and the <strong>Custom rules</strong> will be the rules specified above.',
+            );
 
         return $fields;
     }

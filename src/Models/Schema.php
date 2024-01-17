@@ -48,24 +48,20 @@ class Schema extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $fields->removeByName([
-          'Title',
-          'JsonLD',
-          'Disabled',
-        ]);
+        $fields->removeByName(['Title', 'JsonLD', 'Disabled']);
 
-        $fields->addFieldsToTab(
-          'Root.Main',
-          [
-              CompositeField::create(
-
+        $fields->addFieldsToTab('Root.Main', [
+            CompositeField::create(
                 TextField::create('Title', 'Title'),
-                CheckboxField::create('Disabled', 'Disable this schema')->setDescription('Any page that is using this schema record will not be displayed'),
+                CheckboxField::create(
+                    'Disabled',
+                    'Disable this schema',
+                )->setDescription(
+                    'Any page that is using this schema record will not be displayed',
+                ),
                 JSONEditorField::create('JsonLD', 'Data', $this),
-
-              ),
-          ]
-        );
+            ),
+        ]);
 
         return $fields;
     }

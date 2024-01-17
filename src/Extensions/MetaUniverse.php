@@ -36,29 +36,45 @@ class MetaUniverse extends Extension
 
     public function MetaUniverse()
     {
-        return $this->owner->customise([
-          'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
-          'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
-          'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
-        ])->renderWith('Goldfinch/Seo/MetaUniverse');
+        return $this->owner
+            ->customise([
+                'CommonMeta' => $this->owner->uTagsFormatter(
+                    $this->owner->uCommonMeta(),
+                ),
+                'SensitiveMeta' => $this->owner->uTagsFormatter(
+                    $this->owner->uSensitiveMeta(),
+                ),
+                'CommonLinks' => $this->owner->uTagsFormatter(
+                    $this->owner->uCommonLinks(),
+                ),
+            ])
+            ->renderWith('Goldfinch/Seo/MetaUniverse');
     }
 
     public function MetaUniverseCached()
     {
-        if (Director::isLive())
-        {
-            $cacheKey = crypt($this->owner->ID . get_class($this->owner) , ss_env('APP_KEY'));
+        if (Director::isLive()) {
+            $cacheKey = crypt(
+                $this->owner->ID . get_class($this->owner),
+                ss_env('APP_KEY'),
+            );
 
-            return $this->owner->customise([
-              'CacheKey' => $cacheKey,
-              'URI' => $_SERVER['REQUEST_URI'],
-              'CommonMeta' => $this->owner->uTagsFormatter($this->owner->uCommonMeta()),
-              'SensitiveMeta' => $this->owner->uTagsFormatter($this->owner->uSensitiveMeta()),
-              'CommonLinks' => $this->owner->uTagsFormatter($this->owner->uCommonLinks()),
-            ])->renderWith('Goldfinch/Seo/MetaUniverseCached');
-        }
-        else
-        {
+            return $this->owner
+                ->customise([
+                    'CacheKey' => $cacheKey,
+                    'URI' => $_SERVER['REQUEST_URI'],
+                    'CommonMeta' => $this->owner->uTagsFormatter(
+                        $this->owner->uCommonMeta(),
+                    ),
+                    'SensitiveMeta' => $this->owner->uTagsFormatter(
+                        $this->owner->uSensitiveMeta(),
+                    ),
+                    'CommonLinks' => $this->owner->uTagsFormatter(
+                        $this->owner->uCommonLinks(),
+                    ),
+                ])
+                ->renderWith('Goldfinch/Seo/MetaUniverseCached');
+        } else {
             return $this->MetaUniverse();
         }
     }
@@ -67,15 +83,12 @@ class MetaUniverse extends Extension
     {
         $html =
             $this->owner->metaBase() .
-
             $this->owner->metaTitle() .
-
             $this->owner->metaContentTypeCharset() .
             $this->owner->metaCompatible() .
             $this->owner->metaDnsPrefetchControl() .
             $this->owner->metaRefresh() .
             $this->owner->metaDates() .
-
             $this->owner->metaViewport() .
             $this->owner->metaReferrer() .
             $this->owner->metaLang() .
@@ -85,20 +98,17 @@ class MetaUniverse extends Extension
             $this->owner->metaVerifications() .
             $this->owner->metaTheme() .
             $this->owner->metaRating() .
-
             $this->owner->metaNewsKeywords() . // only for article
             $this->owner->metaGeo() . // perhaps contact page only
             $this->owner->metaDescription() .
             $this->owner->metaCategory() . // for sites catalogs
-
             $this->owner->metaMobile() .
             $this->owner->metaFormatDetection() .
             $this->owner->metaAppleMobile() .
             $this->owner->metaWindowsPhone() .
             $this->owner->metaXCMS() .
             $this->owner->metaAuthor() .
-            $this->owner->metaCopyright()
-        ;
+            $this->owner->metaCopyright();
 
         return $html;
 
@@ -112,9 +122,7 @@ class MetaUniverse extends Extension
 
     public function uSensitiveMeta()
     {
-        $html =
-            $this->owner->metaCSRF()
-        ;
+        $html = $this->owner->metaCSRF();
 
         return $html;
     }
@@ -124,7 +132,6 @@ class MetaUniverse extends Extension
         $html =
             $this->owner->OpenGraph() .
             $this->owner->TwitterCard() .
-
             $this->owner->linkHome() .
             $this->owner->linkCanonical() .
             $this->owner->linkShortlink() .
@@ -136,10 +143,8 @@ class MetaUniverse extends Extension
             $this->owner->linkIcons() .
             $this->owner->linkManifest() .
             $this->owner->linkHumans() .
-
             PHP_EOL .
-            $this->owner->SchemaData()
-        ;
+            $this->owner->SchemaData();
 
         return $html;
     }
@@ -153,31 +158,23 @@ class MetaUniverse extends Extension
 
         $tags = explode(PHP_EOL, $html);
 
-        if ($space = Environment::getEnv('APP_META_SOURCESPACE'))
-        {
+        if ($space = Environment::getEnv('APP_META_SOURCESPACE')) {
             $spacing = '';
 
-            for ($i = 0; $space > $i; $i++)
-            {
+            for ($i = 0; $space > $i; $i++) {
                 $spacing .= ' ';
             }
-        }
-        else
-        {
+        } else {
             // 4 space by default
             $spacing = '    ';
         }
 
         $html = '';
 
-        foreach ($tags as $key => $tag)
-        {
-            if ($key !== 0)
-            {
+        foreach ($tags as $key => $tag) {
+            if ($key !== 0) {
                 $html .= $spacing . $tag . PHP_EOL;
-            }
-            else
-            {
+            } else {
                 $html .= $tag . PHP_EOL;
             }
         }
@@ -189,14 +186,16 @@ class MetaUniverse extends Extension
 
     public function metaBase()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'base'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'base')) {
             return;
         }
 
         // <!--[if lte IE 6]></base><![endif]-->
-        $output = '
-        <base href="'. Director::absoluteBaseURL() .'">
+        $output =
+            '
+        <base href="' .
+            Director::absoluteBaseURL() .
+            '">
         ';
 
         return $output;
@@ -207,8 +206,7 @@ class MetaUniverse extends Extension
      */
     public function metaCategory()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'category'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'category')) {
             return;
         }
 
@@ -234,8 +232,13 @@ class MetaUniverse extends Extension
      */
     public function metaDnsPrefetchControl()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'dns-prefetch-control'))
-        {
+        if (
+            !ss_config(
+                $this->universeClass,
+                'headrules',
+                'dns-prefetch-control',
+            )
+        ) {
             return;
         }
 
@@ -248,8 +251,7 @@ class MetaUniverse extends Extension
 
     public function metaCompatible()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'compatible'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'compatible')) {
             return;
         }
         // imagetoolbar - This is an IE specific meta, In some older versions of Internet Explorer, when an image is hovered, an image toolbar appears. content=no used to disable the image toolbar.
@@ -269,8 +271,7 @@ class MetaUniverse extends Extension
 
     public function metaLang()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'language'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'language')) {
             return;
         }
         // <meta http-equiv="content-language" content="language–Country"> - Enables language specification, enabling search engines to accurately categorise the document into language and country. The language is the main language code, and the country is the country where the dialect of the language is more specific, such as en-US versus en-GB
@@ -279,10 +280,12 @@ class MetaUniverse extends Extension
         // <meta name="locale" content="en-NZ">
         $output = '';
 
-        if (ss_env('APP_META_LOCALE'))
-        {
-            $output .= '
-            <meta name="language" content="'.ss_env('APP_META_LOCALE').'">
+        if (ss_env('APP_META_LOCALE')) {
+            $output .=
+                '
+            <meta name="language" content="' .
+                ss_env('APP_META_LOCALE') .
+                '">
             ';
         }
 
@@ -294,8 +297,7 @@ class MetaUniverse extends Extension
      */
     public function metaNewsKeywords()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'news_keywords'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'news_keywords')) {
             return;
         }
 
@@ -312,8 +314,7 @@ class MetaUniverse extends Extension
      */
     public function metaDates()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'dates'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'dates')) {
             return;
         }
 
@@ -330,13 +331,15 @@ class MetaUniverse extends Extension
      */
     public function metaIdentifierURL()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'identifier-URL'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'identifier-URL')) {
             return;
         }
 
-        $output = '
-        <meta name="identifier-URL" content="' . Director::absoluteBaseURL() . '">
+        $output =
+            '
+        <meta name="identifier-URL" content="' .
+            Director::absoluteBaseURL() .
+            '">
         ';
 
         return $output;
@@ -352,8 +355,7 @@ class MetaUniverse extends Extension
      */
     public function metaGeo()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'geo'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'geo')) {
             return;
         }
 
@@ -365,52 +367,51 @@ class MetaUniverse extends Extension
 
         $cfg = MetaConfig::current_config();
 
-        if ($cfg->GeoPosition)
-        {
+        if ($cfg->GeoPosition) {
             $geoPosition = $cfg->GeoPosition;
-        }
-        else if (ss_env('APP_SEO_GEO_POSITION'))
-        {
+        } elseif (ss_env('APP_SEO_GEO_POSITION')) {
             $geoPosition = ss_env('APP_SEO_GEO_POSITION');
         }
 
-        if ($cfg->GeoRegion)
-        {
+        if ($cfg->GeoRegion) {
             $geoRegion = $cfg->GeoRegion;
-        }
-        else if (ss_env('APP_SEO_GEO_REGION'))
-        {
+        } elseif (ss_env('APP_SEO_GEO_REGION')) {
             $geoRegion = ss_env('APP_SEO_GEO_REGION');
         }
 
-        if ($cfg->GeoPlacename)
-        {
+        if ($cfg->GeoPlacename) {
             $geoPlacename = $cfg->GeoPlacename;
-        }
-        else if (ss_env('APP_SEO_GEO_PLACENAME'))
-        {
+        } elseif (ss_env('APP_SEO_GEO_PLACENAME')) {
             $geoPlacename = ss_env('APP_SEO_GEO_PLACENAME');
         }
 
-        if (isset($geoPosition))
-        {
-            $output .= '
-            <meta name="ICBM" content="' . str_replace(';', ',', $geoPosition) . '">
-            <meta name="geo.position" content="' . $geoPosition . '">
+        if (isset($geoPosition)) {
+            $output .=
+                '
+            <meta name="ICBM" content="' .
+                str_replace(';', ',', $geoPosition) .
+                '">
+            <meta name="geo.position" content="' .
+                $geoPosition .
+                '">
             ';
         }
 
-        if (isset($geoRegion))
-        {
-            $output .= '
-            <meta name="geo.region" content="' . $geoRegion . '">
+        if (isset($geoRegion)) {
+            $output .=
+                '
+            <meta name="geo.region" content="' .
+                $geoRegion .
+                '">
             ';
         }
 
-        if (isset($geoPlacename))
-        {
-            $output .= '
-            <meta name="geo.placename" content="' . $geoPlacename . '">
+        if (isset($geoPlacename)) {
+            $output .=
+                '
+            <meta name="geo.placename" content="' .
+                $geoPlacename .
+                '">
             ';
         }
 
@@ -423,8 +424,7 @@ class MetaUniverse extends Extension
      */
     public function metaRating()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'rating'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'rating')) {
             return;
         }
         // <meta http-equiv="pics-label" content="labellist"> - The Platform for Internet Content Selection (PICS) is a standard for labelling online content: basically online content rating.
@@ -435,19 +435,18 @@ class MetaUniverse extends Extension
 
         $cfg = MetaConfig::current_config();
 
-        if ($cfg->Rating)
-        {
+        if ($cfg->Rating) {
             $rating = $cfg->Rating;
-        }
-        else if (ss_env('APP_SEO_RATING'))
-        {
+        } elseif (ss_env('APP_SEO_RATING')) {
             $rating = ss_env('APP_SEO_RATING');
         }
 
-        if (isset($rating))
-        {
-            $output .= '
-            <meta name="rating" content="' . $rating . '">
+        if (isset($rating)) {
+            $output .=
+                '
+            <meta name="rating" content="' .
+                $rating .
+                '">
             ';
         }
 
@@ -456,8 +455,13 @@ class MetaUniverse extends Extension
 
     public function metaMobile()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'mobile-web-app-capable'))
-        {
+        if (
+            !ss_config(
+                $this->universeClass,
+                'headrules',
+                'mobile-web-app-capable',
+            )
+        ) {
             return;
         }
         // Since Chrome M31, you can set up your web app to have an application shortcut icon added to a device's homescreen, and have the app launch in full-screen "app mode" using Chrome for Android’s "Add to homescreen" menu item.
@@ -470,8 +474,7 @@ class MetaUniverse extends Extension
 
     public function metaRefresh()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'refresh'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'refresh')) {
             return;
         }
         // The refresh meta tag is used to refresh a document. It’s useful if your page uses dynamic content that changes constantly. In the example below, your page will be automatically refreshed every 30 seconds:
@@ -495,8 +498,7 @@ class MetaUniverse extends Extension
      */
     public function metaAppleMobile()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'apple-webapp'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'apple-webapp')) {
             return;
         }
 
@@ -504,24 +506,32 @@ class MetaUniverse extends Extension
 
         $output = '';
 
-        if (ss_env('APP_APPLE_WEBAPP_TITLE') || $cfg->Title)
-        {
-            $output .= '
-            <meta name="apple-mobile-web-app-title" content="'.(ss_env('APP_APPLE_WEBAPP_TITLE') ?? $cfg->Title).'">
+        if (ss_env('APP_APPLE_WEBAPP_TITLE') || $cfg->Title) {
+            $output .=
+                '
+            <meta name="apple-mobile-web-app-title" content="' .
+                (ss_env('APP_APPLE_WEBAPP_TITLE') ?? $cfg->Title) .
+                '">
             ';
         }
 
-        if (ss_env('APP_APPLE_WEBAPP_CAPABLE')) // yes|no
-        {
-            $output .= '
-            <meta name="apple-mobile-web-app-capable" content="'.ss_env('APP_APPLE_WEBAPP_CAPABLE').'">
+        if (ss_env('APP_APPLE_WEBAPP_CAPABLE')) {
+            // yes|no
+            $output .=
+                '
+            <meta name="apple-mobile-web-app-capable" content="' .
+                ss_env('APP_APPLE_WEBAPP_CAPABLE') .
+                '">
             ';
         }
 
-        if (ss_env('APP_APPLE_WEBAPP_STATUS_BAR_STYLE')) // black | black-translucent | default
-        {
-            $output .= '
-            <meta name="apple-mobile-web-app-status-bar-style" content="'.ss_env('APP_APPLE_WEBAPP_STATUS_BAR_STYLE').'">
+        if (ss_env('APP_APPLE_WEBAPP_STATUS_BAR_STYLE')) {
+            // black | black-translucent | default
+            $output .=
+                '
+            <meta name="apple-mobile-web-app-status-bar-style" content="' .
+                ss_env('APP_APPLE_WEBAPP_STATUS_BAR_STYLE') .
+                '">
             ';
         }
 
@@ -533,8 +543,7 @@ class MetaUniverse extends Extension
      */
     public function metaFormatDetection()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'format-detection'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'format-detection')) {
             return;
         }
 
@@ -547,8 +556,7 @@ class MetaUniverse extends Extension
 
     public function metaWindowsPhone()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'msapplication'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'msapplication')) {
             return;
         }
 
@@ -564,41 +572,74 @@ class MetaUniverse extends Extension
 
         $output = '';
 
-        $output .= '
-        <meta name="msapplication-starturl" content="'. Director::absoluteBaseURL() .'">
+        $output .=
+            '
+        <meta name="msapplication-starturl" content="' .
+            Director::absoluteBaseURL() .
+            '">
         <meta name="msapplication-navbutton-color" content="#ffffff">
-        <meta name="msapplication-tooltip" content="'.$baseCfg->Title.'">
+        <meta name="msapplication-tooltip" content="' .
+            $baseCfg->Title .
+            '">
         <meta name="msapplication-tap-highlight" content="no" />
         ';
 
-        if ($metaCfg->MsapplicationTileColor)
-        {
-            $output .= '
-            <meta name="msapplication-TileColor" content="'.$metaCfg->MsapplicationTileColor.'">
+        if ($metaCfg->MsapplicationTileColor) {
+            $output .=
+                '
+            <meta name="msapplication-TileColor" content="' .
+                $metaCfg->MsapplicationTileColor .
+                '">
             ';
         }
 
-        if ($metaCfg->MsapplicationBackgroundImage && $metaCfg->MsapplicationBackgroundImage->exists())
-        {
-            $url = $metaCfg->MsapplicationBackgroundImage->FocusFill(500, 500)->getAbsoluteURL();
+        if (
+            $metaCfg->MsapplicationBackgroundImage &&
+            $metaCfg->MsapplicationBackgroundImage->exists()
+        ) {
+            $url = $metaCfg->MsapplicationBackgroundImage
+                ->FocusFill(500, 500)
+                ->getAbsoluteURL();
 
-            $output .= '
-            <meta name="msapplication-TileImage" content="'.$url.'">
+            $output .=
+                '
+            <meta name="msapplication-TileImage" content="' .
+                $url .
+                '">
             ';
         }
 
-        if ($metaCfg->MsapplicationTileImage && $metaCfg->MsapplicationTileImage->exists())
-        {
-            $url70x70 = $metaCfg->MsapplicationTileImage->FocusFill(70, 70)->getAbsoluteURL();
-            $url150x150 = $metaCfg->MsapplicationTileImage->FocusFill(150, 150)->getAbsoluteURL();
-            $url310x310 = $metaCfg->MsapplicationTileImage->FocusFill(310, 310)->getAbsoluteURL();
-            $url310x150 = $metaCfg->MsapplicationTileImage->FocusFill(310, 150)->getAbsoluteURL();
+        if (
+            $metaCfg->MsapplicationTileImage &&
+            $metaCfg->MsapplicationTileImage->exists()
+        ) {
+            $url70x70 = $metaCfg->MsapplicationTileImage
+                ->FocusFill(70, 70)
+                ->getAbsoluteURL();
+            $url150x150 = $metaCfg->MsapplicationTileImage
+                ->FocusFill(150, 150)
+                ->getAbsoluteURL();
+            $url310x310 = $metaCfg->MsapplicationTileImage
+                ->FocusFill(310, 310)
+                ->getAbsoluteURL();
+            $url310x150 = $metaCfg->MsapplicationTileImage
+                ->FocusFill(310, 150)
+                ->getAbsoluteURL();
 
-            $output .= '
-            <meta name="msapplication-square70x70logo" content="'.$url70x70.'">
-            <meta name="msapplication-square150x150logo" content="'.$url150x150.'">
-            <meta name="msapplication-square310x310logo" content="'.$url310x310.'">
-            <meta name="msapplication-wide310x150logo" content="'.$url310x150.'">
+            $output .=
+                '
+            <meta name="msapplication-square70x70logo" content="' .
+                $url70x70 .
+                '">
+            <meta name="msapplication-square150x150logo" content="' .
+                $url150x150 .
+                '">
+            <meta name="msapplication-square310x310logo" content="' .
+                $url310x310 .
+                '">
+            <meta name="msapplication-wide310x150logo" content="' .
+                $url310x150 .
+                '">
             ';
         }
 
@@ -621,16 +662,17 @@ class MetaUniverse extends Extension
 
     public function metaAuthor()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'author'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'author')) {
             return;
         }
         $output = '';
 
-        if (ss_env('APP_SEO_AUTHOR'))
-        {
-            $output = '
-            <meta name="author" content="' . ss_env('APP_SEO_AUTHOR') . '">
+        if (ss_env('APP_SEO_AUTHOR')) {
+            $output =
+                '
+            <meta name="author" content="' .
+                ss_env('APP_SEO_AUTHOR') .
+                '">
             ';
         }
 
@@ -639,17 +681,18 @@ class MetaUniverse extends Extension
 
     public function metaCopyright()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'copyright'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'copyright')) {
             return;
         }
 
         $output = '';
 
-        if (ss_env('APP_SEO_COPYRIGHT'))
-        {
-            $output = '
-            <meta name="copyright" content="' . ss_env('APP_SEO_COPYRIGHT') . '">
+        if (ss_env('APP_SEO_COPYRIGHT')) {
+            $output =
+                '
+            <meta name="copyright" content="' .
+                ss_env('APP_SEO_COPYRIGHT') .
+                '">
             ';
         }
 
@@ -661,26 +704,24 @@ class MetaUniverse extends Extension
      */
     public function metaRobots()
     {
-
-        if (!ss_config($this->universeClass, 'headrules', 'robots'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'robots')) {
             return;
         }
 
-        if ($this->owner->ClassName == ErrorPage::class)
-        {
+        if ($this->owner->ClassName == ErrorPage::class) {
             $output = '
             <meta name="robots" content="noindex, follow">
             ';
-        }
-        else
-        {
+        } else {
             // <meta name="robots" content="index, follow">
             // <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
             // <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
-            $output = '
-            <meta name="robots" content="' . ss_env('APP_SEO_ROBOTS_BASE') . '">
+            $output =
+                '
+            <meta name="robots" content="' .
+                ss_env('APP_SEO_ROBOTS_BASE') .
+                '">
             ';
         }
 
@@ -689,8 +730,7 @@ class MetaUniverse extends Extension
 
     public function metaReferrer()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'referrer'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'referrer')) {
             return;
         }
 
@@ -704,15 +744,17 @@ class MetaUniverse extends Extension
 
     public function metaApplicationName()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'application-name'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'application-name')) {
             return;
         }
 
         $cfg = SiteConfig::current_site_config();
 
-        $output = '
-        <meta name="application-name" content="' . $cfg->Title . '">
+        $output =
+            '
+        <meta name="application-name" content="' .
+            $cfg->Title .
+            '">
         ';
 
         return $output;
@@ -720,8 +762,13 @@ class MetaUniverse extends Extension
 
     public function metaContentTypeCharset()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'content-type-charset'))
-        {
+        if (
+            !ss_config(
+                $this->universeClass,
+                'headrules',
+                'content-type-charset',
+            )
+        ) {
             return;
         }
 
@@ -739,24 +786,23 @@ class MetaUniverse extends Extension
      */
     public function metaTitle()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'title'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'title')) {
             return;
         }
 
         $cfg = SiteConfig::current_site_config();
 
-        if ($this->owner->MetaTitle)
-        {
+        if ($this->owner->MetaTitle) {
             $title = $this->owner->MetaTitle;
-        }
-        else
-        {
+        } else {
             $title = $this->owner->Title . ' - ' . $cfg->Title;
         }
 
-        $output = '
-        <title>' . $title . '</title>
+        $output =
+            '
+        <title>' .
+            $title .
+            '</title>
         ';
 
         return $output;
@@ -764,38 +810,45 @@ class MetaUniverse extends Extension
 
     public function metaVerifications()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'verifications'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'verifications')) {
             return;
         }
 
         $output = '';
 
-        if (ss_env('APP_SEO_BING_CONSOLE'))
-        {
-            $output .= '
-            <meta name="google-site-verification" content="' . ss_env('APP_SEO_GOOGLE_CONSOLE') . '">
+        if (ss_env('APP_SEO_BING_CONSOLE')) {
+            $output .=
+                '
+            <meta name="google-site-verification" content="' .
+                ss_env('APP_SEO_GOOGLE_CONSOLE') .
+                '">
             ';
         }
 
-        if (ss_env('APP_SEO_BING_CONSOLE'))
-        {
-            $output .= '
-            <meta name="msvalidate.01" content="' . ss_env('APP_SEO_BING_CONSOLE') . '">
+        if (ss_env('APP_SEO_BING_CONSOLE')) {
+            $output .=
+                '
+            <meta name="msvalidate.01" content="' .
+                ss_env('APP_SEO_BING_CONSOLE') .
+                '">
             ';
         }
 
-        if (ss_env('APP_SEO_YANDEX'))
-        {
-            $output .= '
-            <meta name="yandex-verification" content="' . ss_env('APP_SEO_YANDEX') . '" />
+        if (ss_env('APP_SEO_YANDEX')) {
+            $output .=
+                '
+            <meta name="yandex-verification" content="' .
+                ss_env('APP_SEO_YANDEX') .
+                '" />
             ';
         }
 
-        if (ss_env('APP_SEO_PINTEREST'))
-        {
-            $output .= '
-            <meta name="p:domain_verify" content="' . ss_env('APP_SEO_PINTEREST') . '">
+        if (ss_env('APP_SEO_PINTEREST')) {
+            $output .=
+                '
+            <meta name="p:domain_verify" content="' .
+                ss_env('APP_SEO_PINTEREST') .
+                '">
             ';
         }
 
@@ -804,14 +857,16 @@ class MetaUniverse extends Extension
 
     public function metaCSRF()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'csrf'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'csrf')) {
             return;
         }
 
-        $output = '
+        $output =
+            '
         <meta name="csrf-param" content="authenticity_token">
-        <meta name="csrf-token" content="' . SecurityToken::getSecurityID() . '">
+        <meta name="csrf-token" content="' .
+            SecurityToken::getSecurityID() .
+            '">
         ';
 
         return $output;
@@ -823,13 +878,15 @@ class MetaUniverse extends Extension
      */
     public function metaDescription()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'description'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'description')) {
             return;
         }
 
-        $output = '
-        <meta name="description" content="' . strip_tags($this->owner->MetaDescription ?? '') . '">
+        $output =
+            '
+        <meta name="description" content="' .
+            strip_tags($this->owner->MetaDescription ?? '') .
+            '">
         ';
 
         return $output;
@@ -837,8 +894,7 @@ class MetaUniverse extends Extension
 
     public function metaTheme()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'theme'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'theme')) {
             return;
         }
 
@@ -848,17 +904,21 @@ class MetaUniverse extends Extension
         // <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111317">
         $output = '';
 
-        if (ss_env('APP_COLOR_SCHEME'))
-        {
-            $output .= '
-            <meta name="color-scheme" content="' . ss_env('APP_COLOR_SCHEME') . '">
+        if (ss_env('APP_COLOR_SCHEME')) {
+            $output .=
+                '
+            <meta name="color-scheme" content="' .
+                ss_env('APP_COLOR_SCHEME') .
+                '">
             ';
         }
 
-        if (ss_env('APP_THEME_COLOR'))
-        {
-            $output .= '
-            <meta name="theme-color" content="' . ss_env('APP_THEME_COLOR') . '">
+        if (ss_env('APP_THEME_COLOR')) {
+            $output .=
+                '
+            <meta name="theme-color" content="' .
+                ss_env('APP_THEME_COLOR') .
+                '">
             ';
         }
 
@@ -873,14 +933,13 @@ class MetaUniverse extends Extension
      * #maximum-scale : Sets a maximum limit for the user to scale and zoom a webpage. Values are numeric and can range from 0.25 to 10.0.
      * #minimum-scale : Limits the user to a minimum for enlarging or zooming in on a webpage. Values are numeric and can be from 0.25 to 10.0.
      *
-    * Prevent shrink: 'shrink-to-fit=no'
+     * Prevent shrink: 'shrink-to-fit=no'
      *
      */
 
     public function metaViewport()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'viewport'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'viewport')) {
             return;
         }
 
@@ -891,8 +950,11 @@ class MetaUniverse extends Extension
             'user-scalable=yes',
         ];
 
-        $output = '
-        <meta name="viewport" content="' . implode(', ', $content) . '">
+        $output =
+            '
+        <meta name="viewport" content="' .
+            implode(', ', $content) .
+            '">
         ';
 
         return $output;
@@ -901,32 +963,39 @@ class MetaUniverse extends Extension
     // vendor/silverstripe/cms/code/Model/SiteTree.php # MetaComponents
     public function metaXCMS()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'x-cms'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'x-cms')) {
             return;
         }
 
         $output = '';
 
-        if (Permission::check('CMS_ACCESS_CMSMain') && $this->owner->ID > 0)
-        {
-            $output = '
-            <meta name="x-page-id" content="' . $this->owner->ID . '">
+        if (Permission::check('CMS_ACCESS_CMSMain') && $this->owner->ID > 0) {
+            $output =
+                '
+            <meta name="x-page-id" content="' .
+                $this->owner->ID .
+                '">
             ';
 
-            try
-            {
-                $output .= '
-                <meta name="x-cms-edit-link" content="' . $this->owner->CMSEditLink() . '">
+            try {
+                $output .=
+                    '
+                <meta name="x-cms-edit-link" content="' .
+                    $this->owner->CMSEditLink() .
+                    '">
                 ';
-            } catch (BadMethodCallException $e) {}
+            } catch (BadMethodCallException $e) {
+            }
 
-            try
-            {
-                $output .= '
-                <meta name="x-cms-logout-link" content="' . $this->owner->LogoutURL() . '">
+            try {
+                $output .=
+                    '
+                <meta name="x-cms-logout-link" content="' .
+                    $this->owner->LogoutURL() .
+                    '">
                 ';
-            } catch (BadMethodCallException $e) {}
+            } catch (BadMethodCallException $e) {
+            }
         }
 
         return $output;
@@ -934,8 +1003,7 @@ class MetaUniverse extends Extension
 
     public function linkSearch()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'search'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'search')) {
             return;
         }
 
@@ -949,8 +1017,7 @@ class MetaUniverse extends Extension
 
     public function linkImageSrc()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'image_src'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'image_src')) {
             return;
         }
 
@@ -958,15 +1025,21 @@ class MetaUniverse extends Extension
 
         $cfg = MetaConfig::current_config();
 
-        if ($cfg->ImageSRC && $cfg->ImageSRC->exists())
-        {
+        if ($cfg->ImageSRC && $cfg->ImageSRC->exists()) {
             $width = 1200;
             $height = 630;
 
-            $link = $cfg->ImageSRC->FocusFill($width, $height)->getAbsoluteURL();
+            $link = $cfg->ImageSRC
+                ->FocusFill($width, $height)
+                ->getAbsoluteURL();
 
-            $output = '
-            <link rel="image_src" href="'.$link.'" type="'.$cfg->ImageSRC->getMimeType().'">
+            $output =
+                '
+            <link rel="image_src" href="' .
+                $link .
+                '" type="' .
+                $cfg->ImageSRC->getMimeType() .
+                '">
             ';
         }
 
@@ -975,8 +1048,7 @@ class MetaUniverse extends Extension
 
     public function linkHumans()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'humans'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'humans')) {
             return;
         }
 
@@ -989,8 +1061,7 @@ class MetaUniverse extends Extension
 
     public function linkAppleMobile()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'apple-touch'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'apple-touch')) {
             return;
         }
 
@@ -1003,13 +1074,15 @@ class MetaUniverse extends Extension
 
     public function linkHome()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'home'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'home')) {
             return;
         }
 
-        $output = '
-        <link rel="home" href="'. Director::absoluteBaseURL() .'">
+        $output =
+            '
+        <link rel="home" href="' .
+            Director::absoluteBaseURL() .
+            '">
         ';
 
         return $output;
@@ -1017,13 +1090,15 @@ class MetaUniverse extends Extension
 
     public function linkShortlink()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'shortlink'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'shortlink')) {
             return;
         }
 
-        $output = '
-        <link rel="shortlink" href="'. Director::absoluteURL($_SERVER['REQUEST_URI']) .'">
+        $output =
+            '
+        <link rel="shortlink" href="' .
+            Director::absoluteURL($_SERVER['REQUEST_URI']) .
+            '">
         ';
 
         return $output;
@@ -1050,8 +1125,7 @@ class MetaUniverse extends Extension
      */
     public function linkPreconnect()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'preconnect'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'preconnect')) {
             return;
         }
 
@@ -1061,38 +1135,41 @@ class MetaUniverse extends Extension
 
         $cfg = ss_config($this->universeClass);
 
-        foreach ($cfg['preconnect'] as $link => $state)
-        {
-            if (!$state)
-            {
+        foreach ($cfg['preconnect'] as $link => $state) {
+            if (!$state) {
                 continue;
             }
 
             $crossorigin = '';
 
             if (
-              isset($cfg['crossorigin']) &&
-              isset($cfg['crossorigin'][$link]) &&
-              $cfg['crossorigin'][$link]
-            )
-            {
+                isset($cfg['crossorigin']) &&
+                isset($cfg['crossorigin'][$link]) &&
+                $cfg['crossorigin'][$link]
+            ) {
                 $crossorigin = ' crossorigin';
             }
 
-            $output .= '
-            <link rel="preconnect" href="' . $link . '"' . $crossorigin . '>
+            $output .=
+                '
+            <link rel="preconnect" href="' .
+                $link .
+                '"' .
+                $crossorigin .
+                '>
             ';
         }
 
-        foreach ($cfg['dnsprefetch'] as $link => $state)
-        {
-            if (!$state)
-            {
+        foreach ($cfg['dnsprefetch'] as $link => $state) {
+            if (!$state) {
                 continue;
             }
 
-            $output .= '
-            <link rel="dns-prefetch" href="' . $link . '">
+            $output .=
+                '
+            <link rel="dns-prefetch" href="' .
+                $link .
+                '">
             ';
         }
 
@@ -1101,13 +1178,15 @@ class MetaUniverse extends Extension
 
     public function linkCanonical()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'canonical'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'canonical')) {
             return;
         }
 
-        $output = '
-        <link rel="canonical" href="' . Director::absoluteURL($_SERVER['REQUEST_URI']) . '">
+        $output =
+            '
+        <link rel="canonical" href="' .
+            Director::absoluteURL($_SERVER['REQUEST_URI']) .
+            '">
         ';
 
         return $output;
@@ -1115,8 +1194,7 @@ class MetaUniverse extends Extension
 
     public function linkAmphtml()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'amphtml'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'amphtml')) {
             return;
         }
 
@@ -1143,8 +1221,7 @@ class MetaUniverse extends Extension
      */
     public function linkIcons()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'icon'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'icon')) {
             return;
         }
 
@@ -1152,32 +1229,44 @@ class MetaUniverse extends Extension
 
         $cfg = ManifestConfig::current_config();
 
-        if ($cfg->IcoIcon->exists())
-        {
+        if ($cfg->IcoIcon->exists()) {
             $url = $cfg->IcoIcon->getAbsoluteURL();
 
-            $output .= '
-            <link rel="shortcut icon" href="' . $url . '">
-            <link rel="icon" href="' . $url . '" sizes="32x32">
+            $output .=
+                '
+            <link rel="shortcut icon" href="' .
+                $url .
+                '">
+            <link rel="icon" href="' .
+                $url .
+                '" sizes="32x32">
             ';
         }
 
-        if ($cfg->VectorIcon->exists())
-        {
+        if ($cfg->VectorIcon->exists()) {
             $url = $cfg->VectorIcon->getAbsoluteURL();
 
-            $output .= '
-            <link rel="mask-icon" href="' . $url . '" color="' . ss_env('APP_THEME_COLOR') . '">
-            <link rel="icon" href="' . $url . '" type="image/svg+xml">
+            $output .=
+                '
+            <link rel="mask-icon" href="' .
+                $url .
+                '" color="' .
+                ss_env('APP_THEME_COLOR') .
+                '">
+            <link rel="icon" href="' .
+                $url .
+                '" type="image/svg+xml">
             ';
         }
 
-        if ($cfg->PortableImage->exists())
-        {
+        if ($cfg->PortableImage->exists()) {
             $url = $cfg->PortableImage->FocusFill(180, 180)->getAbsoluteURL();
 
-            $output .= '
-            <link rel="apple-touch-icon" href="' . $url . '">
+            $output .=
+                '
+            <link rel="apple-touch-icon" href="' .
+                $url .
+                '">
             ';
         }
 
@@ -1186,8 +1275,7 @@ class MetaUniverse extends Extension
 
     public function linkManifest()
     {
-        if (!ss_config($this->universeClass, 'headrules', 'manifest'))
-        {
+        if (!ss_config($this->universeClass, 'headrules', 'manifest')) {
             return;
         }
 
@@ -1224,81 +1312,97 @@ class MetaUniverse extends Extension
         //     );
         $ogCfg = OpenGraphConfig::current_config();
 
-        if ($this->owner->OpenGraphObject && $this->owner->OpenGraphObject->exists())
-        {
+        if (
+            $this->owner->OpenGraphObject &&
+            $this->owner->OpenGraphObject->exists()
+        ) {
             $og = $this->owner->OpenGraphObject;
-        }
-        else if (!$this->owner->DisableDefaultOpenGraphObject && $ogCfg->DefaultObject && $ogCfg->DefaultObject->exists())
-        {
+        } elseif (
+            !$this->owner->DisableDefaultOpenGraphObject &&
+            $ogCfg->DefaultObject &&
+            $ogCfg->DefaultObject->exists()
+        ) {
             $og = $ogCfg->DefaultObject;
         }
 
-        if (isset($og))
-        {
+        if (isset($og)) {
             $baseCfg = SiteConfig::current_site_config();
 
-            if ($og->OG_Type == 'website')
-            {
+            if ($og->OG_Type == 'website') {
                 $graph = OpenGraph::website($og->OG_Title ?? $baseCfg->Title);
-            }
-            else if ($og->OG_Type == 'profile')
-            {
+            } elseif ($og->OG_Type == 'profile') {
                 $graph = OpenGraph::profile($og->OG_Title ?? $baseCfg->Title);
 
-                if ($og->OG_Profile_FirstName) $graph->firstName($og->OG_Profile_FirstName);
-                if ($og->OG_Profile_LastName) $graph->lastName($og->OG_Profile_LastName);
-                if ($og->OG_Profile_Username) $graph->username($og->OG_Profile_Username);
-                if ($og->OG_Profile_Gender) $graph->gender($og->OG_Profile_Gender);
-            }
-            else if ($og->OG_Type == 'article')
-            {
+                if ($og->OG_Profile_FirstName) {
+                    $graph->firstName($og->OG_Profile_FirstName);
+                }
+                if ($og->OG_Profile_LastName) {
+                    $graph->lastName($og->OG_Profile_LastName);
+                }
+                if ($og->OG_Profile_Username) {
+                    $graph->username($og->OG_Profile_Username);
+                }
+                if ($og->OG_Profile_Gender) {
+                    $graph->gender($og->OG_Profile_Gender);
+                }
+            } elseif ($og->OG_Type == 'article') {
                 $graph = OpenGraph::article($og->OG_Title ?? $baseCfg->Title);
 
                 // TODO
                 // if ($og->OG_Article_Author) $graph->author($og->OG_Article_Author);
-                if ($og->OG_Article_PublishedTime) $graph->publishedAt(new DateTime($og->OG_Article_PublishedTime));
-                if ($og->OG_Article_ModifiedTime) $graph->modifiedAt(new DateTime($og->OG_Article_ModifiedTime));
-                if ($og->OG_Article_ExpirationTime) $graph->expiresAt(new DateTime($og->OG_Article_ExpirationTime));
-                if ($og->OG_Article_Section) $graph->section($og->OG_Article_Section);
+                if ($og->OG_Article_PublishedTime) {
+                    $graph->publishedAt(
+                        new DateTime($og->OG_Article_PublishedTime),
+                    );
+                }
+                if ($og->OG_Article_ModifiedTime) {
+                    $graph->modifiedAt(
+                        new DateTime($og->OG_Article_ModifiedTime),
+                    );
+                }
+                if ($og->OG_Article_ExpirationTime) {
+                    $graph->expiresAt(
+                        new DateTime($og->OG_Article_ExpirationTime),
+                    );
+                }
+                if ($og->OG_Article_Section) {
+                    $graph->section($og->OG_Article_Section);
+                }
                 // TODO
                 // if ($og->OG_Article_Tags) $graph->tag($og->OG_Article_Tags);
                 // ->tag('tag1')
                 // ->tag('tag2')
             }
 
-            if ($og->OG_Images() && $og->OG_Images()->Count())
-            {
-                foreach ($og->OG_Images() as $image)
-                {
+            if ($og->OG_Images() && $og->OG_Images()->Count()) {
+                foreach ($og->OG_Images() as $image) {
                     $ogImage = null;
 
-                    if ($image->OG_Image_Width && $image->OG_Image_Height)
-                    {
+                    if ($image->OG_Image_Width && $image->OG_Image_Height) {
                         $width = $image->OG_Image_Width;
                         $height = $image->OG_Image_Height;
-                    }
-                    else
-                    {
+                    } else {
                         $width = 1200;
                         $height = 630;
                     }
 
-                    $link = $image->FocusFill($width, $height)->getAbsoluteURL();
+                    $link = $image
+                        ->FocusFill($width, $height)
+                        ->getAbsoluteURL();
 
                     $ogImage = ImageOG::make($link)
-                      ->secureUrl($link)
-                      ->mimeType($image->getMimeType())
-                      ->width($width)
-                      ->height($height)
-                    ;
+                        ->secureUrl($link)
+                        ->mimeType($image->getMimeType())
+                        ->width($width)
+                        ->height($height);
 
-                    if ($image->OG_Image_Alt || $image->Title) $ogImage->alt($image->OG_Image_Alt ?? $image->Title);
+                    if ($image->OG_Image_Alt || $image->Title) {
+                        $ogImage->alt($image->OG_Image_Alt ?? $image->Title);
+                    }
 
                     $graph->image($ogImage);
                 }
-            }
-            else if ($ogCfg->DefaultImage && $ogCfg->DefaultImage->exists())
-            {
+            } elseif ($ogCfg->DefaultImage && $ogCfg->DefaultImage->exists()) {
                 $image = $ogCfg->DefaultImage;
 
                 $width = 1200;
@@ -1307,13 +1411,14 @@ class MetaUniverse extends Extension
                 $link = $image->FocusFill($width, $height)->getAbsoluteURL();
 
                 $ogImage = ImageOG::make($link)
-                  ->secureUrl($link)
-                  ->mimeType($image->getMimeType())
-                  ->width($width)
-                  ->height($height)
-                ;
+                    ->secureUrl($link)
+                    ->mimeType($image->getMimeType())
+                    ->width($width)
+                    ->height($height);
 
-                if ($image->Title) $ogImage->alt($image->Title);
+                if ($image->Title) {
+                    $ogImage->alt($image->Title);
+                }
 
                 $graph->image($ogImage);
             }
@@ -1321,15 +1426,16 @@ class MetaUniverse extends Extension
             // Optional & Basic meta (for all types)
             $graph->url($og->OG_Url ?? Director::absoluteBaseURL());
             $graph->siteName($og->OG_SiteName ?? $baseCfg->Title);
-            if ($og->OG_Description) $graph->description($og->OG_Description);
-            if ($og->OG_Determiner) $graph->determiner($og->OG_Determiner);
-
-            if ($og->OG_Locale)
-            {
-                $graph->locale($og->OG_Locale);
+            if ($og->OG_Description) {
+                $graph->description($og->OG_Description);
             }
-            else if ($ogCfg->OG_Locale)
-            {
+            if ($og->OG_Determiner) {
+                $graph->determiner($og->OG_Determiner);
+            }
+
+            if ($og->OG_Locale) {
+                $graph->locale($og->OG_Locale);
+            } elseif ($ogCfg->OG_Locale) {
                 $graph->locale($ogCfg->OG_Locale);
             }
 
@@ -1337,32 +1443,28 @@ class MetaUniverse extends Extension
             // $graph->alternateLocale('ss')
             // ->alternateLocale('en_GB')
 
-            if ($og->FB_AppID)
-            {
+            if ($og->FB_AppID) {
                 $graph->setProperty('fb', 'app_id', $og->FB_AppID);
-            }
-            else if ($ogCfg->FB_AppID)
-            {
+            } elseif ($ogCfg->FB_AppID) {
                 $graph->setProperty('fb', 'app_id', $ogCfg->FB_AppID);
             }
 
             // a wire to page elements (blocks)
-            if ($this->owner->ElementalArea && $this->owner->ElementalArea->exists())
-            {
-                foreach ($this->owner->ElementalArea->Elements() as $element)
-                {
+            if (
+                $this->owner->ElementalArea &&
+                $this->owner->ElementalArea->exists()
+            ) {
+                foreach ($this->owner->ElementalArea->Elements() as $element) {
                     try {
-                      $element->updateOpenGraph($graph);
+                        $element->updateOpenGraph($graph);
+                    } catch (BadMethodCallException $exception) {
                     }
-                    catch(BadMethodCallException $exception) {}
                 }
             }
 
             // additional check for controllers
-            if (is_subclass_of($this->owner, ContentController::class))
-            {
-                if (method_exists($this->owner, 'updateOpenGraph'))
-                {
+            if (is_subclass_of($this->owner, ContentController::class)) {
+                if (method_exists($this->owner, 'updateOpenGraph')) {
                     $this->owner->updateOpenGraph($graph);
                 }
             }
@@ -1379,77 +1481,104 @@ class MetaUniverse extends Extension
     {
         $tcCfg = TwitterCardConfig::current_config();
 
-        if ($this->owner->TwitterCardObject && $this->owner->TwitterCardObject->exists())
-        {
+        if (
+            $this->owner->TwitterCardObject &&
+            $this->owner->TwitterCardObject->exists()
+        ) {
             $tc = $this->owner->TwitterCardObject;
-        }
-        else if (!$this->owner->DisableDefaultTwitterCardObject && $tcCfg->DefaultObject && $tcCfg->DefaultObject->exists())
-        {
+        } elseif (
+            !$this->owner->DisableDefaultTwitterCardObject &&
+            $tcCfg->DefaultObject &&
+            $tcCfg->DefaultObject->exists()
+        ) {
             $tc = $tcCfg->DefaultObject;
         }
 
-        if (isset($tc))
-        {
+        if (isset($tc)) {
             $baseCfg = SiteConfig::current_site_config();
 
-            if ($tc->TC_Type == 'summary')
-            {
+            if ($tc->TC_Type == 'summary') {
                 $graph = SummaryTC::make($tc->TC_Title ?? $baseCfg->Title);
 
-                if ($tc->TC_Description) $graph->description($tc->TC_Description);
+                if ($tc->TC_Description) {
+                    $graph->description($tc->TC_Description);
+                }
 
-                if ($tc->TC_SiteID)
-                {
+                if ($tc->TC_SiteID) {
                     $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
+                } elseif ($tcCfg->TC_SiteID) {
+                    $graph->setProperty(
+                        'twitter',
+                        'site:id',
+                        $tcCfg->TC_SiteID,
+                    );
                 }
-                else if ($tcCfg->TC_SiteID)
-                {
-                    $graph->setProperty('twitter', 'site:id', $tcCfg->TC_SiteID);
+
+                if ($tc->TC_CreatorID) {
+                    $graph->setProperty(
+                        'twitter',
+                        'creator:id',
+                        $tc->TC_CreatorID,
+                    );
+                }
+            } elseif ($tc->TC_Type == 'summary_large_image') {
+                $graph = SummaryLargeImageTC::make(
+                    $tc->TC_Title ?? $baseCfg->Title,
+                );
+                if ($tc->TC_Creator) {
+                    $graph->creator($tc->TC_Creator);
                 }
 
-                if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
-            }
-            else if ($tc->TC_Type == 'summary_large_image')
-            {
-                $graph = SummaryLargeImageTC::make($tc->TC_Title ?? $baseCfg->Title);
-                if ($tc->TC_Creator) $graph->creator($tc->TC_Creator);
+                if ($tc->TC_CreatorID) {
+                    $graph->setProperty(
+                        'twitter',
+                        'creator:id',
+                        $tc->TC_CreatorID,
+                    );
+                }
 
-                if ($tc->TC_CreatorID) $graph->setProperty('twitter', 'creator:id', $tc->TC_CreatorID);
-
-                if ($tc->TC_SiteID)
-                {
+                if ($tc->TC_SiteID) {
                     $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
-                }
-                else if ($tcCfg->TC_SiteID)
-                {
-                    $graph->setProperty('twitter', 'site:id', $tcCfg->TC_SiteID);
+                } elseif ($tcCfg->TC_SiteID) {
+                    $graph->setProperty(
+                        'twitter',
+                        'site:id',
+                        $tcCfg->TC_SiteID,
+                    );
                 }
 
-                if ($tc->TC_Description) $graph->description($tc->TC_Description);
-            }
-            else if ($tc->TC_Type == 'app')
-            {
+                if ($tc->TC_Description) {
+                    $graph->description($tc->TC_Description);
+                }
+            } elseif ($tc->TC_Type == 'app') {
                 $graph = AppTC::make($tc->TC_Title ?? $baseCfg->Title);
 
-                if ($tc->TC_AppNameIphone && $tc->TC_AppIdIphone)
-                {
-                    $graph->iPhoneApp($tc->TC_AppNameIphone, $tc->TC_AppIdIphone, $tc->TC_AppUrlIphone ?? null);
+                if ($tc->TC_AppNameIphone && $tc->TC_AppIdIphone) {
+                    $graph->iPhoneApp(
+                        $tc->TC_AppNameIphone,
+                        $tc->TC_AppIdIphone,
+                        $tc->TC_AppUrlIphone ?? null,
+                    );
                 }
 
-                if ($tc->TC_AppNameIpad && $tc->TC_AppIdIpad)
-                {
-                    $graph->iPadApp($tc->TC_AppNameIpad, $tc->TC_AppIdIpad, $tc->TC_AppUrlIpad ?? null);
+                if ($tc->TC_AppNameIpad && $tc->TC_AppIdIpad) {
+                    $graph->iPadApp(
+                        $tc->TC_AppNameIpad,
+                        $tc->TC_AppIdIpad,
+                        $tc->TC_AppUrlIpad ?? null,
+                    );
                 }
 
-                if ($tc->TC_AppNameGoogleplay && $tc->TC_AppIDGoogleplay)
-                {
-                    $graph->googlePlayApp($tc->TC_AppNameGoogleplay, $tc->TC_AppIDGoogleplay, $tc->TC_AppUrlGoogleplay ?? null);
+                if ($tc->TC_AppNameGoogleplay && $tc->TC_AppIDGoogleplay) {
+                    $graph->googlePlayApp(
+                        $tc->TC_AppNameGoogleplay,
+                        $tc->TC_AppIDGoogleplay,
+                        $tc->TC_AppUrlGoogleplay ?? null,
+                    );
                 }
 
                 // $graph->country('name');
-            }
-            else if ($tc->TC_Type == 'player')
-            {
+            } elseif ($tc->TC_Type == 'player') {
                 $graph = PlayerTC::make($tc->TC_Title ?? $baseCfg->Title);
 
                 // 'http://www.example.com/player.iframe', 1920, 1080
@@ -1458,60 +1587,66 @@ class MetaUniverse extends Extension
                 //     $graph->player($tc->TC_Player, $tc->TC_PlayerWidth, $tc->TC_PlayerHeight);
                 // }
 
-                if ($tc->TC_SiteID)
-                {
+                if ($tc->TC_SiteID) {
                     $graph->setProperty('twitter', 'site:id', $tc->TC_SiteID);
-                }
-                else if ($tcCfg->TC_SiteID)
-                {
-                    $graph->setProperty('twitter', 'site:id', $tcCfg->TC_SiteID);
+                } elseif ($tcCfg->TC_SiteID) {
+                    $graph->setProperty(
+                        'twitter',
+                        'site:id',
+                        $tcCfg->TC_SiteID,
+                    );
                 }
 
-                if ($tc->TC_Description) $graph->description($tc->TC_Description);
+                if ($tc->TC_Description) {
+                    $graph->description($tc->TC_Description);
+                }
             }
 
-            if ($tc->TC_Type == 'player' || $tc->TC_Type == 'summary_large_image' || $tc->TC_Type == 'summary')
-            {
-                if ($tc->TC_Image->exists())
-                {
-                    $url = $tc->TC_Image->FocusFill(1200, 630)->getAbsoluteURL();
+            if (
+                $tc->TC_Type == 'player' ||
+                $tc->TC_Type == 'summary_large_image' ||
+                $tc->TC_Type == 'summary'
+            ) {
+                if ($tc->TC_Image->exists()) {
+                    $url = $tc->TC_Image
+                        ->FocusFill(1200, 630)
+                        ->getAbsoluteURL();
                     $graph->image($url, $tc->Title);
-                }
-                else if ($tcCfg->DefaultImage && $tcCfg->DefaultImage->exists())
-                {
+                } elseif (
+                    $tcCfg->DefaultImage &&
+                    $tcCfg->DefaultImage->exists()
+                ) {
                     $image = $tcCfg->DefaultImage;
 
-                    $url = $tcCfg->DefaultImage->FocusFill(1200, 630)->getAbsoluteURL();
+                    $url = $tcCfg->DefaultImage
+                        ->FocusFill(1200, 630)
+                        ->getAbsoluteURL();
                     $graph->image($url, $tcCfg->Title);
                 }
             }
 
-            if ($tc->TC_Site)
-            {
+            if ($tc->TC_Site) {
                 $graph->site($tc->TC_Site);
-            }
-            else if ($tcCfg->TC_Site)
-            {
+            } elseif ($tcCfg->TC_Site) {
                 $graph->site($tcCfg->TC_Site);
             }
 
             // a wire to page elements (blocks)
-            if ($this->owner->ElementalArea && $this->owner->ElementalArea->exists())
-            {
-                foreach ($this->owner->ElementalArea->Elements() as $element)
-                {
+            if (
+                $this->owner->ElementalArea &&
+                $this->owner->ElementalArea->exists()
+            ) {
+                foreach ($this->owner->ElementalArea->Elements() as $element) {
                     try {
-                      $element->updateTwitterCard($graph);
+                        $element->updateTwitterCard($graph);
+                    } catch (BadMethodCallException $exception) {
                     }
-                    catch(BadMethodCallException $exception) {}
                 }
             }
 
             // additional check for controllers
-            if (is_subclass_of($this->owner, ContentController::class))
-            {
-                if (method_exists($this->owner, 'updateTwitterCard'))
-                {
+            if (is_subclass_of($this->owner, ContentController::class)) {
+                if (method_exists($this->owner, 'updateTwitterCard')) {
                     $this->owner->updateTwitterCard($graph);
                 }
             }
@@ -1532,50 +1667,52 @@ class MetaUniverse extends Extension
         ];
 
         if (
-          isset($this->owner->manyMany()['Schemas']) &&
-          get_class($this->owner->Schemas()) == ManyManyThroughList::class &&
-          $this->owner->Schemas()->Count()
-        )
-        {
-            foreach ($this->owner->Schemas() as $schemaType)
-            {
-                if (!$schemaType->Disabled)
-                {
-                    $schema['@graph'][] = json_decode($schemaType->JsonLD, true);
+            isset($this->owner->manyMany()['Schemas']) &&
+            get_class($this->owner->Schemas()) == ManyManyThroughList::class &&
+            $this->owner->Schemas()->Count()
+        ) {
+            foreach ($this->owner->Schemas() as $schemaType) {
+                if (!$schemaType->Disabled) {
+                    $schema['@graph'][] = json_decode(
+                        $schemaType->JsonLD,
+                        true,
+                    );
                 }
             }
         }
 
         $cfg = SchemaConfig::current_config();
 
-        if (!$this->owner->DisableDefaultSchema && $cfg->DefaultSchemas()->Count())
-        {
-            foreach ($cfg->DefaultSchemas() as $schemaType)
-            {
-                if (!$schemaType->Disabled)
-                {
-                    $schema['@graph'][] = json_decode($schemaType->JsonLD, true);
+        if (
+            !$this->owner->DisableDefaultSchema &&
+            $cfg->DefaultSchemas()->Count()
+        ) {
+            foreach ($cfg->DefaultSchemas() as $schemaType) {
+                if (!$schemaType->Disabled) {
+                    $schema['@graph'][] = json_decode(
+                        $schemaType->JsonLD,
+                        true,
+                    );
                 }
             }
         }
 
         // a wire to page elements (blocks)
-        if ($this->owner->ElementalArea && $this->owner->ElementalArea->exists())
-        {
-            foreach ($this->owner->ElementalArea->Elements() as $element)
-            {
+        if (
+            $this->owner->ElementalArea &&
+            $this->owner->ElementalArea->exists()
+        ) {
+            foreach ($this->owner->ElementalArea->Elements() as $element) {
                 try {
-                  $element->updateSchemaData($schema);
+                    $element->updateSchemaData($schema);
+                } catch (BadMethodCallException $exception) {
                 }
-                catch(BadMethodCallException $exception) {}
             }
         }
 
         // additional check for controllers
-        if (is_subclass_of($this->owner, ContentController::class))
-        {
-            if (method_exists($this->owner, 'updateSchemaData'))
-            {
+        if (is_subclass_of($this->owner, ContentController::class)) {
+            if (method_exists($this->owner, 'updateSchemaData')) {
                 $this->owner->updateSchemaData($schema);
             }
         }
@@ -1583,9 +1720,10 @@ class MetaUniverse extends Extension
         // a wire to parent page
         $this->updateSchemaData($schema);
 
-        if (!empty($schema['@graph']))
-        {
-            return '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES).'</script>';
+        if (!empty($schema['@graph'])) {
+            return '<script type="application/ld+json">' .
+                json_encode($schema, JSON_UNESCAPED_SLASHES) .
+                '</script>';
         }
     }
 

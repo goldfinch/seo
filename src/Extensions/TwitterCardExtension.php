@@ -19,15 +19,17 @@ class TwitterCardExtension extends SeoDataExtension
 
     protected function seoFieldsTab(&$fields, $tab)
     {
-        if ($this->owner->ID)
-        {
-            $fields->addFieldsToTab(
-                $tab,
-                [
-                    $og = HasOneButtonField::create($this->owner, 'TwitterCardObject'),
-                    CheckboxField::create('DisableDefaultTwitterCardObject', 'Disable default TC for this page'),
-                ]
-            );
+        if ($this->owner->ID) {
+            $fields->addFieldsToTab($tab, [
+                ($og = HasOneButtonField::create(
+                    $this->owner,
+                    'TwitterCardObject',
+                )),
+                CheckboxField::create(
+                    'DisableDefaultTwitterCardObject',
+                    'Disable default TC for this page',
+                ),
+            ]);
         }
 
         // $og

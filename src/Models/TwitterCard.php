@@ -76,155 +76,215 @@ class TwitterCard extends DataObject
         'TC_Image' => Image::class,
     ];
 
-    private static $owns = [
-        'TC_Image',
-    ];
+    private static $owns = ['TC_Image'];
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
         $fields->removeByName([
-          'Title',
-          'Disabled',
+            'Title',
+            'Disabled',
 
-          'TC_Title',
-          'TC_Type',
+            'TC_Title',
+            'TC_Type',
 
-          'TC_Site',
-          'TC_SiteID',
-          'TC_Creator',
-          'TC_CreatorID',
-          'TC_Description',
+            'TC_Site',
+            'TC_SiteID',
+            'TC_Creator',
+            'TC_CreatorID',
+            'TC_Description',
 
-          'TC_AppNameIphone',
-          'TC_AppIdIphone',
-          'TC_AppUrlIphone',
-          'TC_AppNameIpad',
-          'TC_AppIdIpad',
-          'TC_AppUrlIpad',
-          'TC_AppNameGoogleplay',
-          'TC_AppIDGoogleplay',
-          'TC_AppUrlGoogleplay',
+            'TC_AppNameIphone',
+            'TC_AppIdIphone',
+            'TC_AppUrlIphone',
+            'TC_AppNameIpad',
+            'TC_AppIdIpad',
+            'TC_AppUrlIpad',
+            'TC_AppNameGoogleplay',
+            'TC_AppIDGoogleplay',
+            'TC_AppUrlGoogleplay',
 
-          'TC_Image',
+            'TC_Image',
         ]);
 
         $types = [
-          'summary' => 'Summary',
-          'summary_large_image' => 'Summary large image',
-          'app' => 'App',
-          'player' => 'Player',
+            'summary' => 'Summary',
+            'summary_large_image' => 'Summary large image',
+            'app' => 'App',
+            'player' => 'Player',
         ];
 
         $fields->addFieldsToTab('Root.Main', [
+            CompositeField::create(
+                TextField::create('Title', 'Twitter Card Record Title'),
+                CheckboxField::create(
+                    'Disabled',
+                    'Disable this TC',
+                )->setDescription(
+                    'Any page that is using this TC record will not be displaying any twitter-card-related tags',
+                ),
+            )->addExtraClass('mb-5'),
 
-          CompositeField::create(
+            CompositeField::create(
+                LiteralField::create(
+                    'LF',
+                    '<h2 style="font-size: 1.5rem">Card metadata</h2>',
+                ),
 
-            TextField::create('Title', 'Twitter Card Record Title'),
-            CheckboxField::create('Disabled', 'Disable this TC')->setDescription('Any page that is using this TC record will not be displaying any twitter-card-related tags'),
+                DropdownField::create(
+                    'TC_Type',
+                    'Type',
+                    $types,
+                )->setDescription('The card type'),
+                TextField::create('TC_Site', 'Site')->setDescription(
+                    '@username of website. Either twitter:site or twitter:site:id is required.<br>If this field is empty, this value refers to the general value in the config.',
+                ),
 
-          )->addExtraClass('mb-5'),
+                TextField::create('TC_SiteID', 'Site ID')
+                    ->setDescription(
+                        'Same as twitter:site, but the user’s Twitter ID. Either twitter:site or twitter:site:id is required.<br>If this field is empty, this value refers to the general value in the config.',
+                    )
+                    ->displayIf('TC_Type')
+                    ->contains('summary')
+                    ->orIf()
+                    ->contains('summary_large_image')
+                    ->orIf()
+                    ->contains('player')
+                    ->end(),
 
-          CompositeField::create(
+                TextField::create('TC_Creator', 'Creator')
+                    ->setDescription('@username of content creator')
+                    ->displayIf('TC_Type')
+                    ->contains('summary_large_image')
+                    ->end(),
 
-            LiteralField::create('LF', '<h2 style="font-size: 1.5rem">Card metadata</h2>'),
+                TextField::create('TC_CreatorID', 'Creator ID')
+                    ->setDescription('Twitter user ID of content creator')
+                    ->displayIf('TC_Type')
+                    ->contains('summary')
+                    ->orIf()
+                    ->contains('summary_large_image')
+                    ->end(),
 
-            DropdownField::create('TC_Type', 'Type', $types)->setDescription('The card type'),
-            TextField::create('TC_Site', 'Site')->setDescription('@username of website. Either twitter:site or twitter:site:id is required.<br>If this field is empty, this value refers to the general value in the config.'),
+                TextareaField::create('TC_Description', 'Description')
+                    ->setMaxLength(200)
+                    ->setDescription(
+                        'Description of content (maximum 200 characters)',
+                    )
+                    ->displayIf('TC_Type')
+                    ->contains('summary')
+                    ->orIf()
+                    ->contains('summary_large_image')
+                    ->orIf()
+                    ->contains('player')
+                    ->end(),
+                TextField::create('TC_Title', 'Title')
+                    ->setMaxLength(70)
+                    ->setDescription('Title of content (max 70 characters)')
+                    ->displayIf('TC_Type')
+                    ->contains('summary')
+                    ->orIf()
+                    ->contains('summary_large_image')
+                    ->orIf()
+                    ->contains('player')
+                    ->end(),
+                UploadField::create('TC_Image', 'Image')
+                    ->setDescription(
+                        'URL of image to use in the card. Images must be less than 5MB in size. JPG, PNG, WEBP and GIF formats are supported. Only the first frame of an animated GIF will be used. SVG is not supported.',
+                    )
+                    ->setFolderName('seo')
+                    ->displayIf('TC_Type')
+                    ->contains('summary')
+                    ->orIf()
+                    ->contains('summary_large_image')
+                    ->orIf()
+                    ->contains('player')
+                    ->end(),
+                TextareaField::create('TC_ImageAlt', 'Image Alt')
+                    ->setMaxLength(420)
+                    ->setDescription(
+                        'A text description of the image conveying the essential nature of an image to users who are visually impaired. Maximum 420 characters.',
+                    )
+                    ->displayIf('TC_Type')
+                    ->contains('summary')
+                    ->orIf()
+                    ->contains('summary_large_image')
+                    ->orIf()
+                    ->contains('player')
+                    ->end(),
 
-            TextField::create('TC_SiteID', 'Site ID')->setDescription('Same as twitter:site, but the user’s Twitter ID. Either twitter:site or twitter:site:id is required.<br>If this field is empty, this value refers to the general value in the config.')
-              ->displayIf('TC_Type')->contains('summary')
-              ->orIf()->contains('summary_large_image')
-              ->orIf()->contains('player')
-            ->end(),
+                TextField::create('TC_Player', 'Player')
+                    ->setDescription('HTTPS URL of player iframe')
+                    ->displayIf('TC_Type')
+                    ->contains('player')
+                    ->end(),
+                TextField::create('TC_PlayerWidth', 'Player width')
+                    ->setDescription('Width of iframe in pixels')
+                    ->displayIf('TC_Type')
+                    ->contains('player')
+                    ->end(),
+                TextField::create('TC_PlayerHeight', 'Player height')
+                    ->setDescription('Height of iframe in pixels')
+                    ->displayIf('TC_Type')
+                    ->contains('player')
+                    ->end(),
+                TextField::create('TC_PlayerStream', 'Player stream')
+                    ->setDescription('URL to raw video or audio stream')
+                    ->displayIf('TC_Type')
+                    ->contains('player')
+                    ->end(),
 
-            TextField::create('TC_Creator', 'Creator')->setDescription('@username of content creator')
-              ->displayIf('TC_Type')->contains('summary_large_image')
-            ->end(),
-
-            TextField::create('TC_CreatorID', 'Creator ID')->setDescription('Twitter user ID of content creator')
-              ->displayIf('TC_Type')->contains('summary')
-              ->orIf()->contains('summary_large_image')
-            ->end(),
-
-            TextareaField::create('TC_Description', 'Description')->setMaxLength(200)->setDescription('Description of content (maximum 200 characters)')
-              ->displayIf('TC_Type')->contains('summary')
-              ->orIf()->contains('summary_large_image')
-              ->orIf()->contains('player')
-            ->end(),
-            TextField::create('TC_Title', 'Title')->setMaxLength(70)->setDescription('Title of content (max 70 characters)')
-              ->displayIf('TC_Type')->contains('summary')
-              ->orIf()->contains('summary_large_image')
-              ->orIf()->contains('player')
-            ->end(),
-            UploadField::create('TC_Image', 'Image')->setDescription('URL of image to use in the card. Images must be less than 5MB in size. JPG, PNG, WEBP and GIF formats are supported. Only the first frame of an animated GIF will be used. SVG is not supported.')->setFolderName('seo')
-              ->displayIf('TC_Type')->contains('summary')
-              ->orIf()->contains('summary_large_image')
-              ->orIf()->contains('player')
-            ->end(),
-            TextareaField::create('TC_ImageAlt', 'Image Alt')->setMaxLength(420)->setDescription('A text description of the image conveying the essential nature of an image to users who are visually impaired. Maximum 420 characters.')
-              ->displayIf('TC_Type')->contains('summary')
-              ->orIf()->contains('summary_large_image')
-              ->orIf()->contains('player')
-            ->end(),
-
-            TextField::create('TC_Player', 'Player')->setDescription('HTTPS URL of player iframe')
-              ->displayIf('TC_Type')
-              ->contains('player')
-            ->end(),
-            TextField::create('TC_PlayerWidth', 'Player width')->setDescription('Width of iframe in pixels')
-              ->displayIf('TC_Type')
-              ->contains('player')
-            ->end(),
-            TextField::create('TC_PlayerHeight', 'Player height')->setDescription('Height of iframe in pixels')
-              ->displayIf('TC_Type')
-              ->contains('player')
-            ->end(),
-            TextField::create('TC_PlayerStream', 'Player stream')->setDescription('URL to raw video or audio stream')
-              ->displayIf('TC_Type')
-              ->contains('player')
-            ->end(),
-
-            TextField::create('TC_AppNameIphone', 'App Name Iphone')->setDescription('Name of your iPhone app')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppIdIphone', 'App ID Iphone')->setDescription('Your app ID in the iTunes App Store (Note: NOT your bundle ID)')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppUrlIphone', 'App Url Iphone')->setDescription('Your app’s custom URL scheme (you must include ”://” after your scheme name)')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppNameIpad', 'App Name Ipad')->setDescription('Name of your iPad optimized app')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppIdIpad', 'App ID Ipad')->setDescription('Your app ID in the iTunes App Store')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppUrlIpad', 'App Url Ipad')->setDescription('Your app’s custom URL scheme')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppNameGoogleplay', 'App Name Googleplay')->setDescription('Name of your Android app')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppIDGoogleplay', 'App ID Googleplay')->setDescription('Your app ID in the Google Play Store')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-            TextField::create('TC_AppUrlGoogleplay', 'App Url Googleplay')->setDescription('Your app’s custom URL scheme')
-              ->displayIf('TC_Type')
-              ->contains('app')
-            ->end(),
-
-          )->addExtraClass('mb-5'),
-
+                TextField::create('TC_AppNameIphone', 'App Name Iphone')
+                    ->setDescription('Name of your iPhone app')
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppIdIphone', 'App ID Iphone')
+                    ->setDescription(
+                        'Your app ID in the iTunes App Store (Note: NOT your bundle ID)',
+                    )
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppUrlIphone', 'App Url Iphone')
+                    ->setDescription(
+                        'Your app’s custom URL scheme (you must include ”://” after your scheme name)',
+                    )
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppNameIpad', 'App Name Ipad')
+                    ->setDescription('Name of your iPad optimized app')
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppIdIpad', 'App ID Ipad')
+                    ->setDescription('Your app ID in the iTunes App Store')
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppUrlIpad', 'App Url Ipad')
+                    ->setDescription('Your app’s custom URL scheme')
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppNameGoogleplay', 'App Name Googleplay')
+                    ->setDescription('Name of your Android app')
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppIDGoogleplay', 'App ID Googleplay')
+                    ->setDescription('Your app ID in the Google Play Store')
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+                TextField::create('TC_AppUrlGoogleplay', 'App Url Googleplay')
+                    ->setDescription('Your app’s custom URL scheme')
+                    ->displayIf('TC_Type')
+                    ->contains('app')
+                    ->end(),
+            )->addExtraClass('mb-5'),
         ]);
 
         return $fields;

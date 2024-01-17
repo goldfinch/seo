@@ -30,7 +30,7 @@ class SEOTwitterCardAdmin extends ModelAdmin
             'title' => 'Twitter Cards',
         ],
         TwitterCardConfig::class => [
-            'title'=> 'Settings',
+            'title' => 'Settings',
         ],
     ];
 }

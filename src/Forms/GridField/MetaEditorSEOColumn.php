@@ -38,9 +38,7 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
      */
     public function getColumnsHandled($gridField)
     {
-        return [
-            'MetaEditorSEOColumn',
-        ];
+        return ['MetaEditorSEOColumn'];
     }
 
     /**
@@ -77,8 +75,8 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
 
         return [
             'class' => count($errors)
-            ? 'has-warning meta-editor-error ' . implode(' ', $errors)
-            : 'has-success',
+                ? 'has-warning meta-editor-error ' . implode(' ', $errors)
+                : 'has-success',
         ];
     }
 
@@ -93,15 +91,15 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
     {
         $description_field = Config::inst()->get(
             MetaEditor::class,
-            'meta_description_field'
+            'meta_description_field',
         );
         $description_min = Config::inst()->get(
             MetaEditor::class,
-            'meta_description_min_length'
+            'meta_description_min_length',
         );
         $description_max = Config::inst()->get(
             MetaEditor::class,
-            'meta_description_max_length'
+            'meta_description_max_length',
         );
 
         if (!MetaEditorPermissions::canEdit($record)) {
@@ -110,17 +108,21 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
 
         $errors = [];
 
-        if (!$record->{$description_field}
-            || strlen($record->{$description_field}) < $description_min
+        if (
+            !$record->{$description_field} ||
+            strlen($record->{$description_field}) < $description_min
         ) {
             $errors[] = 'meta-editor-error-too-short';
-        } elseif ($record->{$description_field}
-            && strlen($record->{$description_field}) > $description_max
+        } elseif (
+            $record->{$description_field} &&
+            strlen($record->{$description_field}) > $description_max
         ) {
             $errors[] = 'meta-editor-error-too-long';
-        } elseif ($record->{$description_field}
-            && self::getAllEditableRecords()
-                ->filter($description_field, $record->{$description_field})->count() > 1
+        } elseif (
+            $record->{$description_field} &&
+            self::getAllEditableRecords()
+                ->filter($description_field, $record->{$description_field})
+                ->count() > 1
         ) {
             $errors[] = 'meta-editor-error-duplicate';
         }
@@ -142,95 +144,105 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
         if ('MetaEditorSEOColumn' == $columnName) {
             $value = $gridField->getDataFieldValue(
                 $record,
-                Config::inst()->get(MetaEditor::class, 'show_in_search_field')
+                Config::inst()->get(MetaEditor::class, 'show_in_search_field'),
             );
             if (MetaEditorPermissions::canEdit($record)) {
-
                 $html = '';
 
-                if ($record->ShowInMenus !== null)
-                {
-                    if ($record->ShowInMenus)
-                    {
-                        $showInMenusHTML = '<spna style="color: green">yes</span>';
-                    }
-                    else
-                    {
+                if ($record->ShowInMenus !== null) {
+                    if ($record->ShowInMenus) {
+                        $showInMenusHTML =
+                            '<spna style="color: green">yes</span>';
+                    } else {
                         $showInMenusHTML = '<spna style="color: red">no</span>';
                     }
                 }
 
-                if ($record->ShowInSearch !== null)
-                {
-                    if ($record->ShowInSearch)
-                    {
-                        $showInSearchHTML = '<spna style="color: green">yes</span>';
-                    }
-                    else
-                    {
-                        $showInSearchHTML = '<spna style="color: red">no</span>';
+                if ($record->ShowInSearch !== null) {
+                    if ($record->ShowInSearch) {
+                        $showInSearchHTML =
+                            '<spna style="color: green">yes</span>';
+                    } else {
+                        $showInSearchHTML =
+                            '<spna style="color: red">no</span>';
                     }
                 }
 
                 $ogCfg = OpenGraphConfig::current_config();
 
-                if (method_exists($record, 'OpenGraph') && $record->OpenGraph())
-                {
+                if (
+                    method_exists($record, 'OpenGraph') &&
+                    $record->OpenGraph()
+                ) {
                     $openGraphHTML = '<i>code based</i>';
-                }
-                else if ($record->OpenGraphObject && $record->OpenGraphObject->exists())
-                {
+                } elseif (
+                    $record->OpenGraphObject &&
+                    $record->OpenGraphObject->exists()
+                ) {
                     $og = $record->OpenGraphObject;
 
-                    $ma = new SEOOpenGraphAdmin;
+                    $ma = new SEOOpenGraphAdmin();
                     $link = $ma->getCMSEditLinkForManagedDataObject($og);
 
-                    $openGraphHTML = '<a href="'.$link.'">'.$og->Title.'</a>';
-                }
-                else if ($record->DisableDefaultOpenGraphObject && $ogCfg->DefaultObject && $ogCfg->DefaultObject->exists())
-                {
+                    $openGraphHTML =
+                        '<a href="' . $link . '">' . $og->Title . '</a>';
+                } elseif (
+                    $record->DisableDefaultOpenGraphObject &&
+                    $ogCfg->DefaultObject &&
+                    $ogCfg->DefaultObject->exists()
+                ) {
                     $og = $ogCfg->DefaultObject;
 
-                    $ma = new SEOOpenGraphAdmin;
+                    $ma = new SEOOpenGraphAdmin();
                     $link = $ma->getCMSEditLinkForManagedDataObject($og);
 
-                    $openGraphHTML = '<a href="'.$link.'">'.$og->Title.' (default)</a>';
-                }
-                else
-                {
+                    $openGraphHTML =
+                        '<a href="' .
+                        $link .
+                        '">' .
+                        $og->Title .
+                        ' (default)</a>';
+                } else {
                     $openGraphHTML = '<spna style="color: red">no</span>';
                 }
 
                 $tcCfg = TwitterCardConfig::current_config();
 
-                if (method_exists($record, 'TwitterCard') && $record->TwitterCard())
-                {
+                if (
+                    method_exists($record, 'TwitterCard') &&
+                    $record->TwitterCard()
+                ) {
                     $twitterCardHTML = '<i>code based</i>';
-                }
-                else if ($record->TwitterCardObject && $record->TwitterCardObject->exists())
-                {
+                } elseif (
+                    $record->TwitterCardObject &&
+                    $record->TwitterCardObject->exists()
+                ) {
                     $tc = $record->TwitterCardObject;
 
-                    $ma = new SEOTwitterCardAdmin;
+                    $ma = new SEOTwitterCardAdmin();
                     $link = $ma->getCMSEditLinkForManagedDataObject($tc);
 
-                    $twitterCardHTML = '<a href="'.$link.'">'.$tc->Title.'</a>';
-                }
-                else if ($record->DisableDefaultTwitterCardObject && $tcCfg->DefaultObject && $tcCfg->DefaultObject->exists())
-                {
+                    $twitterCardHTML =
+                        '<a href="' . $link . '">' . $tc->Title . '</a>';
+                } elseif (
+                    $record->DisableDefaultTwitterCardObject &&
+                    $tcCfg->DefaultObject &&
+                    $tcCfg->DefaultObject->exists()
+                ) {
                     $tc = $tcCfg->DefaultObject;
 
-                    $ma = new SEOTwitterCardAdmin;
+                    $ma = new SEOTwitterCardAdmin();
                     $link = $ma->getCMSEditLinkForManagedDataObject($tc);
 
-                    $twitterCardHTML = '<a href="'.$link.'">'.$tc->Title.' (default)</a>';
-                }
-                else
-                {
+                    $twitterCardHTML =
+                        '<a href="' .
+                        $link .
+                        '">' .
+                        $tc->Title .
+                        ' (default)</a>';
+                } else {
                     $twitterCardHTML = '<spna style="color: red">no</span>';
                 }
-
-
 
                 $recordException = false;
                 $schemaHTML = '';
@@ -238,74 +250,99 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
                 $scCfg = SchemaConfig::current_config();
 
                 try {
-                  $record->Schemas();
+                    $record->Schemas();
                 } catch (BadMethodCallException $e) {
-                  $recordException = true;
+                    $recordException = true;
                 }
 
-                if (method_exists($record, 'SchemaData') && $record->SchemaData())
-                {
+                if (
+                    method_exists($record, 'SchemaData') &&
+                    $record->SchemaData()
+                ) {
                     $schemaHTML = '<i>code based</i>';
-                }
-                else if (!$recordException && $record->Schemas() && $record->Schemas()->count())
-                {
+                } elseif (
+                    !$recordException &&
+                    $record->Schemas() &&
+                    $record->Schemas()->count()
+                ) {
                     $schemas = $record->Schemas();
 
-                    $ma = new SEOSchemaAdmin;
+                    $ma = new SEOSchemaAdmin();
 
-                    foreach ($schemas as $schema)
-                    {
-                        $link = $ma->getCMSEditLinkForManagedDataObject($schema);
+                    foreach ($schemas as $schema) {
+                        $link = $ma->getCMSEditLinkForManagedDataObject(
+                            $schema,
+                        );
 
-                        if ($schemaHTML != '') $schemaHTML .= ', ';
+                        if ($schemaHTML != '') {
+                            $schemaHTML .= ', ';
+                        }
 
-                        $schemaHTML .= '<a href="'.$link.'">'.$schema->Title.'</a>';
+                        $schemaHTML .=
+                            '<a href="' .
+                            $link .
+                            '">' .
+                            $schema->Title .
+                            '</a>';
                     }
-                }
-                else if ($record->DisableDefaultSchema && $scCfg->DefaultSchemas()->count())
-                {
+                } elseif (
+                    $record->DisableDefaultSchema &&
+                    $scCfg->DefaultSchemas()->count()
+                ) {
                     $schemas = $scCfg->DefaultSchemas();
 
-                    $ma = new SEOSchemaAdmin;
+                    $ma = new SEOSchemaAdmin();
 
-                    foreach ($schemas as $schema)
-                    {
-                        $link = $ma->getCMSEditLinkForManagedDataObject($schema);
+                    foreach ($schemas as $schema) {
+                        $link = $ma->getCMSEditLinkForManagedDataObject(
+                            $schema,
+                        );
 
-                        if ($schemaHTML != '') $schemaHTML .= ', ';
+                        if ($schemaHTML != '') {
+                            $schemaHTML .= ', ';
+                        }
 
-                        $schemaHTML .= '<a href="'.$link.'">'.$schema->Title.' (default)</a>';
+                        $schemaHTML .=
+                            '<a href="' .
+                            $link .
+                            '">' .
+                            $schema->Title .
+                            ' (default)</a>';
                     }
-                }
-                else
-                {
+                } else {
                     $schemaHTML = '<spna style="color: red">no</span>';
                 }
 
-                if (isset($showInMenusHTML))
-                {
-                    $html .= '<div>Show in menu: '.$showInMenusHTML.'</div>';
+                if (isset($showInMenusHTML)) {
+                    $html .=
+                        '<div>Show in menu: ' . $showInMenusHTML . '</div>';
                 }
 
-                if (isset($showInSearchHTML))
-                {
-                    $html .= '<div>Show in search: '.$showInSearchHTML.'</div>';
+                if (isset($showInSearchHTML)) {
+                    $html .=
+                        '<div>Show in search: ' . $showInSearchHTML . '</div>';
                 }
 
-                $html .= '
-                <div>Open Graph: '.$openGraphHTML.'</div>
-                <div>Twitter Card: '.$twitterCardHTML.'</div>
-                <div>Schema: '.$schemaHTML.'</div>
+                $html .=
+                    '
+                <div>Open Graph: ' .
+                    $openGraphHTML .
+                    '</div>
+                <div>Twitter Card: ' .
+                    $twitterCardHTML .
+                    '</div>
+                <div>Schema: ' .
+                    $schemaHTML .
+                    '</div>
                 ';
-
 
                 $ShowInSearch_field = LiteralField::create('Info', $html);
                 $ShowInSearch_field->setName(
                     $this->getFieldName(
                         $ShowInSearch_field->getName(),
                         $gridField,
-                        $record
-                    )
+                        $record,
+                    ),
                 );
 
                 // $ShowInSearch_field->setValue($record->ShowInSearch ? true : false);
@@ -326,11 +363,11 @@ class MetaEditorSEOColumn extends MetaEditorTitleColumn
     {
         $description_min = Config::inst()->get(
             MetaEditor::class,
-            'meta_description_min_length'
+            'meta_description_min_length',
         );
         $description_max = Config::inst()->get(
             MetaEditor::class,
-            'meta_description_max_length'
+            'meta_description_max_length',
         );
 
         return '<div class="meta-editor-errors"></div>';

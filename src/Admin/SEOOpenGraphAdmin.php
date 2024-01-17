@@ -30,7 +30,7 @@ class SEOOpenGraphAdmin extends ModelAdmin
             'title' => 'Open Graph records',
         ],
         OpenGraphConfig::class => [
-            'title'=> 'Settings',
+            'title' => 'Settings',
         ],
     ];
 }

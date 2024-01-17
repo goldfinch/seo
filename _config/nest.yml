@@ -1,10 +1,9 @@
 ---
 Name: goldfinch-seo-nest-meta-edit
 Only:
-  moduleexists: 'goldfinch/nest'
+  moduleexists: "goldfinch/nest"
 ---
-
 Axllent\MetaEditor\MetaEditor:
   managed_models:
     Goldfinch\Nest\Models\NestedObject:
-      title: 'Other'
+      title: "Other"

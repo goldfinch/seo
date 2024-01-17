@@ -12,7 +12,7 @@ class GridFieldEditNoInlineButton extends GridFieldEditButton
     {
         return [
             // "classNames" => "font-icon-edit action-detail edit-link"
-            "classNames" => "font-icon-edit action-detail"
+            'classNames' => 'font-icon-edit action-detail',
         ];
     }
 
@@ -21,22 +21,20 @@ class GridFieldEditNoInlineButton extends GridFieldEditButton
         $link = Controller::join_links(
             $gridField->Link('item'),
             $record->ID,
-            'edit'
+            'edit',
         );
 
         if (
-          $record->getClassName() == 'Page' ||
-          $record->getClassName() == SiteTree::class ||
-          get_parent_class($record) == SiteTree::class ||
-          get_parent_class($record) == 'Page'
-        )
-        {
-            return str_replace('/edit/', '/settings/', $record->CMSEditLink()) . '#Root_SEO';
+            $record->getClassName() == 'Page' ||
+            $record->getClassName() == SiteTree::class ||
+            get_parent_class($record) == SiteTree::class ||
+            get_parent_class($record) == 'Page'
+        ) {
+            return str_replace('/edit/', '/settings/', $record->CMSEditLink()) .
+                '#Root_SEO';
+        } else {
+            return $gridField->addAllStateToUrl($link, $addState) .
+                '#Root_Settings_set';
         }
-        else
-        {
-            return $gridField->addAllStateToUrl($link, $addState) . '#Root_Settings_set';
-        }
-
     }
 }

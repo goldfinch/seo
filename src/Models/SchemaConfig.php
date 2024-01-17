@@ -21,7 +21,7 @@ class SchemaConfig extends DataObject implements TemplateGlobalProvider
     private static $many_many_extraFields = [
         'DefaultSchemas' => [
             'SortExtra' => 'Int',
-        ]
+        ],
     ];
 
     public function getCMSFields()
@@ -31,9 +31,12 @@ class SchemaConfig extends DataObject implements TemplateGlobalProvider
         // $fields->removeByName(['DefaultOpenGraphObjectID']);
 
         $fields->addFieldsToTab('Root.Main', [
-
-          MultiSelectField::create('DefaultSchemas', 'Default Schemas', $this, 'SortExtra'),
-
+            MultiSelectField::create(
+                'DefaultSchemas',
+                'Default Schemas',
+                $this,
+                'SortExtra',
+            ),
         ]);
 
         return $fields;

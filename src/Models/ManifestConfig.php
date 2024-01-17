@@ -21,38 +21,34 @@ class ManifestConfig extends DataObject implements TemplateGlobalProvider
     ];
 
     private static $has_one = [
-        'PortableImage'=> Image::class,
+        'PortableImage' => Image::class,
         'VectorIcon' => File::class,
         'IcoIcon' => File::class,
     ];
 
-    private static $owns = [
-        'PortableImage',
-        'VectorIcon',
-        'IcoIcon',
-    ];
+    private static $owns = ['PortableImage', 'VectorIcon', 'IcoIcon'];
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
-        $fields->dataFieldByName('PortableImage')
-          ->setFolderName('seo')
-          ->setAllowedExtensions('png')
-          ->setDescription('png 512x512')
-        ;
+        $fields
+            ->dataFieldByName('PortableImage')
+            ->setFolderName('seo')
+            ->setAllowedExtensions('png')
+            ->setDescription('png 512x512');
 
-        $fields->dataFieldByName('VectorIcon')
-          ->setFolderName('seo')
-          ->setAllowedExtensions('svg')
-          ->setDescription('svg 512x512')
-        ;
+        $fields
+            ->dataFieldByName('VectorIcon')
+            ->setFolderName('seo')
+            ->setAllowedExtensions('svg')
+            ->setDescription('svg 512x512');
 
-        $fields->dataFieldByName('IcoIcon')
-          ->setFolderName('seo')
-          ->setAllowedExtensions('ico')
-          ->setDescription('ico 32x32')
-        ;
+        $fields
+            ->dataFieldByName('IcoIcon')
+            ->setFolderName('seo')
+            ->setAllowedExtensions('ico')
+            ->setDescription('ico 32x32');
 
         return $fields;
     }

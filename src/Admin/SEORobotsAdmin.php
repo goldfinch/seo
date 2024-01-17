@@ -26,7 +26,7 @@ class SEORobotsAdmin extends ModelAdmin
 
     private static $managed_models = [
         RobotsConfig::class => [
-            'title'=> 'Robots',
+            'title' => 'Robots',
         ],
     ];
 
@@ -36,11 +36,17 @@ class SEORobotsAdmin extends ModelAdmin
 
         $configSegment = $this->sanitiseClassName(RobotsConfig::class);
 
-        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false)
-        {
+        if (strpos($_SERVER['REQUEST_URI'], $configSegment) === false) {
             $config = RobotsConfig::current_config();
             $configSegment = $this->sanitiseClassName(RobotsConfig::class);
-            $link = str_replace($configSegment, '', parent::Link(null)) . $configSegment . '/EditForm/field/' . $configSegment . '/item/' . $config->ID . '/edit';
+            $link =
+                str_replace($configSegment, '', parent::Link(null)) .
+                $configSegment .
+                '/EditForm/field/' .
+                $configSegment .
+                '/item/' .
+                $config->ID .
+                '/edit';
 
             return $this->redirect($link);
         }

@@ -30,7 +30,7 @@ class SEOSchemaAdmin extends ModelAdmin
             'title' => 'Schema records',
         ],
         SchemaConfig::class => [
-            'title'=> 'Settings',
+            'title' => 'Settings',
         ],
     ];
 }
