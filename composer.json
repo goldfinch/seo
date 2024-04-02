@@ -21,6 +21,7 @@
         "goldfinch/json-editor": "^2.0",
         "goldfinch/image-editor": "^2.0",
         "goldfinch/silverstripe-meta-editor": "^1.2",
+        "goldfinch/fielder": "^2.0",
         "astrotomic/php-open-graph": "^1.0",
         "spatie/schema-org": "^3.14",
         "unclecheese/display-logic": "^3.0",

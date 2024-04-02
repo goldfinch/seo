@@ -3,10 +3,6 @@
 namespace Goldfinch\Seo\Models;
 
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\CompositeField;
-use Goldfinch\JSONEditor\Forms\JSONEditorField;
 
 class Schema extends DataObject
 {
@@ -46,22 +42,20 @@ class Schema extends DataObject
 
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        $fields = parent::getCMSFields()->initFielder($this);
 
-        $fields->removeByName(['Title', 'JsonLD', 'Disabled']);
+        $fielder = $fields->getFielder();
 
-        $fields->addFieldsToTab('Root.Main', [
-            CompositeField::create(
-                TextField::create('Title', 'Title'),
-                CheckboxField::create(
-                    'Disabled',
-                    'Disable this schema',
-                )->setDescription(
-                    'Any page that is using this schema record will not be displayed',
-                ),
-                JSONEditorField::create('JsonLD', 'Data', $this),
-            ),
-        ]);
+        $fielder->required(['Title']);
+
+        $fielder->fields(['Root.Main' => [
+
+            $fielder->composite([
+                $fielder->string('Title'),
+                $fielder->checkbox('Disabled', 'Disable this schema')->setDescription('Any page that is using this schema record will not be displayed'),
+                $fielder->json('JsonLD', 'Data', ['disable_edit_json' => false])
+            ]),
+        ]]);
 
         return $fields;
     }
