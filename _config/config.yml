@@ -1,5 +1,6 @@
 ---
 Name: goldfinch-seo
+After: 'goldfinch-basement'
 ---
 SilverStripe\Core\Injector\Injector:
   Psr\SimpleCache\CacheInterface.MetaUniverse:
