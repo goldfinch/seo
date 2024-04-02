@@ -14,46 +14,51 @@ class Humans extends RequestHandler
 
         $text = '';
 
-        $text .= '
-        /* TEAM */
+        if (ss_env('APP_HUMANS_CREATOR') || ss_env('APP_HUMANS_SITE') || ss_env('APP_HUMANS_LOCATION')) {
 
-        ';
+            $text .= '
+/* TEAM */
 
-        if (ss_env('APP_HUMANS_CREATOR')) {
-            $text .=
-                '
-            Creator: ' .
-                ss_env('APP_HUMANS_CREATOR') .
-                '
             ';
+
+            if (ss_env('APP_HUMANS_CREATOR')) {
+                $text .=
+                    '
+                Creator: ' .
+                    ss_env('APP_HUMANS_CREATOR');
+            }
+
+            if (ss_env('APP_HUMANS_CREATOR')) {
+                $text .=
+                    '
+                Site: ' .
+                    ss_env('APP_HUMANS_SITE');
+            }
+
+            if (ss_env('APP_HUMANS_CREATOR')) {
+                $text .=
+                    '
+                Location: ' .
+                    ss_env('APP_HUMANS_LOCATION');
+            }
         }
 
-        if (ss_env('APP_HUMANS_CREATOR')) {
-            $text .=
-                '
-            Site: ' .
-                ss_env('APP_HUMANS_SITE') .
-                '
-            ';
+        if (ss_env('APP_HUMANS_THANKS')) {
+            $text .= '
+
+/* THANKS */
+
+' .
+            ss_env('APP_HUMANS_THANKS');
         }
 
-        if (ss_env('APP_HUMANS_CREATOR')) {
-            $text .=
-                '
-            Location: ' .
-                ss_env('APP_HUMANS_LOCATION') .
-                '
+        if (ss_env('APP_HUMANS_STANDARDS')) {
+
+            $text .= '
+
+/* SITE */
             ';
-        }
 
-        $text .= '
-
-        /* THANKS */
-
-        /* SITE */
-        ';
-
-        if (ss_env('APP_HUMANS_CREATOR')) {
             $text .=
                 '
             Standards: ' .
