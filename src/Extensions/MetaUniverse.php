@@ -53,7 +53,9 @@ class MetaUniverse extends Extension
 
     public function MetaUniverseCached()
     {
-        if (Director::isLive()) {
+        if (Director::isDev()) {
+            return $this->MetaUniverse();
+        } else {
             $cacheKey = crypt(
                 $this->owner->ID . get_class($this->owner),
                 ss_env('APP_KEY'),
@@ -74,8 +76,6 @@ class MetaUniverse extends Extension
                     ),
                 ])
                 ->renderWith('Goldfinch/Seo/MetaUniverseCached');
-        } else {
-            return $this->MetaUniverse();
         }
     }
 
