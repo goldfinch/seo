@@ -83,7 +83,7 @@ class MetaUniverse extends Extension
     {
         $html =
             $this->owner->metaBase() .
-            $this->owner->metaTitle() .
+            $this->owner->universeMetaTitle() .
             $this->owner->metaContentTypeCharset() .
             $this->owner->metaCompatible() .
             $this->owner->metaDnsPrefetchControl() .
@@ -784,7 +784,7 @@ class MetaUniverse extends Extension
      * - Google typically shows 55-64 characters (keep it under 60).
      * - Keep important keywords within the first 8 words
      */
-    public function metaTitle()
+    public function universeMetaTitle()
     {
         if (!ss_config($this->universeClass, 'headrules', 'title')) {
             return;
