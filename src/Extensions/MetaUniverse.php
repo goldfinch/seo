@@ -100,7 +100,7 @@ class MetaUniverse extends Extension
             $this->owner->metaRating() .
             $this->owner->metaNewsKeywords() . // only for article
             $this->owner->metaGeo() . // perhaps contact page only
-            $this->owner->metaDescription() .
+            $this->owner->universeMetaDescription() .
             $this->owner->metaCategory() . // for sites catalogs
             $this->owner->metaMobile() .
             $this->owner->metaFormatDetection() .
@@ -876,7 +876,7 @@ class MetaUniverse extends Extension
      * - Google typically shows max. 165 characters (keep it under 160).
      * ~ 155
      */
-    public function metaDescription()
+    public function universeMetaDescription()
     {
         if (!ss_config($this->universeClass, 'headrules', 'description')) {
             return;
