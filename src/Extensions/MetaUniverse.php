@@ -944,10 +944,12 @@ class MetaUniverse extends Extension
         }
 
         $content = [
+            , , ,
             'width=device-width',
-            'initial-scale=1.0',
-            'viewport-fit=cover',
-            'user-scalable=yes',
+            'initial-scale=1',
+            'maximum-scale=1',
+            'user-scalable=0',
+            // 'viewport-fit=cover',
         ];
 
         $output =
