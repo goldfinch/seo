@@ -944,7 +944,6 @@ class MetaUniverse extends Extension
         }
 
         $content = [
-            , , ,
             'width=device-width',
             'initial-scale=1',
             'maximum-scale=1',
